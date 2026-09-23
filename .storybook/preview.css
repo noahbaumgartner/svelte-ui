@@ -1,0 +1,10 @@
+body {
+	background-color: var(--color-bg);
+	color: var(--color-text);
+	font-family: system-ui, sans-serif;
+}
+
+/* Docs pages render stories inside their own light frame */
+.docs-story {
+	background-color: var(--color-bg);
+}
