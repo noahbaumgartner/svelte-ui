@@ -10,11 +10,9 @@
 		rel?: string;
 		type?: 'button' | 'submit' | 'reset';
 		disabled?: boolean;
-		/** `overlay` is a translucent, blurred fill for use on top of images or media. */
+		/** `overlay` is a translucent, blurred, fully rounded button for use on top of images or media. */
 		variant?: 'primary' | 'secondary' | 'ghost' | 'overlay';
 		size?: 'sm' | 'md' | 'lg';
-		/** Fully rounded: a pill with a label, a circle when icon-only. */
-		rounded?: boolean;
 		/** Any Lucide icon (import from `svelte-ui/icons`). */
 		icon?: LucideIcon;
 		/** Accessible name. Required when the button has no label (icon-only). */
@@ -30,7 +28,6 @@
 		disabled = false,
 		variant = 'primary',
 		size = 'md',
-		rounded = false,
 		icon: Icon,
 		label,
 		class: className,
@@ -46,7 +43,6 @@
 		`button--${variant}`,
 		`button--${size}`,
 		{
-			'button--rounded': rounded,
 			'button--icon-only': iconOnly,
 			'button--no-icon': !Icon
 		},
@@ -169,10 +165,6 @@
 		padding: 0;
 	}
 
-	.button--rounded {
-		border-radius: 999px;
-	}
-
 	/* Variants */
 
 	.button--primary {
@@ -202,7 +194,9 @@
 		background-color: var(--color-surface);
 	}
 
+	/* Pill with a label, circle when icon-only */
 	.button--overlay {
+		border-radius: 999px;
 		background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
 		backdrop-filter: blur(8px);
 		-webkit-backdrop-filter: blur(8px);
