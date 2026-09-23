@@ -33,6 +33,12 @@
 		'display: inline-flex; padding: 12px; border-radius: 12px; background: linear-gradient(135deg, #f97316, #a855f7 60%, #0ea5e9);';
 </script>
 
+<Story name="Default" tags={['!dev']}>
+	{#snippet template(args)}
+		<Button {...args}>Button</Button>
+	{/snippet}
+</Story>
+
 <Story name="Variants" parameters={{ controls: { exclude: ['variant'] } }}>
 	{#snippet template(args)}
 		<div style={row}>

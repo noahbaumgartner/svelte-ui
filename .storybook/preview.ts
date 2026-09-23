@@ -33,6 +33,9 @@ const preview: Preview = {
 		}
 	],
 	parameters: {
+		options: {
+			storySort: (a, b) => (a.title === b.title ? 0 : a.title.localeCompare(b.title))
+		},
 		controls: {
 			matchers: {
 				color: /(background|color)$/i,
