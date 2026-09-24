@@ -11,7 +11,7 @@
 		type?: 'button' | 'submit' | 'reset';
 		disabled?: boolean;
 		/** `overlay` is a translucent, blurred, fully rounded button for use on top of images or media. */
-		variant?: 'primary' | 'secondary' | 'ghost' | 'overlay';
+		variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'overlay';
 		size?: 'sm' | 'md' | 'lg';
 		/** Any Lucide icon (import from `svelte-ui/icons`). */
 		icon?: LucideIcon;
@@ -183,6 +183,16 @@
 
 	.button--secondary:hover:not(:disabled) {
 		background-color: var(--color-surface-hover);
+	}
+
+	.button--outline {
+		border: 1px solid var(--color-border-strong);
+		background-color: transparent;
+		color: var(--color-text);
+	}
+
+	.button--outline:hover:not(:disabled) {
+		background-color: var(--color-surface);
 	}
 
 	.button--ghost {

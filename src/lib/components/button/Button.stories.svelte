@@ -4,7 +4,7 @@
 	import Button from './Button.svelte';
 	import { ArrowLeft, ArrowUpRight, Link, Pause } from '../../icons.js';
 
-	const variants = ['primary', 'secondary', 'ghost', 'overlay'] as const;
+	const variants = ['primary', 'secondary', 'outline', 'ghost', 'overlay'] as const;
 	const sizes = ['sm', 'md', 'lg'] as const;
 
 	const { Story } = defineMeta({
@@ -44,6 +44,7 @@
 		<div style={row}>
 			<Button {...args} variant="primary">Primary</Button>
 			<Button {...args} variant="secondary">Secondary</Button>
+			<Button {...args} variant="outline">Outline</Button>
 			<Button {...args} variant="ghost">Ghost</Button>
 			<div style={media}>
 				<Button {...args} variant="overlay">Overlay</Button>
