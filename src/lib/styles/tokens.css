@@ -7,6 +7,7 @@
    Theme selection: follows prefers-color-scheme by default; set
    data-theme="light" | "dark" on <html> to force one. */
 :root {
+	color-scheme: light;
 	--base: #fff;
 	--ink: #000;
 
@@ -25,16 +26,23 @@
 	/* Hover states */
 	--color-surface-hover: color-mix(in srgb, var(--base), var(--ink) 12%);
 	--color-ink-hover: color-mix(in srgb, var(--base), var(--ink) 90%);
+
+	/* Validation errors; the only non-gray color */
+	--color-destructive: #dc2626;
 }
 
 @media (prefers-color-scheme: dark) {
 	:root:not([data-theme='light']) {
 		--base: #0a0a0a;
 		--ink: #fff;
+		color-scheme: dark;
+		--color-destructive: #f87171;
 	}
 }
 
 :root[data-theme='dark'] {
 	--base: #0a0a0a;
 	--ink: #fff;
+	color-scheme: dark;
+	--color-destructive: #f87171;
 }

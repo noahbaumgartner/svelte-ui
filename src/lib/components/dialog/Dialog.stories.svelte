@@ -3,6 +3,11 @@
 	import { expect, fn, waitFor } from 'storybook/test';
 	import Dialog from './Dialog.svelte';
 	import Button from '../button/Button.svelte';
+	import Field from '../field/Field.svelte';
+	import FieldDescription from '../field/FieldDescription.svelte';
+	import FieldGroup from '../field/FieldGroup.svelte';
+	import FieldLabel from '../field/FieldLabel.svelte';
+	import Input from '../input/Input.svelte';
 	import { Pencil } from '../../icons.js';
 
 	const { Story } = defineMeta({
@@ -25,9 +30,6 @@
 	});
 
 	const row = 'display: flex; flex-wrap: wrap; gap: 8px; align-items: center;';
-	const field = 'display: grid; gap: 6px;';
-	const input =
-		'box-sizing: border-box; width: 100%; height: 32px; padding: 0 10px; font: inherit; color: inherit; background: var(--color-bg); border: 1px solid var(--color-border-strong); border-radius: 8px;';
 	const onsave = fn();
 </script>
 
@@ -37,10 +39,23 @@
 			{#snippet trigger(props)}
 				<Button {...props} variant="secondary" icon={Pencil}>Edit profile</Button>
 			{/snippet}
-			<label style={field}>
-				Name
-				<input style={input} value="Noah Baumgartner" />
-			</label>
+			<FieldGroup>
+				<Field>
+					<FieldLabel for="default-name">Name</FieldLabel>
+					<Input id="default-name" value="Noah Baumgartner" />
+				</Field>
+				<Field>
+					<FieldLabel for="default-username">Username</FieldLabel>
+					<Input
+						id="default-username"
+						value="noah"
+						aria-describedby="default-username-description"
+					/>
+					<FieldDescription id="default-username-description">
+						Used in your profile URL.
+					</FieldDescription>
+				</Field>
+			</FieldGroup>
 			{#snippet actions(close)}
 				<Button variant="ghost" onclick={close}>Cancel</Button>
 				<Button onclick={close}>Save</Button>
@@ -66,10 +81,10 @@
 				{#snippet trigger(props)}
 					<Button {...props} variant="secondary">With content</Button>
 				{/snippet}
-				<label style={field}>
-					Name
-					<input style={input} value="Noah Baumgartner" />
-				</label>
+				<Field>
+					<FieldLabel for="content-name">Name</FieldLabel>
+					<Input id="content-name" value="Noah Baumgartner" />
+				</Field>
 			</Dialog>
 			<Dialog {...args} title="Release notes" description="Version 2.0">
 				{#snippet trigger(props)}
@@ -131,10 +146,10 @@
 			{#snippet trigger(props)}
 				<Button {...props} variant="secondary">Edit profile</Button>
 			{/snippet}
-			<label style={field}>
-				Name
-				<input style={input} value="Noah Baumgartner" />
-			</label>
+			<Field>
+				<FieldLabel for="test-name">Name</FieldLabel>
+				<Input id="test-name" value="Noah Baumgartner" />
+			</Field>
 			{#snippet actions(close)}
 				<Button onclick={close}>Save</Button>
 			{/snippet}
