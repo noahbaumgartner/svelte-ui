@@ -1,3 +1,4 @@
+export { default as Avatar } from './components/avatar/Avatar.svelte';
 export { default as Badge } from './components/badge/Badge.svelte';
 export { default as Breadcrumb } from './components/breadcrumb/Breadcrumb.svelte';
 export { default as BreadcrumbEllipsis } from './components/breadcrumb/BreadcrumbEllipsis.svelte';
