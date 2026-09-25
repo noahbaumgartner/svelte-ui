@@ -3,7 +3,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
-		/** FieldLabel, FieldDescription and FieldError next to the control in a horizontal Field. */
+		/** Label, FieldDescription and FieldError next to the control in a horizontal Field. */
 		children: Snippet;
 	};
 

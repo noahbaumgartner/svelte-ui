@@ -25,6 +25,7 @@
 
 	/* Hover states */
 	--color-surface-hover: color-mix(in srgb, var(--base), var(--ink) 12%);
+	--color-surface-active: color-mix(in srgb, var(--base), var(--ink) 17%);
 	--color-ink-hover: color-mix(in srgb, var(--base), var(--ink) 90%);
 
 	/* Validation errors; the only non-gray color */

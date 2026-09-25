@@ -3,7 +3,7 @@
 	import { expect } from 'storybook/test';
 	import Checkbox from './Checkbox.svelte';
 	import Field from '../field/Field.svelte';
-	import FieldLabel from '../field/FieldLabel.svelte';
+	import Label from '../label/Label.svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Checkbox',
@@ -26,7 +26,7 @@
 	{#snippet template(args)}
 		<Field orientation="horizontal">
 			<Checkbox {...args} id="default-terms" />
-			<FieldLabel for="default-terms">Accept terms and conditions</FieldLabel>
+			<Label for="default-terms">Accept terms and conditions</Label>
 		</Field>
 	{/snippet}
 </Story>
@@ -56,7 +56,7 @@
 	{#snippet template(args)}
 		<Field orientation="horizontal">
 			<Checkbox {...args} id="test-terms" />
-			<FieldLabel for="test-terms">Accept terms</FieldLabel>
+			<Label for="test-terms">Accept terms</Label>
 		</Field>
 	{/snippet}
 </Story>

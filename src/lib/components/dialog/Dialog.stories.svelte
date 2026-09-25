@@ -6,7 +6,7 @@
 	import Field from '../field/Field.svelte';
 	import FieldDescription from '../field/FieldDescription.svelte';
 	import FieldGroup from '../field/FieldGroup.svelte';
-	import FieldLabel from '../field/FieldLabel.svelte';
+	import Label from '../label/Label.svelte';
 	import Input from '../input/Input.svelte';
 	import { Pencil } from '../../icons.js';
 
@@ -41,11 +41,11 @@
 			{/snippet}
 			<FieldGroup>
 				<Field>
-					<FieldLabel for="default-name">Name</FieldLabel>
+					<Label for="default-name">Name</Label>
 					<Input id="default-name" value="Noah Baumgartner" />
 				</Field>
 				<Field>
-					<FieldLabel for="default-username">Username</FieldLabel>
+					<Label for="default-username">Username</Label>
 					<Input
 						id="default-username"
 						value="noah"
@@ -82,7 +82,7 @@
 					<Button {...props} variant="secondary">With content</Button>
 				{/snippet}
 				<Field>
-					<FieldLabel for="content-name">Name</FieldLabel>
+					<Label for="content-name">Name</Label>
 					<Input id="content-name" value="Noah Baumgartner" />
 				</Field>
 			</Dialog>
@@ -147,7 +147,7 @@
 				<Button {...props} variant="secondary">Edit profile</Button>
 			{/snippet}
 			<Field>
-				<FieldLabel for="test-name">Name</FieldLabel>
+				<Label for="test-name">Name</Label>
 				<Input id="test-name" value="Noah Baumgartner" />
 			</Field>
 			{#snippet actions(close)}

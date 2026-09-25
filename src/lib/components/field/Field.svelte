@@ -5,7 +5,7 @@
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 		/** `responsive` is vertical and switches to horizontal when the surrounding FieldGroup is wider than 448px. */
 		orientation?: 'vertical' | 'horizontal' | 'responsive';
-		/** A FieldLabel, the control, and optionally FieldDescription and FieldError. Horizontal fields wrap label and description in a FieldContent. */
+		/** A Label, the control, and optionally FieldDescription and FieldError. Horizontal fields wrap label and description in a FieldContent. */
 		children: Snippet;
 	};
 
@@ -31,7 +31,7 @@
 		align-items: center;
 	}
 
-	.field--horizontal > :global(.field-label) {
+	.field--horizontal > :global(.label) {
 		flex: auto;
 	}
 
@@ -39,7 +39,7 @@
 		align-items: flex-start;
 	}
 
-	.field--horizontal:has(> :global(.field-content)) > :global(.checkbox) {
+	.field--horizontal:has(> :global(.field-content)) > :global(:is(.checkbox, .radio)) {
 		margin-top: 2px;
 	}
 
@@ -49,7 +49,7 @@
 			align-items: center;
 		}
 
-		.field--responsive > :global(:is(.field-label, .field-content)) {
+		.field--responsive > :global(:is(.label, .field-content)) {
 			flex: auto;
 		}
 
@@ -59,20 +59,20 @@
 	}
 
 	/* State follows the control, so there is no invalid or disabled prop to keep in sync */
-	.field:has(:global([aria-invalid='true'])) :global(.field-label) {
+	.field:has(:global([aria-invalid='true'])) :global(.label) {
 		color: var(--color-destructive);
 	}
 
-	.field:has(:global(.checkbox)) :global(.field-label) {
+	.field:has(:global(:is(.checkbox, .radio, .switch))) :global(.label) {
 		cursor: pointer;
 	}
 
 	/* The control dims itself */
-	.field:has(:global(:disabled)) > :global(:is(.field-label, .field-description, .field-content)) {
+	.field:has(:global(:disabled)) > :global(:is(.label, .field-description, .field-content)) {
 		opacity: 0.5;
 	}
 
-	.field:has(:global(:disabled)) :global(.field-label) {
+	.field:has(:global(:disabled)) :global(.label) {
 		cursor: not-allowed;
 	}
 </style>

@@ -3,7 +3,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	type Props = Omit<HTMLAttributes<HTMLLegendElement>, 'children'> & {
-		/** `label` matches a FieldLabel, for a group of checkboxes or radios. */
+		/** `label` matches a Label, for a group of checkboxes or radios. */
 		variant?: 'legend' | 'label';
 		children: Snippet;
 	};

@@ -27,16 +27,16 @@
 		user-select: none;
 	}
 
-	/* Checkboxes toggle on a label click, so show it */
-	.label:has(:global(.checkbox)),
-	:global(.checkbox) + .label {
+	/* Checkboxes and switches toggle on a label click, so show it */
+	.label:has(:global(:is(.checkbox, .switch))),
+	:global(:is(.checkbox, .switch)) + .label {
 		cursor: pointer;
 	}
 
 	/* Dim with a disabled control, whether wrapped or placed right before the label */
 	.label:has(:global(:disabled)),
 	:global(:disabled) + .label,
-	:global(.checkbox:has(:disabled)) + .label {
+	:global(:is(.checkbox, .switch):has(:disabled)) + .label {
 		cursor: not-allowed;
 		opacity: 0.5;
 	}

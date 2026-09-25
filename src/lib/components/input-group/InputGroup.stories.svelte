@@ -3,8 +3,7 @@
 	import { expect, fn } from 'storybook/test';
 	import InputGroup from './InputGroup.svelte';
 	import InputGroupAddon from './InputGroupAddon.svelte';
-	import InputGroupButton from './InputGroupButton.svelte';
-	import InputGroupText from './InputGroupText.svelte';
+	import Button from '../button/Button.svelte';
 	import Input from '../input/Input.svelte';
 	import { Copy, Info, Mail, Search } from '../../icons.js';
 
@@ -30,9 +29,7 @@
 			<InputGroupAddon>
 				<Search />
 			</InputGroupAddon>
-			<InputGroupAddon align="inline-end">
-				<InputGroupText>12 results</InputGroupText>
-			</InputGroupAddon>
+			<InputGroupAddon align="inline-end">12 results</InputGroupAddon>
 		</InputGroup>
 	{/snippet}
 </Story>
@@ -45,7 +42,7 @@
 					<Input placeholder={align} aria-label={align} />
 					<InputGroupAddon {align}>
 						<Info />
-						<InputGroupText>align="{align}"</InputGroupText>
+						align="{align}"
 					</InputGroupAddon>
 				</InputGroup>
 			{/each}
@@ -57,13 +54,9 @@
 	{#snippet template()}
 		<div style={column}>
 			<InputGroup>
-				<InputGroupAddon>
-					<InputGroupText>https://</InputGroupText>
-				</InputGroupAddon>
+				<InputGroupAddon>https://</InputGroupAddon>
 				<Input placeholder="example" aria-label="Domain" />
-				<InputGroupAddon align="inline-end">
-					<InputGroupText>.com</InputGroupText>
-				</InputGroupAddon>
+				<InputGroupAddon align="inline-end">.com</InputGroupAddon>
 			</InputGroup>
 			<InputGroup>
 				<InputGroupAddon>
@@ -74,23 +67,19 @@
 			<InputGroup>
 				<Input value="sk-3f9a…c21" readonly aria-label="API key" />
 				<InputGroupAddon align="inline-end">
-					<InputGroupButton icon={Copy} label="Copy" />
+					<Button variant="ghost" size="sm" icon={Copy} label="Copy" />
 				</InputGroupAddon>
 			</InputGroup>
 			<InputGroup>
 				<Input type="search" placeholder="Search docs" aria-label="Search docs" />
 				<InputGroupAddon align="inline-end">
-					<InputGroupButton variant="secondary">Search</InputGroupButton>
+					<Button variant="secondary" size="sm">Search</Button>
 				</InputGroupAddon>
 			</InputGroup>
 			<InputGroup>
-				<InputGroupAddon>
-					<InputGroupText>€</InputGroupText>
-				</InputGroupAddon>
+				<InputGroupAddon>€</InputGroupAddon>
 				<Input type="number" value={20} aria-label="Amount" />
-				<InputGroupAddon align="inline-end">
-					<InputGroupText>EUR</InputGroupText>
-				</InputGroupAddon>
+				<InputGroupAddon align="inline-end">EUR</InputGroupAddon>
 			</InputGroup>
 		</div>
 	{/snippet}
@@ -124,12 +113,10 @@
 >
 	{#snippet template()}
 		<InputGroup style="width: 320px;">
-			<InputGroupAddon>
-				<InputGroupText>https://</InputGroupText>
-			</InputGroupAddon>
+			<InputGroupAddon>https://</InputGroupAddon>
 			<Input placeholder="example" aria-label="Domain" />
 			<InputGroupAddon align="inline-end">
-				<InputGroupButton icon={Copy} label="Copy" onclick={oncopy} />
+				<Button variant="ghost" size="sm" icon={Copy} label="Copy" onclick={oncopy} />
 			</InputGroupAddon>
 		</InputGroup>
 	{/snippet}

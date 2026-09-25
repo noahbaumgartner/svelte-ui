@@ -5,7 +5,7 @@
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 		/** Placement relative to the input, independent of the order in the markup. */
 		align?: 'inline-start' | 'inline-end' | 'block-start' | 'block-end';
-		/** InputGroupText, InputGroupButton, icons or other content. */
+		/** Text, icons or ghost Buttons; Buttons are shrunk to fit. */
 		children: Snippet;
 	};
 
@@ -32,7 +32,9 @@
 		align-items: center;
 		gap: 6px;
 		height: 100%;
+		font-size: 13px;
 		color: var(--color-text-muted);
+		white-space: nowrap;
 		cursor: text;
 		user-select: none;
 	}
@@ -41,6 +43,16 @@
 		width: 16px;
 		height: 16px;
 		flex-shrink: 0;
+	}
+
+	/* Buttons shrink to fit inside the 32px group */
+	.input-group-addon > :global(.button) {
+		height: 24px;
+		border-radius: 6px;
+	}
+
+	.input-group-addon > :global(.button--icon-only) {
+		width: 24px;
 	}
 
 	.input-group-addon--inline-start {
@@ -66,11 +78,11 @@
 	}
 
 	/* Buttons sit 4px from the border, like the Input's own controls */
-	.input-group-addon--inline-start:has(> :global(.input-group-button:first-child)) {
+	.input-group-addon--inline-start:has(> :global(.button:first-child)) {
 		padding-left: 4px;
 	}
 
-	.input-group-addon--inline-end:has(> :global(.input-group-button:last-child)) {
+	.input-group-addon--inline-end:has(> :global(.button:last-child)) {
 		padding-right: 4px;
 	}
 </style>

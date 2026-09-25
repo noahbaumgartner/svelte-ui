@@ -6,11 +6,11 @@
 	import FieldDescription from './FieldDescription.svelte';
 	import FieldError from './FieldError.svelte';
 	import FieldGroup from './FieldGroup.svelte';
-	import FieldLabel from './FieldLabel.svelte';
 	import FieldLegend from './FieldLegend.svelte';
 	import FieldSeparator from './FieldSeparator.svelte';
 	import FieldSet from './FieldSet.svelte';
 	import Button from '../button/Button.svelte';
+	import Label from '../label/Label.svelte';
 	import Checkbox from '../checkbox/Checkbox.svelte';
 	import Input from '../input/Input.svelte';
 
@@ -41,11 +41,11 @@
 				<FieldDescription>This is shown on your public page.</FieldDescription>
 				<FieldGroup>
 					<Field {orientation}>
-						<FieldLabel for="default-name">Name</FieldLabel>
+						<Label for="default-name">Name</Label>
 						<Input id="default-name" placeholder="Ada Lovelace" />
 					</Field>
 					<Field {orientation}>
-						<FieldLabel for="default-email">Email</FieldLabel>
+						<Label for="default-email">Email</Label>
 						<Input id="default-email" type="email" aria-describedby="default-email-description" />
 						<FieldDescription id="default-email-description">
 							We never share your email.
@@ -54,7 +54,7 @@
 					<FieldSeparator />
 					<Field orientation="horizontal">
 						<Checkbox id="default-newsletter" />
-						<FieldLabel for="default-newsletter">Subscribe to the newsletter</FieldLabel>
+						<Label for="default-newsletter">Subscribe to the newsletter</Label>
 					</Field>
 					<Field orientation="horizontal">
 						<Button type="submit">Save</Button>
@@ -72,7 +72,7 @@
 			{#each orientations as orientation (orientation)}
 				<Field {orientation}>
 					<FieldContent>
-						<FieldLabel for="orientation-{orientation}">Display name</FieldLabel>
+						<Label for="orientation-{orientation}">Display name</Label>
 						<FieldDescription>orientation="{orientation}"</FieldDescription>
 					</FieldContent>
 					<Input
@@ -84,7 +84,7 @@
 			<Field orientation="horizontal">
 				<Checkbox id="orientation-check" checked />
 				<FieldContent>
-					<FieldLabel for="orientation-check">Share usage data</FieldLabel>
+					<Label for="orientation-check">Share usage data</Label>
 					<FieldDescription>A checkbox with a description.</FieldDescription>
 				</FieldContent>
 			</Field>
@@ -96,7 +96,7 @@
 	{#snippet template({ orientation })}
 		<FieldGroup style={form}>
 			<Field {orientation}>
-				<FieldLabel for="state-username">Username</FieldLabel>
+				<Label for="state-username">Username</Label>
 				<Input
 					id="state-username"
 					value="ada lovelace"
@@ -106,7 +106,7 @@
 				<FieldError id="state-username-error" errors={['Only letters, numbers and dashes.']} />
 			</Field>
 			<Field {orientation}>
-				<FieldLabel for="state-password">Password</FieldLabel>
+				<Label for="state-password">Password</Label>
 				<Input
 					id="state-password"
 					type="password"
@@ -120,7 +120,7 @@
 				/>
 			</Field>
 			<Field {orientation}>
-				<FieldLabel for="state-disabled">Workspace</FieldLabel>
+				<Label for="state-disabled">Workspace</Label>
 				<Input id="state-disabled" value="acme" disabled />
 				<FieldDescription>Only owners can rename the workspace.</FieldDescription>
 			</Field>
@@ -137,14 +137,14 @@
 					{#each ['Mentions', 'Replies', 'New followers'] as topic (topic)}
 						<Field orientation="horizontal">
 							<Checkbox id="topic-{topic}" />
-							<FieldLabel for="topic-{topic}">{topic}</FieldLabel>
+							<Label for="topic-{topic}">{topic}</Label>
 						</Field>
 					{/each}
 				</FieldGroup>
 			</FieldSet>
 			<FieldSeparator>Or</FieldSeparator>
 			<Field {orientation}>
-				<FieldLabel for="composition-webhook">Webhook URL</FieldLabel>
+				<Label for="composition-webhook">Webhook URL</Label>
 				<Input id="composition-webhook" type="url" />
 				<FieldDescription>Receive the same events as a POST request.</FieldDescription>
 			</Field>
@@ -163,7 +163,7 @@
 >
 	{#snippet template({ orientation })}
 		<Field {orientation} style={form}>
-			<FieldLabel for="test-username">Username</FieldLabel>
+			<Label for="test-username">Username</Label>
 			<Input id="test-username" aria-invalid="true" aria-describedby="test-username-error" />
 			<FieldError id="test-username-error" errors={['Only letters, numbers and dashes.']} />
 		</Field>
