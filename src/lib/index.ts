@@ -35,6 +35,7 @@ export { default as InputGroup } from './components/input-group/InputGroup.svelt
 export { default as InputGroupAddon } from './components/input-group/InputGroupAddon.svelte';
 export { default as InputGroupButton } from './components/input-group/InputGroupButton.svelte';
 export { default as InputGroupText } from './components/input-group/InputGroupText.svelte';
+export { default as Label } from './components/label/Label.svelte';
 export { default as Link } from './components/link/Link.svelte';
 export { default as Sidebar } from './components/sidebar/Sidebar.svelte';
 export { default as SidebarContent } from './components/sidebar/SidebarContent.svelte';
@@ -48,7 +49,9 @@ export { default as SidebarProvider } from './components/sidebar/SidebarProvider
 export { default as SidebarSeparator } from './components/sidebar/SidebarSeparator.svelte';
 export { default as SidebarTrigger } from './components/sidebar/SidebarTrigger.svelte';
 export type { AlertDialogTriggerProps } from './components/alert-dialog/AlertDialog.svelte';
+export { default as Tooltip } from './components/tooltip/Tooltip.svelte';
 export { default as TimePicker } from './components/time-picker/TimePicker.svelte';
+export type { TooltipTriggerProps } from './components/tooltip/Tooltip.svelte';
 export type { InputType } from './components/input/Input.svelte';
 export type { DialogTriggerProps } from './components/dialog/Dialog.svelte';
 export type { ContextMenuTriggerProps } from './components/context-menu/context.js';

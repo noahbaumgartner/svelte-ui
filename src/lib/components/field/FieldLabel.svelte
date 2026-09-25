@@ -1,28 +1,10 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import type { HTMLLabelAttributes } from 'svelte/elements';
+	import type { ComponentProps } from 'svelte';
+	import Label from '../label/Label.svelte';
 
-	type Props = Omit<HTMLLabelAttributes, 'children'> & {
-		/** Set `for` to the control's id, or wrap the control. */
-		children: Snippet;
-	};
+	type Props = ComponentProps<typeof Label>;
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { class: className, ...rest }: Props = $props();
 </script>
 
-<label {...rest} class={['field-label', className]}>
-	{@render children()}
-</label>
-
-<style>
-	.field-label {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		width: fit-content;
-		font-size: 13px;
-		font-weight: 500;
-		line-height: 1.4;
-		user-select: none;
-	}
-</style>
+<Label {...rest} class={['field-label', className]} />

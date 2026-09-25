@@ -20,4 +20,8 @@
 		font-size: 12px;
 		color: var(--color-text-muted);
 	}
+
+	:global(.tooltip-content) .kbd-group {
+		color: inherit;
+	}
 </style>

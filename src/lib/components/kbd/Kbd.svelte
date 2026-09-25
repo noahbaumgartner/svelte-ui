@@ -38,7 +38,8 @@
 		flex-shrink: 0;
 	}
 
-	:global(.button--primary) .kbd {
+	:global(.button--primary) .kbd,
+	:global(.tooltip-content) .kbd {
 		background-color: color-mix(in srgb, var(--color-base) 20%, transparent);
 		color: inherit;
 	}
