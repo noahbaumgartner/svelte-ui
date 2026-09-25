@@ -54,6 +54,8 @@ export { default as Skeleton } from './components/skeleton/Skeleton.svelte';
 export { default as Spinner } from './components/spinner/Spinner.svelte';
 export { default as Switch } from './components/switch/Switch.svelte';
 export { default as Textarea } from './components/textarea/Textarea.svelte';
+export { default as Toaster } from './components/toaster/Toaster.svelte';
+export { toast, type ToastOptions, type ToastAction } from './components/toaster/toast.svelte.js';
 export { default as Toggle } from './components/toggle/Toggle.svelte';
 export { default as Tooltip } from './components/tooltip/Tooltip.svelte';
 export { default as TimePicker } from './components/time-picker/TimePicker.svelte';
