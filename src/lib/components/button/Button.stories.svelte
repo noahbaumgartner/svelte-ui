@@ -15,6 +15,7 @@
 			variant: { control: 'select', options: variants },
 			size: { control: 'inline-radio', options: sizes },
 			disabled: { control: 'boolean' },
+			loading: { control: 'boolean' },
 			href: { control: 'text' },
 			label: { control: 'text' },
 			icon: { control: false },
@@ -73,11 +74,12 @@
 	{/snippet}
 </Story>
 
-<Story name="States" parameters={{ controls: { exclude: ['disabled'] } }}>
+<Story name="States" parameters={{ controls: { exclude: ['disabled', 'loading'] } }}>
 	{#snippet template(args)}
 		<div style={row}>
 			<Button {...args}>Enabled</Button>
 			<Button {...args} disabled>Disabled</Button>
+			<Button {...args} loading>Loading</Button>
 		</div>
 	{/snippet}
 </Story>
@@ -114,6 +116,23 @@
 >
 	{#snippet template(args)}
 		<Button {...args}>Disabled</Button>
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: loading blocks click"
+	tags={['!dev', '!autodocs']}
+	args={{ loading: true }}
+	play={async ({ args, canvas }) => {
+		const button = canvas.getByRole('button', { name: 'Saving' });
+		await expect(button).toBeDisabled();
+		await expect(button).toHaveAttribute('aria-busy', 'true');
+		button.click();
+		await expect(args.onclick).not.toHaveBeenCalled();
+	}}
+>
+	{#snippet template(args)}
+		<Button {...args}>Saving</Button>
 	{/snippet}
 </Story>
 

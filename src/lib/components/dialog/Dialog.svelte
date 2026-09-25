@@ -9,6 +9,7 @@
 	import type { Snippet } from 'svelte';
 	import { X } from '@lucide/svelte';
 	import Button from '../button/Button.svelte';
+	import Spinner from '../spinner/Spinner.svelte';
 
 	type Props = {
 		/** Whether the dialog is open. Bindable. Escape, the close button and a click on the backdrop close it. */
@@ -21,9 +22,19 @@
 		children?: Snippet;
 		/** Optional Buttons in the footer, right-aligned with the primary one last (rightmost). Call `close` to close the dialog. */
 		actions?: Snippet<[close: () => void]>;
+		/** Grays out the content and actions, makes them inert and shows a centered Spinner. The close button keeps working. */
+		loading?: boolean;
 	};
 
-	let { open = $bindable(false), title, description, trigger, children, actions }: Props = $props();
+	let {
+		open = $bindable(false),
+		title,
+		description,
+		trigger,
+		children,
+		actions,
+		loading = false
+	}: Props = $props();
 
 	const id = $props.id();
 	let dialogEl: HTMLDialogElement;
@@ -52,6 +63,7 @@
 	bind:this={dialogEl}
 	aria-labelledby="{id}-title"
 	aria-describedby={description ? `${id}-description` : undefined}
+	aria-busy={loading || undefined}
 	class="dialog"
 	onkeydown={(event) => {
 		if (event.key !== 'Escape') return;
@@ -75,7 +87,7 @@
 		if (!inside) close();
 	}}
 >
-	<div class="dialog-content">
+	<div class="dialog-content" class:dialog-dimmed={loading} inert={loading}>
 		<h2 id="{id}-title" class="dialog-title">{title}</h2>
 		{#if description}
 			<p id="{id}-description" class="dialog-description">{description}</p>
@@ -85,9 +97,12 @@
 		{/if}
 	</div>
 	{#if actions}
-		<div class="dialog-actions">
+		<div class="dialog-actions" class:dialog-dimmed={loading} inert={loading}>
 			{@render actions(close)}
 		</div>
+	{/if}
+	{#if loading}
+		<Spinner class="dialog-spinner" size="lg" />
 	{/if}
 	<!-- Last in the DOM so the content, not the close button, gets the initial focus -->
 	<Button class="dialog-close" variant="ghost" size="sm" icon={X} label="Close" onclick={close} />
@@ -152,6 +167,11 @@
 		}
 	}
 
+	.dialog-content,
+	.dialog-actions {
+		transition: opacity 140ms ease;
+	}
+
 	.dialog-content {
 		min-height: 0;
 		padding: 20px;
@@ -184,6 +204,18 @@
 		gap: 4px;
 		padding: 16px;
 		border-top: 1px solid var(--color-border);
+	}
+
+	.dialog-dimmed {
+		opacity: 0.4;
+		filter: grayscale(1);
+		user-select: none;
+	}
+
+	.dialog :global(.dialog-spinner) {
+		position: absolute;
+		inset: 0;
+		margin: auto;
 	}
 
 	.dialog :global(.dialog-close) {

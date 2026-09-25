@@ -1,9 +1,5 @@
-<hr class="sidebar-separator" />
+<script lang="ts">
+	import Separator from '../separator/Separator.svelte';
+</script>
 
-<style>
-	.sidebar-separator {
-		margin: 0 8px;
-		border: none;
-		border-top: 1px solid var(--color-border);
-	}
-</style>
+<Separator decorative={false} style="margin: 0 8px;" />

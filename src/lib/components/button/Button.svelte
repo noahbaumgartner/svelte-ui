@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import type { LucideIcon } from '@lucide/svelte';
+	import Spinner from '../spinner/Spinner.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
 		/** Renders an <a> instead of a <button>. External (http) links open in a new tab. */
@@ -10,6 +11,8 @@
 		rel?: string;
 		type?: 'button' | 'submit' | 'reset';
 		disabled?: boolean;
+		/** Replaces the icon with a Spinner and blocks clicks. */
+		loading?: boolean;
 		/** `overlay` is a translucent, blurred, fully rounded button for use on top of images or media. */
 		variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'overlay';
 		size?: 'sm' | 'md' | 'lg';
@@ -26,6 +29,7 @@
 		rel,
 		type = 'button',
 		disabled = false,
+		loading = false,
 		variant = 'primary',
 		size = 'md',
 		icon: Icon,
@@ -44,25 +48,35 @@
 		`button--${size}`,
 		{
 			'button--icon-only': iconOnly,
-			'button--no-icon': !Icon
+			'button--no-icon': !Icon && !loading,
+			'button--loading': loading
 		},
 		className
 	]);
 </script>
 
 {#snippet content()}
-	{#if Icon}<Icon class="button-icon" aria-hidden="true" />{/if}
+	{#if loading}
+		<Spinner class="button-spinner" aria-hidden="true" />
+	{:else if Icon}<Icon class="button-icon" aria-hidden="true" />{/if}
 	{#if children}<span class="button-label">{@render children()}</span>{/if}
 {/snippet}
 
-{#if href && !disabled}
+{#if href && !disabled && !loading}
 	<!-- href comes from the consumer, who resolves it; this library has no routes -->
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 	<a {...rest} {href} target={resolvedTarget} rel={resolvedRel} aria-label={label} class={classes}>
 		{@render content()}
 	</a>
 {:else}
-	<button {...rest} {type} {disabled} aria-label={label} class={classes}>
+	<button
+		{...rest}
+		{type}
+		disabled={disabled || loading}
+		aria-busy={loading || undefined}
+		aria-label={label}
+		class={classes}
+	>
 		{@render content()}
 	</button>
 {/if}
@@ -91,7 +105,12 @@
 
 	.button:disabled {
 		cursor: not-allowed;
-		opacity: 0.5;
+		opacity: 0.7;
+	}
+
+	.button--loading:disabled {
+		cursor: progress;
+		opacity: 1;
 	}
 
 	.button-label {
@@ -110,6 +129,15 @@
 		width: 16px;
 		height: 16px;
 		flex-shrink: 0;
+	}
+
+	/* 2px smaller than the icon it replaces */
+	.button :global(.button-spinner) {
+		--spinner-size: 14px;
+	}
+
+	.button--sm :global(.button-spinner) {
+		--spinner-size: 12px;
 	}
 
 	/* Sizes */

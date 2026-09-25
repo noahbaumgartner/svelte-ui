@@ -37,6 +37,7 @@ export { default as Link } from './components/link/Link.svelte';
 export { default as Popover } from './components/popover/Popover.svelte';
 export { default as RadioGroup } from './components/radio-group/RadioGroup.svelte';
 export { default as RadioGroupItem } from './components/radio-group/RadioGroupItem.svelte';
+export { default as Separator } from './components/separator/Separator.svelte';
 export { default as Sidebar } from './components/sidebar/Sidebar.svelte';
 export { default as SidebarContent } from './components/sidebar/SidebarContent.svelte';
 export { default as SidebarFooter } from './components/sidebar/SidebarFooter.svelte';
@@ -49,6 +50,8 @@ export { default as SidebarProvider } from './components/sidebar/SidebarProvider
 export { default as SidebarSeparator } from './components/sidebar/SidebarSeparator.svelte';
 export { default as SidebarTrigger } from './components/sidebar/SidebarTrigger.svelte';
 export type { AlertDialogTriggerProps } from './components/alert-dialog/AlertDialog.svelte';
+export { default as Skeleton } from './components/skeleton/Skeleton.svelte';
+export { default as Spinner } from './components/spinner/Spinner.svelte';
 export { default as Switch } from './components/switch/Switch.svelte';
 export { default as Textarea } from './components/textarea/Textarea.svelte';
 export { default as Toggle } from './components/toggle/Toggle.svelte';

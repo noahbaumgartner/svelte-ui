@@ -20,12 +20,14 @@
 			description: { control: 'text' },
 			trigger: { control: false },
 			children: { control: false },
-			actions: { control: false }
+			actions: { control: false },
+			loading: { control: 'boolean' }
 		},
 		args: {
 			open: false,
 			title: 'Edit profile',
-			description: 'Changes are visible to everyone in your workspace.'
+			description: 'Changes are visible to everyone in your workspace.',
+			loading: false
 		}
 	});
 
@@ -127,6 +129,66 @@
 				{/snippet}
 			</Dialog>
 		</div>
+	{/snippet}
+</Story>
+
+<Story name="States" parameters={{ controls: { exclude: ['loading'] } }}>
+	{#snippet template(args)}
+		<div style={row}>
+			<Dialog {...args}>
+				{#snippet trigger(props)}
+					<Button {...props} variant="secondary">Ready</Button>
+				{/snippet}
+				<Field>
+					<Label for="states-ready-name">Name</Label>
+					<Input id="states-ready-name" value="Noah Baumgartner" />
+				</Field>
+				{#snippet actions(close)}
+					<Button variant="ghost" onclick={close}>Cancel</Button>
+					<Button onclick={close}>Save</Button>
+				{/snippet}
+			</Dialog>
+			<Dialog {...args} loading>
+				{#snippet trigger(props)}
+					<Button {...props} variant="secondary">Loading</Button>
+				{/snippet}
+				<Field>
+					<Label for="states-loading-name">Name</Label>
+					<Input id="states-loading-name" value="Noah Baumgartner" />
+				</Field>
+				{#snippet actions(close)}
+					<Button variant="ghost" onclick={close}>Cancel</Button>
+					<Button onclick={close}>Save</Button>
+				{/snippet}
+			</Dialog>
+		</div>
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: loading makes content inert and shows spinner"
+	tags={['!dev', '!autodocs']}
+	args={{ open: true, loading: true }}
+	play={async ({ canvas }) => {
+		const dialog = canvas.getByRole('dialog', { name: 'Edit profile' });
+		await waitFor(() => expect(dialog).toBeVisible());
+		await expect(dialog).toHaveAttribute('aria-busy', 'true');
+		await expect(canvas.getByRole('status', { name: 'Loading' })).toBeVisible();
+		await expect(canvas.getByRole('button', { name: 'Save' }).closest('[inert]')).not.toBeNull();
+		await expect(canvas.getByRole('textbox', { name: 'Name' }).closest('[inert]')).not.toBeNull();
+		await expect(canvas.getByRole('button', { name: 'Close' })).toBeEnabled();
+	}}
+>
+	{#snippet template(args)}
+		<Dialog {...args}>
+			<Field>
+				<Label for="test-loading-name">Name</Label>
+				<Input id="test-loading-name" value="Noah Baumgartner" />
+			</Field>
+			{#snippet actions(close)}
+				<Button onclick={close}>Save</Button>
+			{/snippet}
+		</Dialog>
 	{/snippet}
 </Story>
 
