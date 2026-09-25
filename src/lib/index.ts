@@ -34,6 +34,9 @@ export { default as InputGroup } from './components/input-group/InputGroup.svelt
 export { default as InputGroupAddon } from './components/input-group/InputGroupAddon.svelte';
 export { default as Label } from './components/label/Label.svelte';
 export { default as Link } from './components/link/Link.svelte';
+export { default as NavigationMenu } from './components/navigation-menu/NavigationMenu.svelte';
+export { default as NavigationMenuItem } from './components/navigation-menu/NavigationMenuItem.svelte';
+export { default as NavigationMenuLink } from './components/navigation-menu/NavigationMenuLink.svelte';
 export { default as Popover } from './components/popover/Popover.svelte';
 export { default as RadioGroup } from './components/radio-group/RadioGroup.svelte';
 export { default as RadioGroupItem } from './components/radio-group/RadioGroupItem.svelte';
