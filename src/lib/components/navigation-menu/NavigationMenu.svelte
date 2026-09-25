@@ -5,11 +5,13 @@
 	type Props = {
 		/** Accessible name of the navigation landmark. */
 		label?: string;
+		/** `vertical` stacks the items and expands submenus in place, e.g. in a mobile menu. */
+		orientation?: 'horizontal' | 'vertical';
 		/** `NavigationMenuItem`s. */
 		children: Snippet;
 	};
 
-	let { label = 'Main', children }: Props = $props();
+	let { label = 'Main', orientation = 'horizontal', children }: Props = $props();
 
 	const openDelay = 200;
 	const closeDelay = 200;
@@ -18,6 +20,9 @@
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	setNavigationMenuContext({
+		get vertical() {
+			return orientation === 'vertical';
+		},
 		get current() {
 			return current;
 		},
@@ -42,6 +47,7 @@
 	$effect(() => () => clearTimeout(timer));
 
 	function handleKeydown(event: KeyboardEvent) {
+		if (orientation === 'vertical') return;
 		if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
 		const list = event.currentTarget as HTMLElement;
 		const triggers = Array.from(
@@ -55,7 +61,10 @@
 	}
 </script>
 
-<nav aria-label={label} class="navigation-menu">
+<nav
+	aria-label={label}
+	class={['navigation-menu', { 'navigation-menu--vertical': orientation === 'vertical' }]}
+>
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<ul class="navigation-menu-list" onkeydown={handleKeydown}>
 		{@render children()}
@@ -75,5 +84,12 @@
 		margin: 0;
 		padding: 0;
 		list-style: none;
+	}
+
+	.navigation-menu--vertical .navigation-menu-list {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 4px;
+		width: 100%;
 	}
 </style>

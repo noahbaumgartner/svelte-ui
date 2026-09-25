@@ -34,6 +34,7 @@ export { default as InputGroup } from './components/input-group/InputGroup.svelt
 export { default as InputGroupAddon } from './components/input-group/InputGroupAddon.svelte';
 export { default as Label } from './components/label/Label.svelte';
 export { default as Link } from './components/link/Link.svelte';
+export { default as Navbar } from './components/navbar/Navbar.svelte';
 export { default as NavigationMenu } from './components/navigation-menu/NavigationMenu.svelte';
 export { default as NavigationMenuItem } from './components/navigation-menu/NavigationMenuItem.svelte';
 export { default as NavigationMenuLink } from './components/navigation-menu/NavigationMenuLink.svelte';
@@ -56,12 +57,19 @@ export type { AlertDialogTriggerProps } from './components/alert-dialog/AlertDia
 export { default as Skeleton } from './components/skeleton/Skeleton.svelte';
 export { default as Spinner } from './components/spinner/Spinner.svelte';
 export { default as Switch } from './components/switch/Switch.svelte';
+export {
+	default as Table,
+	type TableColumn,
+	type TableSort,
+	type TableSortValue
+} from './components/table/Table.svelte';
 export { default as Textarea } from './components/textarea/Textarea.svelte';
 export { default as Toaster } from './components/toaster/Toaster.svelte';
 export { toast, type ToastOptions, type ToastAction } from './components/toaster/toast.svelte.js';
 export { default as Toggle } from './components/toggle/Toggle.svelte';
 export { default as Tooltip } from './components/tooltip/Tooltip.svelte';
 export { default as TimePicker } from './components/time-picker/TimePicker.svelte';
+export type { NavbarTriggerProps } from './components/navbar/Navbar.svelte';
 export type { PopoverTriggerProps } from './components/popover/Popover.svelte';
 export type { TooltipTriggerProps } from './components/tooltip/Tooltip.svelte';
 export type { InputType } from './components/input/Input.svelte';

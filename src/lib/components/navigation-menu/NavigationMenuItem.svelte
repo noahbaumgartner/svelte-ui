@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
-	import { scale } from 'svelte/transition';
+	import { scale, slide } from 'svelte/transition';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { getNavigationMenuContext } from './context.js';
 
@@ -10,9 +10,9 @@
 		href?: string;
 		/** Marks the item as the current page, or the section containing it. */
 		active?: boolean;
-		/** `NavigationMenuLink`s, shown in a panel the item opens on hover or click. */
+		/** `NavigationMenuLink`s, shown in a panel the item opens on hover or click, or expanded in place in a vertical menu. */
 		items?: Snippet;
-		/** Number of columns the panel lays its links out in. */
+		/** Number of columns the panel lays its links out in. Ignored in a vertical menu. */
 		columns?: 1 | 2 | 3;
 		children: Snippet;
 	};
@@ -26,7 +26,7 @@
 
 	let itemEl: HTMLLIElement;
 	let triggerEl: HTMLButtonElement | undefined = $state();
-	let contentEl: HTMLDivElement | undefined = $state();
+	let contentEl: HTMLElement | undefined = $state();
 	let position = $state({ top: 0, left: 0 });
 	let open = $derived(menu.current === id);
 	let classes = $derived([
@@ -38,13 +38,17 @@
 		return Array.from(contentEl?.querySelectorAll<HTMLElement>('a[href]') ?? []);
 	}
 
+	function hoverable(event: PointerEvent) {
+		return !menu.vertical && event.pointerType !== 'touch';
+	}
+
 	function close({ restoreFocus = false } = {}) {
 		menu.close();
 		if (restoreFocus) triggerEl?.focus();
 	}
 
 	async function handleTriggerKeydown(event: KeyboardEvent) {
-		if (event.key !== 'ArrowDown') return;
+		if (menu.vertical || event.key !== 'ArrowDown') return;
 		event.preventDefault();
 		menu.open(id, true);
 		await tick();
@@ -73,7 +77,7 @@
 	};
 
 	$effect(() => {
-		if (!open) return;
+		if (!open || menu.vertical) return;
 
 		function handlePointerDown(event: PointerEvent) {
 			if (!itemEl.contains(event.target as Node)) close();
@@ -98,10 +102,11 @@
 </script>
 
 <li
-	class="navigation-menu-item"
+	class={['navigation-menu-item', { 'navigation-menu-item--vertical': menu.vertical }]}
 	bind:this={itemEl}
 	onfocusout={(event) => {
-		if (open && !itemEl.contains(event.relatedTarget as Node | null)) menu.close();
+		if (open && !menu.vertical && !itemEl.contains(event.relatedTarget as Node | null))
+			menu.close();
 	}}
 >
 	{#if items}
@@ -113,14 +118,23 @@
 			bind:this={triggerEl}
 			onclick={() => (open ? close() : menu.open(id, true))}
 			onkeydown={handleTriggerKeydown}
-			onpointerenter={(event) => event.pointerType !== 'touch' && menu.open(id)}
-			onpointerleave={(event) => event.pointerType !== 'touch' && menu.leave()}
+			onpointerenter={(event) => hoverable(event) && menu.open(id)}
+			onpointerleave={(event) => hoverable(event) && menu.leave()}
 		>
 			{@render children()}
 			<ChevronDown class="navigation-menu-chevron" aria-hidden="true" />
 		</button>
 
-		{#if open}
+		{#if open && menu.vertical}
+			<ul
+				id="{id}-content"
+				class="navigation-menu-sub"
+				bind:this={contentEl}
+				transition:slide={{ duration: 200 }}
+			>
+				{@render items()}
+			</ul>
+		{:else if open}
 			<!-- svelte-ignore a11y_no_static_element_interactions -->
 			<div
 				id="{id}-content"
@@ -150,6 +164,11 @@
 <style>
 	.navigation-menu-item {
 		display: flex;
+	}
+
+	.navigation-menu-item--vertical {
+		flex-direction: column;
+		align-items: inherit;
 	}
 
 	.navigation-menu-trigger {
@@ -217,6 +236,15 @@
 		width: min(var(--columns) * 240px, 100vw - 30px);
 		gap: 2px;
 		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.navigation-menu-sub {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin: 4px 0 0;
 		padding: 0;
 		list-style: none;
 	}

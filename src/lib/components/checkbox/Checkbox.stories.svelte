@@ -11,10 +11,12 @@
 		tags: ['autodocs'],
 		argTypes: {
 			checked: { control: 'boolean' },
+			indeterminate: { control: 'boolean' },
 			disabled: { control: 'boolean' }
 		},
 		args: {
 			checked: false,
+			indeterminate: false,
 			disabled: false
 		}
 	});
@@ -31,11 +33,15 @@
 	{/snippet}
 </Story>
 
-<Story name="States" parameters={{ controls: { exclude: ['checked', 'disabled'] } }}>
+<Story
+	name="States"
+	parameters={{ controls: { exclude: ['checked', 'indeterminate', 'disabled'] } }}
+>
 	{#snippet template()}
 		<div style={row}>
 			<Checkbox aria-label="Unchecked" />
 			<Checkbox aria-label="Checked" checked />
+			<Checkbox aria-label="Indeterminate" indeterminate />
 			<Checkbox aria-label="Invalid" aria-invalid="true" />
 			<Checkbox aria-label="Disabled" disabled />
 			<Checkbox aria-label="Checked and disabled" checked disabled />

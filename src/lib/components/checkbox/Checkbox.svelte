@@ -1,15 +1,24 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import { Check } from '@lucide/svelte';
+	import { Check, Minus } from '@lucide/svelte';
 
 	type Props = Omit<HTMLInputAttributes, 'type'>;
 
-	let { checked = $bindable(false), class: className, ...rest }: Props = $props();
+	let {
+		checked = $bindable(false),
+		indeterminate = $bindable(false),
+		class: className,
+		...rest
+	}: Props = $props();
 </script>
 
 <span class={['checkbox', className]}>
-	<input {...rest} type="checkbox" bind:checked />
-	<Check class="checkbox-icon" aria-hidden="true" />
+	<input {...rest} type="checkbox" bind:checked bind:indeterminate />
+	{#if indeterminate}
+		<Minus class="checkbox-icon" aria-hidden="true" />
+	{:else}
+		<Check class="checkbox-icon" aria-hidden="true" />
+	{/if}
 </span>
 
 <style>
@@ -37,7 +46,8 @@
 			border-color 200ms ease;
 	}
 
-	input:checked {
+	input:checked,
+	input:indeterminate {
 		background-color: var(--color-ink);
 		border-color: var(--color-ink);
 	}
@@ -67,7 +77,8 @@
 		opacity: 0;
 	}
 
-	input:checked + :global(.checkbox-icon) {
+	input:checked + :global(.checkbox-icon),
+	input:indeterminate + :global(.checkbox-icon) {
 		opacity: 1;
 	}
 
@@ -75,7 +86,8 @@
 		opacity: 0;
 	}
 
-	input:checked:disabled + :global(.checkbox-icon) {
+	input:checked:disabled + :global(.checkbox-icon),
+	input:indeterminate:disabled + :global(.checkbox-icon) {
 		opacity: 0.5;
 	}
 </style>
