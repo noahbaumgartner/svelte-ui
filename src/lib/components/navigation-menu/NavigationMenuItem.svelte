@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import { scale, slide } from 'svelte/transition';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { getNavigationMenuContext } from './context.js';
@@ -130,7 +131,7 @@
 				id="{id}-content"
 				class="navigation-menu-sub"
 				bind:this={contentEl}
-				transition:slide={{ duration: 200 }}
+				transition:slide={{ duration: prefersReducedMotion.current ? 0 : 200 }}
 			>
 				{@render items()}
 			</ul>
@@ -147,7 +148,7 @@
 				onpointerleave={(event) => event.pointerType !== 'touch' && menu.leave()}
 				onkeydown={handleContentKeydown}
 				{@attach popover}
-				transition:scale={{ duration: 140, start: 0.95 }}
+				transition:scale={{ duration: prefersReducedMotion.current ? 0 : 140, start: 0.95 }}
 			>
 				<ul class="navigation-menu-links" style:--columns={columns}>
 					{@render items()}
@@ -168,7 +169,12 @@
 
 	.navigation-menu-item--vertical {
 		flex-direction: column;
-		align-items: inherit;
+	}
+
+	.navigation-menu-item--vertical .navigation-menu-trigger {
+		justify-content: space-between;
+		width: 100%;
+		text-align: left;
 	}
 
 	.navigation-menu-trigger {

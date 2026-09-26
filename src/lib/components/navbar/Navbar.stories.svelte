@@ -46,14 +46,19 @@
 {/snippet}
 
 {#snippet items()}
-	<NavigationMenuItem href="#start" active>Start</NavigationMenuItem>
-	<NavigationMenuItem>
+	<NavigationMenuItem href="#start">Start</NavigationMenuItem>
+	<NavigationMenuItem active>
 		Guides
 		{#snippet items()}
 			<NavigationMenuLink href="#introduction" icon={BookOpen} description="What the library is.">
 				Introduction
 			</NavigationMenuLink>
-			<NavigationMenuLink href="#installation" icon={Rocket} description="Install and import.">
+			<NavigationMenuLink
+				href="#installation"
+				icon={Rocket}
+				description="Install and import."
+				active
+			>
 				Installation
 			</NavigationMenuLink>
 			<NavigationMenuLink href="#theming" icon={Palette} description="Light and dark mode.">
@@ -84,6 +89,22 @@
 	{/snippet}
 </Story>
 
+<Story name="Scroll" parameters={{ docs: { story: { inline: false, iframeHeight: 360 } } }}>
+	{#snippet template(args)}
+		<Navbar open={args.open} label={args.label} {logo} {actions} {trigger}>
+			{@render items()}
+		</Navbar>
+		<main style="max-width: 640px; padding: 16px; line-height: 1.6;">
+			{#each { length: 12 }, index (index)}
+				<p>
+					The navbar stays at the top while the page scrolls beneath it. Open the menu on a narrow
+					screen and the page behind it can neither scroll nor take focus.
+				</p>
+			{/each}
+		</main>
+	{/snippet}
+</Story>
+
 <Story
 	name="Test: trigger opens the mobile menu and escape closes it"
 	tags={['!dev', '!autodocs']}
@@ -107,16 +128,16 @@
 </Story>
 
 <Story
-	name="Test: submenus expand in place and links close the mobile menu"
+	name="Test: submenus start collapsed and links close the mobile menu"
 	tags={['!dev', '!autodocs']}
 	globals={{ viewport: { value: 'mobile1', isRotated: false } }}
 	play={async ({ canvas, userEvent }) => {
 		const menu = canvas.getByRole('button', { name: 'Menu' });
 		await userEvent.click(menu);
 		const guides = await waitFor(() => canvas.getAllByRole('button', { name: 'Guides' }).at(-1)!);
+		await expect(guides).toHaveAttribute('aria-expanded', 'false');
 		await userEvent.click(guides);
-		await expect(guides).toHaveAttribute('aria-expanded', 'true');
-		const link = await waitFor(() => canvas.getByRole('link', { name: /Installation/ }));
+		const link = await waitFor(() => canvas.getByRole('link', { name: /Introduction/ }));
 		await userEvent.click(link);
 		await waitFor(() => expect(menu).toHaveAttribute('aria-expanded', 'false'));
 	}}
@@ -125,5 +146,28 @@
 		<Navbar open={args.open} label={args.label} {logo} {trigger}>
 			{@render items()}
 		</Navbar>
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: focus moves into the mobile menu and the page behind is inert"
+	tags={['!dev', '!autodocs']}
+	globals={{ viewport: { value: 'mobile1', isRotated: false } }}
+	play={async ({ canvas, userEvent }) => {
+		const behind = canvas.getByRole('button', { name: 'Behind' });
+		await userEvent.click(canvas.getByRole('button', { name: 'Menu' }));
+		await waitFor(() =>
+			expect(canvas.getAllByRole('link', { name: 'Start' }).at(-1)).toHaveFocus()
+		);
+		await expect(behind.closest('[inert]')).not.toBeNull();
+		await userEvent.keyboard('{Escape}');
+		await waitFor(() => expect(behind.closest('[inert]')).toBeNull());
+	}}
+>
+	{#snippet template(args)}
+		<Navbar open={args.open} label={args.label} {logo} {trigger}>
+			{@render items()}
+		</Navbar>
+		<Button variant="secondary">Behind</Button>
 	{/snippet}
 </Story>
