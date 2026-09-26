@@ -121,7 +121,7 @@
 	}
 
 	.button:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
 	}
 
@@ -196,12 +196,12 @@
 	/* Variants */
 
 	.button--primary {
-		background-color: var(--color-ink);
-		color: var(--color-base);
+		background-color: var(--color-accent);
+		color: var(--color-accent-foreground);
 	}
 
 	.button--primary:hover:not(:disabled) {
-		background-color: var(--color-ink-hover);
+		background-color: var(--color-accent-hover);
 	}
 
 	.button--secondary {

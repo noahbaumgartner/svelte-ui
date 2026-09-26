@@ -37,12 +37,12 @@
 	}
 
 	input:checked {
-		background-color: var(--color-ink);
-		border-color: var(--color-ink);
+		background-color: var(--color-accent);
+		border-color: var(--color-accent);
 	}
 
 	input:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
 	}
 
@@ -65,10 +65,13 @@
 		background-color: var(--color-base);
 		border-radius: 5px;
 		pointer-events: none;
-		transition: transform 200ms ease;
+		transition:
+			transform 200ms ease,
+			background-color 200ms ease;
 	}
 
 	input:checked + .switch-thumb {
+		background-color: var(--color-accent-foreground);
 		transform: translateX(14px);
 	}
 

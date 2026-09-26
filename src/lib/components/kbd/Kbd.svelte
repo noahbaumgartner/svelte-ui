@@ -40,7 +40,7 @@
 
 	:global(.button--primary) .kbd,
 	:global(.tooltip-content) .kbd {
-		background-color: color-mix(in srgb, var(--color-base) 20%, transparent);
+		background-color: color-mix(in srgb, currentColor 20%, transparent);
 		color: inherit;
 	}
 </style>

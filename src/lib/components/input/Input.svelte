@@ -253,8 +253,8 @@
 	}
 
 	.input::selection {
-		color: var(--color-base);
-		background-color: var(--color-ink);
+		color: var(--color-accent-foreground);
+		background-color: var(--color-accent);
 	}
 
 	.input[type='file'] {
@@ -440,8 +440,8 @@
 	}
 
 	.input:focus-visible {
-		border-color: var(--color-ink);
-		outline: 1px solid var(--color-ink);
+		border-color: var(--color-accent);
+		outline: 1px solid var(--color-accent);
 	}
 
 	.input[aria-invalid='true'] {

@@ -32,8 +32,8 @@
 	}
 
 	.badge--primary {
-		background-color: var(--color-ink);
-		color: var(--color-base);
+		background-color: var(--color-accent);
+		color: var(--color-accent-foreground);
 	}
 
 	.badge--secondary {

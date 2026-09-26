@@ -16,10 +16,27 @@ const preview: Preview = {
 				],
 				dynamicTitle: true
 			}
+		},
+		accent: {
+			description: 'Accent color',
+			toolbar: {
+				title: 'Accent',
+				icon: 'paintbrush',
+				items: [
+					{ value: 'ink', title: 'Ink (default)' },
+					{ value: '#ad5f45', title: 'Terracotta' },
+					{ value: '#977534', title: 'Ochre' },
+					{ value: '#6a7746', title: 'Moss' },
+					{ value: '#5f7b65', title: 'Sage' },
+					{ value: '#5a7885', title: 'Slate' }
+				],
+				dynamicTitle: true
+			}
 		}
 	},
 	initialGlobals: {
-		theme: 'system'
+		theme: 'system',
+		accent: 'ink'
 	},
 	decorators: [
 		(story, { globals }) => {
@@ -28,6 +45,11 @@ const preview: Preview = {
 				root.dataset.theme = globals.theme;
 			} else {
 				delete root.dataset.theme;
+			}
+			if (globals.accent && globals.accent !== 'ink') {
+				root.style.setProperty('--accent', globals.accent);
+			} else {
+				root.style.removeProperty('--accent');
 			}
 			return story();
 		}

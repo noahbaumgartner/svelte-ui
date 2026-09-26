@@ -343,7 +343,7 @@
 	}
 
 	.calendar-cell:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: -2px;
 	}
 
@@ -366,13 +366,13 @@
 	.calendar-cell--selected:hover:not(:disabled),
 	.calendar-row--selected .calendar-cell,
 	.calendar-row--selected .calendar-cell:hover:not(:disabled) {
-		color: var(--color-base);
-		background-color: var(--color-ink);
+		color: var(--color-accent-foreground);
+		background-color: var(--color-accent);
 	}
 
 	.calendar-cell--selected:focus-visible,
 	.calendar-row--selected .calendar-cell:focus-visible {
-		outline-color: var(--color-base);
+		outline-color: var(--color-accent-foreground);
 	}
 
 	/* Week mode: a row reads as one pill */
@@ -381,7 +381,7 @@
 	}
 
 	.calendar--week tbody tr.calendar-row--selected .calendar-cell {
-		background-color: var(--color-ink);
+		background-color: var(--color-accent);
 	}
 
 	.calendar--week .calendar-cell {

@@ -146,17 +146,17 @@
 	}
 
 	.time-picker-item:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: -2px;
 	}
 
 	.time-picker-item--selected,
 	.time-picker-item--selected:hover {
-		color: var(--color-base);
-		background-color: var(--color-ink);
+		color: var(--color-accent-foreground);
+		background-color: var(--color-accent);
 	}
 
 	.time-picker-item--selected:focus-visible {
-		outline-color: var(--color-base);
+		outline-color: var(--color-accent-foreground);
 	}
 </style>

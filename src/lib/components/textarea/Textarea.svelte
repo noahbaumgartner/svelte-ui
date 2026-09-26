@@ -29,8 +29,8 @@
 	}
 
 	.textarea::selection {
-		color: var(--color-base);
-		background-color: var(--color-ink);
+		color: var(--color-accent-foreground);
+		background-color: var(--color-accent);
 	}
 
 	.textarea::placeholder {
@@ -38,8 +38,8 @@
 	}
 
 	.textarea:focus-visible {
-		border-color: var(--color-ink);
-		outline: 1px solid var(--color-ink);
+		border-color: var(--color-accent);
+		outline: 1px solid var(--color-accent);
 	}
 
 	.textarea[aria-invalid='true'] {

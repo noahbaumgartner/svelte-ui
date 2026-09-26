@@ -212,7 +212,7 @@
 
 	.color-picker-area:focus-visible .color-picker-thumb,
 	.color-picker-hue:focus-visible .color-picker-thumb {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
 	}
 

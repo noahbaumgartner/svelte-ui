@@ -48,12 +48,12 @@
 
 	input:checked,
 	input:indeterminate {
-		background-color: var(--color-ink);
-		border-color: var(--color-ink);
+		background-color: var(--color-accent);
+		border-color: var(--color-accent);
 	}
 
 	input:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 		outline-offset: 2px;
 	}
 
@@ -71,7 +71,7 @@
 		inset: 2px;
 		width: 12px;
 		height: 12px;
-		color: var(--color-base);
+		color: var(--color-accent-foreground);
 		stroke-width: 3;
 		pointer-events: none;
 		opacity: 0;

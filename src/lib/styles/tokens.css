@@ -5,7 +5,13 @@
    --color-* tokens below, never raw hex values, so dark mode stays free.
 
    Theme selection: follows prefers-color-scheme by default; set
-   data-theme="light" | "dark" on <html> to force one. */
+   data-theme="light" | "dark" on <html> to force one.
+
+   Accent: set --accent on :root (e.g. `:root { --accent: #2563eb; }`) to
+   color primary actions, checked controls, selections and focus rings. The
+   same color is used in light and dark mode; without it the accent falls
+   back to the ink color. Text on the accent turns black or white depending
+   on its lightness; override --color-accent-foreground to pick it yourself. */
 :root {
 	color-scheme: light;
 	--base: #fff;
@@ -27,6 +33,11 @@
 	--color-surface-hover: color-mix(in srgb, var(--base), var(--ink) 12%);
 	--color-surface-active: color-mix(in srgb, var(--base), var(--ink) 17%);
 	--color-ink-hover: color-mix(in srgb, var(--base), var(--ink) 80%);
+
+	/* Accent */
+	--color-accent: var(--accent, var(--ink));
+	--color-accent-hover: color-mix(in srgb, var(--base), var(--color-accent) 80%);
+	--color-accent-foreground: oklch(from var(--color-accent) clamp(0, (0.65 - l) * 1000, 1) 0 0);
 
 	/* Validation errors; the only non-gray color */
 	--color-destructive: #dc2626;

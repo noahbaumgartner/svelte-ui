@@ -35,7 +35,6 @@
 		display: inline-flex;
 		flex-shrink: 0;
 		overflow: hidden;
-		border-radius: 9999px;
 		background-color: var(--color-surface);
 		color: var(--color-text-secondary);
 		user-select: none;
@@ -44,18 +43,21 @@
 	.avatar--sm {
 		width: 24px;
 		height: 24px;
+		border-radius: 8px;
 		font-size: 10px;
 	}
 
 	.avatar--md {
 		width: 32px;
 		height: 32px;
+		border-radius: 10px;
 		font-size: 12px;
 	}
 
 	.avatar--lg {
 		width: 40px;
 		height: 40px;
+		border-radius: 12px;
 		font-size: 14px;
 	}
 

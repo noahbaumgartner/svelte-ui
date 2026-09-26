@@ -261,7 +261,7 @@
 	}
 
 	.table-sort:focus-visible {
-		outline: 2px solid var(--color-ink);
+		outline: 2px solid var(--color-accent);
 	}
 
 	.table-sort :global(.table-sort-icon) {

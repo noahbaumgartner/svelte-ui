@@ -1,6 +1,10 @@
 {
-	"name": "svelte-ui",
+	"name": "@noahbaumgartner/svelte-ui",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/noahbaumgartner/svelte-ui.git"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run prepack",

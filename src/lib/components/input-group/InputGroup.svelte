@@ -47,8 +47,8 @@
 	}
 
 	.input-group:has(:global(.input:focus-visible)) {
-		border-color: var(--color-ink);
-		outline: 1px solid var(--color-ink);
+		border-color: var(--color-accent);
+		outline: 1px solid var(--color-accent);
 	}
 
 	.input-group:has(:global([aria-invalid='true'])) {

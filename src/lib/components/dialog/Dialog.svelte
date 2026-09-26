@@ -208,7 +208,6 @@
 
 	.dialog-dimmed {
 		opacity: 0.4;
-		filter: grayscale(1);
 		user-select: none;
 	}
 
