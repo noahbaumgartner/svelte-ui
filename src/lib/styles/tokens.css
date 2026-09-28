@@ -1,18 +1,5 @@
-/* Color system: every gray is a mix between a base color and an ink color at
-   a given step. Light mode mixes toward black on a white base; dark mode
-   mixes toward white on a near-black base — flipping the two variables is
-   the whole theme switch. Components always reference the semantic
-   --color-* tokens below, never raw hex values, so dark mode stays free.
-
-   Theme selection: follows prefers-color-scheme by default; set
-   data-theme="light" | "dark" on <html> to force one.
-
-   Accent: set --accent on :root (e.g. `:root { --accent: #2563eb; }`) to
-   color primary actions, checked controls, selections and focus rings. The
-   same color is used in light and dark mode; without it the accent falls
-   back to the ink color. Text on the accent turns black or white depending
-   on its lightness; override --color-accent-foreground to pick it yourself. */
-:root {
+:root
+{
 	color-scheme: light;
 	--base: #fff;
 	--ink: #000;
@@ -43,8 +30,10 @@
 	--color-destructive: #dc2626;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root:not([data-theme='light']) {
+@media (prefers-color-scheme: dark)
+{
+	:root:not([data-theme='light'])
+	{
 		--base: #0a0a0a;
 		--ink: #fff;
 		color-scheme: dark;
@@ -52,7 +41,8 @@
 	}
 }
 
-:root[data-theme='dark'] {
+:root[data-theme='dark']
+{
 	--base: #0a0a0a;
 	--ink: #fff;
 	color-scheme: dark;
