@@ -45,8 +45,8 @@
 		box-sizing: border-box;
 		min-height: 256px;
 		padding: 40px;
-		color: var(--color-text);
-		background-color: var(--color-surface);
+		color: #fff;
+		background-color: #000;
 		border-radius: 12px;
 	}
 

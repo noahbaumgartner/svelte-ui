@@ -23,12 +23,12 @@
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 8px;
-		color: var(--color-text-secondary);
+		color: color-mix(in srgb, #fff, #000 17%);
 	}
 
 	.footer-column-heading {
 		font-weight: 600;
-		color: var(--color-text);
+		color: #fff;
 		user-select: none;
 	}
 </style>
