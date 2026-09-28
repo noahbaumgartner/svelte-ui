@@ -19,6 +19,7 @@ export { default as ColorPicker } from './components/color-picker/ColorPicker.sv
 export { default as ContextMenu } from './components/context-menu/ContextMenu.svelte';
 export { default as ContextMenuItem } from './components/context-menu/ContextMenuItem.svelte';
 export { default as Dialog } from './components/dialog/Dialog.svelte';
+export { default as Entry } from './components/entry/Entry.svelte';
 export { default as Field } from './components/field/Field.svelte';
 export { default as FieldContent } from './components/field/FieldContent.svelte';
 export { default as FieldDescription } from './components/field/FieldDescription.svelte';
@@ -27,6 +28,8 @@ export { default as FieldGroup } from './components/field/FieldGroup.svelte';
 export { default as FieldLegend } from './components/field/FieldLegend.svelte';
 export { default as FieldSeparator } from './components/field/FieldSeparator.svelte';
 export { default as FieldSet } from './components/field/FieldSet.svelte';
+export { default as Footer } from './components/footer/Footer.svelte';
+export { default as FooterColumn } from './components/footer/FooterColumn.svelte';
 export { default as Input } from './components/input/Input.svelte';
 export { default as Kbd } from './components/kbd/Kbd.svelte';
 export { default as KbdGroup } from './components/kbd/KbdGroup.svelte';
