@@ -41,7 +41,7 @@
 		padding: 24px;
 		color: var(--color-text);
 		border: 1px solid var(--color-border-strong);
-		border-radius: 12px;
+		border-radius: 14px;
 	}
 
 	.entry-heading {

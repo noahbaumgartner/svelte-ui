@@ -2,6 +2,8 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { fade } from 'svelte/transition';
+	import X from '@lucide/svelte/icons/x';
+	import Button from '../button/Button.svelte';
 	import { getSidebarContext } from './context.js';
 
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
@@ -70,6 +72,17 @@
 	]}
 >
 	<div class="sidebar-inner">
+		{#if sidebar.mobile}
+			<div class="sidebar-close">
+				<Button
+					variant="ghost"
+					size="sm"
+					icon={X}
+					label="Close sidebar"
+					onclick={sidebar.closeMobile}
+				/>
+			</div>
+		{/if}
 		{@render children()}
 	</div>
 </aside>
@@ -154,9 +167,22 @@
 		bottom: 0;
 		left: 0;
 		z-index: 50;
+		width: 100%;
 		height: auto;
 		transform: translateX(-100%);
 		transition: transform 200ms ease;
+	}
+
+	.sidebar--mobile .sidebar-inner {
+		width: 100%;
+	}
+
+	.sidebar--mobile.sidebar--sidebar .sidebar-inner {
+		border-inline: none;
+	}
+
+	.sidebar--mobile.sidebar--floating .sidebar-inner {
+		width: calc(100% - 16px);
 	}
 
 	.sidebar--mobile.sidebar--right {
@@ -167,6 +193,17 @@
 
 	.sidebar--mobile.sidebar--open-mobile {
 		transform: none;
+	}
+
+	/* Fallback for sidebars without a `SidebarHeader`, which otherwise holds the close button */
+	.sidebar-close {
+		display: flex;
+		justify-content: flex-end;
+		padding: 8px 8px 0;
+	}
+
+	.sidebar-inner:has(:global(.sidebar-header)) .sidebar-close {
+		display: none;
 	}
 
 	.sidebar-backdrop {

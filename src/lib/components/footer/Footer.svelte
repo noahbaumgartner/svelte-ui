@@ -47,7 +47,7 @@
 		padding: 40px;
 		color: #fff;
 		background-color: #000;
-		border-radius: 12px;
+		border-radius: 14px;
 	}
 
 	.footer-title {

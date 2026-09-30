@@ -1,5 +1,8 @@
+export { default as Accordion } from './components/accordion/Accordion.svelte';
+export { default as AccordionItem } from './components/accordion/AccordionItem.svelte';
 export { default as AlertDialog } from './components/alert-dialog/AlertDialog.svelte';
 export { default as Avatar } from './components/avatar/Avatar.svelte';
+export { default as AvatarGroup } from './components/avatar-group/AvatarGroup.svelte';
 export { default as Badge } from './components/badge/Badge.svelte';
 export { default as Breadcrumb } from './components/breadcrumb/Breadcrumb.svelte';
 export { default as BreadcrumbEllipsis } from './components/breadcrumb/BreadcrumbEllipsis.svelte';
@@ -19,6 +22,8 @@ export { default as ColorPicker } from './components/color-picker/ColorPicker.sv
 export { default as ContextMenu } from './components/context-menu/ContextMenu.svelte';
 export { default as ContextMenuItem } from './components/context-menu/ContextMenuItem.svelte';
 export { default as Dialog } from './components/dialog/Dialog.svelte';
+export { default as Drawer } from './components/drawer/Drawer.svelte';
+export { default as EmptyState } from './components/empty-state/EmptyState.svelte';
 export { default as Entry } from './components/entry/Entry.svelte';
 export { default as Field } from './components/field/Field.svelte';
 export { default as FieldContent } from './components/field/FieldContent.svelte';
@@ -37,13 +42,18 @@ export { default as InputGroup } from './components/input-group/InputGroup.svelt
 export { default as InputGroupAddon } from './components/input-group/InputGroupAddon.svelte';
 export { default as Label } from './components/label/Label.svelte';
 export { default as Link } from './components/link/Link.svelte';
+export { default as MeshGradient } from './components/mesh-gradient/MeshGradient.svelte';
 export { default as Navbar } from './components/navbar/Navbar.svelte';
 export { default as NavigationMenu } from './components/navigation-menu/NavigationMenu.svelte';
 export { default as NavigationMenuItem } from './components/navigation-menu/NavigationMenuItem.svelte';
 export { default as NavigationMenuLink } from './components/navigation-menu/NavigationMenuLink.svelte';
+export { default as NumberStepper } from './components/number-stepper/NumberStepper.svelte';
 export { default as Popover } from './components/popover/Popover.svelte';
+export { default as PreviewCard } from './components/preview-card/PreviewCard.svelte';
+export { default as Progress } from './components/progress/Progress.svelte';
 export { default as RadioGroup } from './components/radio-group/RadioGroup.svelte';
 export { default as RadioGroupItem } from './components/radio-group/RadioGroupItem.svelte';
+export { default as Select, type SelectOption } from './components/select/Select.svelte';
 export { default as Separator } from './components/separator/Separator.svelte';
 export { default as Sidebar } from './components/sidebar/Sidebar.svelte';
 export { default as SidebarContent } from './components/sidebar/SidebarContent.svelte';
@@ -66,6 +76,7 @@ export {
 	type TableSort,
 	type TableSortValue
 } from './components/table/Table.svelte';
+export { default as Tabs, type TabsOption } from './components/tabs/Tabs.svelte';
 export { default as Textarea } from './components/textarea/Textarea.svelte';
 export { default as Toaster } from './components/toaster/Toaster.svelte';
 export { toast, type ToastOptions, type ToastAction } from './components/toaster/toast.svelte.js';
@@ -77,5 +88,6 @@ export type { PopoverTriggerProps } from './components/popover/Popover.svelte';
 export type { TooltipTriggerProps } from './components/tooltip/Tooltip.svelte';
 export type { InputType } from './components/input/Input.svelte';
 export type { DialogTriggerProps } from './components/dialog/Dialog.svelte';
+export type { DrawerTriggerProps } from './components/drawer/Drawer.svelte';
 export type { ContextMenuTriggerProps } from './components/context-menu/context.js';
 export { getSidebarContext, type SidebarContext } from './components/sidebar/context.js';

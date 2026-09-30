@@ -62,6 +62,8 @@
 	const stack = 'display: flex; flex-direction: column; gap: 16px;';
 	const topbar =
 		'display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 12px; border-bottom: 1px solid var(--color-border);';
+	const brand =
+		'display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; overflow: hidden; font-size: 13px; font-weight: 600; white-space: nowrap;';
 	const placeholder =
 		'flex: 1; margin: 16px; border-radius: 10px; background-color: var(--color-surface);';
 </script>
@@ -81,9 +83,10 @@
 
 {#snippet header()}
 	<SidebarHeader>
-		<SidebarMenu>
-			<SidebarMenuItem icon={GalleryVerticalEnd}>Acme Inc</SidebarMenuItem>
-		</SidebarMenu>
+		<div style={brand}>
+			<GalleryVerticalEnd size={16} style="flex-shrink: 0;" />
+			Acme Inc
+		</div>
 	</SidebarHeader>
 {/snippet}
 

@@ -62,14 +62,14 @@ See [`src/lib/styles/tokens.css`](src/lib/styles/tokens.css) for every token.
 
 ## Components
 
-| Category   | Components                                                                                     |
-| ---------- | ---------------------------------------------------------------------------------------------- |
-| Actions    | `Button`, `ButtonGroup`, `Toggle`, `Link`                                                      |
-| Forms      | `Input`, `InputGroup`, `Textarea`, `Checkbox`, `RadioGroup`, `Switch`, `Label`, `Field` family |
-| Pickers    | `Calendar`, `TimePicker`, `ColorPicker`                                                        |
-| Overlays   | `Dialog`, `AlertDialog`, `Popover`, `Tooltip`, `ContextMenu`, `Toaster` + `toast()`            |
-| Navigation | `Navbar`, `NavigationMenu`, `Sidebar` family, `Breadcrumb`                                     |
-| Display    | `Card` family, `Table`, `Avatar`, `Badge`, `Kbd`, `Separator`, `Skeleton`, `Spinner`           |
+| Category   | Components                                                                                                                                 |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Actions    | `Button`, `ButtonGroup`, `Toggle`, `Link`                                                                                                  |
+| Forms      | `Input`, `InputGroup`, `Textarea`, `Select`, `NumberStepper`, `Checkbox`, `RadioGroup`, `Switch`, `Label`, `Field` family                  |
+| Pickers    | `Calendar`, `TimePicker`, `ColorPicker`                                                                                                    |
+| Overlays   | `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Tooltip`, `ContextMenu`, `Toaster` + `toast()`                                              |
+| Navigation | `Navbar`, `NavigationMenu`, `Sidebar` family, `Breadcrumb`, `Tabs`                                                                         |
+| Display    | `Card` family, `Table`, `Accordion`, `Avatar`, `AvatarGroup`, `Badge`, `EmptyState`, `Kbd`, `Progress`, `Separator`, `Skeleton`, `Spinner` |
 
 Every component is documented in Storybook, with one story per prop.
 
