@@ -23,7 +23,8 @@
 			options: { control: 'object' },
 			placeholder: { control: 'text' },
 			name: { control: 'text' },
-			disabled: { control: 'boolean' }
+			disabled: { control: 'boolean' },
+			labels: { control: 'object' }
 		},
 		args: {
 			value: 'editor',
@@ -71,6 +72,14 @@
 				value={1}
 				aria-label="Time zone"
 			/>
+		</div>
+	{/snippet}
+</Story>
+
+<Story name="Empty" parameters={{ controls: { exclude: ['options', 'value', 'labels'] } }}>
+	{#snippet template(args)}
+		<div style={column}>
+			<Select {...args} options={[]} value={undefined} labels={{ empty: 'Nothing to choose' }} />
 		</div>
 	{/snippet}
 </Story>

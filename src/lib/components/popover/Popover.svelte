@@ -16,11 +16,13 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import { scale } from 'svelte/transition';
 
 	type Side = 'top' | 'right' | 'bottom' | 'left';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'title'> & {
 		/** Whether the popover is open. Bindable. */
 		open?: boolean;
 		/** Opens on hover and keyboard focus instead of on click, like a hover card. */
@@ -36,6 +38,8 @@
 		/** Renders the trigger. Spread the given props onto it, e.g. `<Button {...props} />`. */
 		trigger: Snippet<[PopoverTriggerProps]>;
 		children?: Snippet;
+		/** The popup element, only set while open. Bindable. */
+		ref?: HTMLDivElement | null;
 	};
 
 	let {
@@ -47,7 +51,10 @@
 		title,
 		description,
 		trigger,
-		children
+		children,
+		class: className,
+		ref = $bindable(null),
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
@@ -58,7 +65,6 @@
 
 	let wrapperEl: HTMLSpanElement;
 	let triggerEl: HTMLElement | undefined;
-	let contentEl: HTMLDivElement | undefined = $state();
 	let placement: Side = $state('bottom');
 	let position = $state({ top: 0, left: 0 });
 	let timer: ReturnType<typeof setTimeout> | undefined;
@@ -126,9 +132,9 @@
 	}
 
 	function place() {
-		if (!triggerEl || !contentEl) return;
+		if (!triggerEl || !ref) return;
 		const rect = triggerEl.getBoundingClientRect();
-		const { offsetWidth: width, offsetHeight: height } = contentEl;
+		const { offsetWidth: width, offsetHeight: height } = ref;
 		const s =
 			fits(rect, width, height, side) || !fits(rect, width, height, opposite[side])
 				? side
@@ -190,23 +196,29 @@
 
 	{#if open}
 		<div
+			{...rest}
 			id="{id}-popover"
 			role={hover ? undefined : 'dialog'}
 			aria-labelledby={title ? `${id}-title` : undefined}
 			aria-describedby={description ? `${id}-description` : undefined}
 			tabindex="-1"
 			popover="manual"
-			class={['popover-content', `popover-content--${placement}`, `popover-content--${align}`]}
+			class={[
+				'popover-content',
+				`popover-content--${placement}`,
+				`popover-content--${align}`,
+				className
+			]}
 			style:top="{position.top}px"
 			style:left="{position.left}px"
-			bind:this={contentEl}
+			bind:this={ref}
 			onpointerenter={() => hover && clearTimeout(timer)}
 			onpointerleave={() => hover && schedule(false, closeDelay)}
 			onfocusout={(event) => {
 				if (leftWrapper(event)) close();
 			}}
 			{@attach popover}
-			transition:scale={{ duration: 140, start: 0.95 }}
+			transition:scale={{ duration: prefersReducedMotion.current ? 0 : 140, start: 0.95 }}
 		>
 			{#if title}
 				<h3 id="{id}-title" class="popover-title">{title}</h3>
@@ -222,74 +234,82 @@
 </span>
 
 <style>
-	.popover {
-		display: inline-flex;
-		height: fit-content;
-	}
+	@layer svelte-ui {
+		.popover {
+			display: inline-flex;
+			height: fit-content;
+		}
 
-	.popover-content {
-		position: fixed;
-		inset: auto;
-		box-sizing: border-box;
-		width: 288px;
-		max-width: calc(100vw - 16px);
-		margin: 0;
-		padding: 16px;
-		overflow: visible;
-		font-size: 13px;
-		line-height: 1.5;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		outline: none;
-	}
+		.popover-content {
+			position: fixed;
+			inset: auto;
+			box-sizing: border-box;
+			width: 288px;
+			max-width: calc(100vw - 16px);
+			margin: 0;
+			padding: 16px;
+			overflow: visible;
+			font-size: 13px;
+			line-height: 1.5;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-radius: 12px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			outline: none;
+		}
 
-	.popover-title {
-		margin: 0;
-		font-size: 14px;
-		font-weight: 600;
-	}
+		.popover-title {
+			margin: 0;
+			font-size: 14px;
+			font-weight: 600;
+		}
 
-	.popover-description {
-		margin: 4px 0 0;
-		color: var(--color-text-muted);
-	}
+		.popover-description {
+			margin: 4px 0 0;
+			color: var(--color-text-muted);
+		}
 
-	:is(.popover-title, .popover-description) + .popover-body {
-		margin-top: 14px;
-	}
+		:is(.popover-title, .popover-description) + .popover-body {
+			margin-top: 14px;
+		}
 
-	.popover-content--bottom {
-		transform-origin: top center;
-	}
+		.popover-content--bottom {
+			transform-origin: top center;
+		}
 
-	.popover-content--top {
-		transform-origin: bottom center;
-	}
+		.popover-content--top {
+			transform-origin: bottom center;
+		}
 
-	.popover-content--left {
-		transform-origin: center right;
-	}
+		.popover-content--left {
+			transform-origin: center right;
+		}
 
-	.popover-content--right {
-		transform-origin: center left;
-	}
+		.popover-content--right {
+			transform-origin: center left;
+		}
 
-	.popover-content--bottom.popover-content--start {
-		transform-origin: top left;
-	}
+		.popover-content--bottom.popover-content--start {
+			transform-origin: top left;
+		}
 
-	.popover-content--bottom.popover-content--end {
-		transform-origin: top right;
-	}
+		.popover-content--bottom.popover-content--end {
+			transform-origin: top right;
+		}
 
-	.popover-content--top.popover-content--start {
-		transform-origin: bottom left;
-	}
+		.popover-content--top.popover-content--start {
+			transform-origin: bottom left;
+		}
 
-	.popover-content--top.popover-content--end {
-		transform-origin: bottom right;
+		.popover-content--top.popover-content--end {
+			transform-origin: bottom right;
+		}
+
+		@media (forced-colors: active) {
+			.popover-content {
+				border-color: CanvasText;
+			}
+		}
 	}
 </style>

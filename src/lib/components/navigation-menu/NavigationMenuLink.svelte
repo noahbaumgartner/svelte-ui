@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import type { LucideIcon } from '@lucide/svelte';
 	import { getNavigationMenuContext } from './context.js';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
 		href: string;
 		/** Any Lucide icon (import from `svelte-ui/icons`). */
 		icon?: LucideIcon;
@@ -13,15 +14,25 @@
 		active?: boolean;
 		/** The link's title. */
 		children: Snippet;
+		ref?: HTMLLIElement | null;
 	};
 
-	let { href, icon: Icon, description, active = false, children }: Props = $props();
+	let {
+		href,
+		icon: Icon,
+		description,
+		active = false,
+		class: className,
+		children,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 
 	const menu = getNavigationMenuContext();
 	let classes = $derived(['navigation-menu-link', { 'navigation-menu-link--active': active }]);
 </script>
 
-<li>
+<li {...rest} bind:this={ref} class={className}>
 	<!-- href comes from the consumer, who resolves it; this library has no routes -->
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 	<a {href} aria-current={active ? 'page' : undefined} class={classes} onclick={menu.close}>
@@ -36,56 +47,84 @@
 </li>
 
 <style>
-	.navigation-menu-link {
-		display: flex;
-		align-items: flex-start;
-		gap: 10px;
-		padding: 8px 10px;
-		border-radius: 8px;
-		font-size: 13px;
-		line-height: 1.4;
-		color: var(--color-text);
-		text-decoration: none;
-		outline: none;
-		transition: background-color 150ms ease;
-	}
+	@layer svelte-ui {
+		.navigation-menu-link {
+			display: flex;
+			align-items: flex-start;
+			gap: 10px;
+			padding: 8px 10px;
+			border-radius: 8px;
+			font-size: 13px;
+			line-height: 1.4;
+			color: var(--color-text);
+			text-decoration: none;
+			outline: none;
+			transition: background-color 150ms ease;
+		}
 
-	.navigation-menu-link:hover,
-	.navigation-menu-link:focus-visible,
-	.navigation-menu-link--active {
-		background-color: var(--color-surface);
-	}
+		.navigation-menu-link:hover,
+		.navigation-menu-link:focus-visible,
+		.navigation-menu-link--active {
+			background-color: var(--color-surface);
+		}
 
-	.navigation-menu-link:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: -2px;
-	}
+		.navigation-menu-link:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: -2px;
+		}
 
-	.navigation-menu-link :global(.navigation-menu-link-icon) {
-		width: 16px;
-		height: 16px;
-		margin-top: 1px;
-		flex-shrink: 0;
-	}
+		.navigation-menu-link :global(.navigation-menu-link-icon) {
+			width: 16px;
+			height: 16px;
+			margin-top: 1px;
+			flex-shrink: 0;
+		}
 
-	.navigation-menu-link-text {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		min-width: 0;
-	}
+		.navigation-menu-link-text {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			min-width: 0;
+		}
 
-	.navigation-menu-link-title {
-		font-weight: 500;
-	}
+		.navigation-menu-link-title {
+			font-weight: 500;
+		}
 
-	.navigation-menu-link-description {
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		overflow: hidden;
-		font-size: 12px;
-		color: var(--color-text-muted);
+		.navigation-menu-link-description {
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			overflow: hidden;
+			font-size: 12px;
+			color: var(--color-text-muted);
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.navigation-menu-link {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.navigation-menu-link:hover,
+			.navigation-menu-link--active {
+				outline: 1px solid Highlight;
+				outline-offset: -1px;
+			}
+
+			.navigation-menu-link:focus-visible {
+				outline: 2px solid Highlight;
+				outline-offset: -2px;
+			}
+		}
+
+		@media (pointer: coarse) {
+			.navigation-menu-link {
+				min-height: 44px;
+				box-sizing: border-box;
+			}
+		}
 	}
 </style>

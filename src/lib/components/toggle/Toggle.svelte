@@ -24,8 +24,22 @@
 />
 
 <style>
-	:global(.button.toggle[aria-pressed='true']),
-	:global(.button.toggle[aria-pressed='true']:hover:not(:disabled)) {
-		background-color: var(--color-surface-active);
+	@layer svelte-ui {
+		:global(.button.toggle[aria-pressed='true']),
+		:global(.button.toggle[aria-pressed='true']:hover:not(:disabled)) {
+			background-color: var(--color-surface-active);
+		}
+
+		@media (forced-colors: active) {
+			:global(.button.toggle[aria-pressed='true']),
+			:global(.button.toggle[aria-pressed='true']:hover:not(:disabled)) {
+				background-color: Highlight;
+				color: HighlightText;
+			}
+
+			:global(.button.toggle[aria-pressed='false']) {
+				border: 1px solid ButtonText;
+			}
+		}
 	}
 </style>

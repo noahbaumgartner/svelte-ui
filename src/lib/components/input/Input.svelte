@@ -15,11 +15,20 @@
 		| 'week'
 		| 'color'
 		| 'file';
+
+	export type InputLabels = {
+		increase: string;
+		decrease: string;
+		chooseDate: string;
+		chooseTime: string;
+		chooseColor: string;
+	};
 </script>
 
 <script lang="ts">
 	import { tick } from 'svelte';
 	import { scale } from 'svelte/transition';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Clock } from '@lucide/svelte';
 	import Calendar from '../calendar/Calendar.svelte';
@@ -30,6 +39,18 @@
 	type Props = Omit<HTMLInputAttributes, 'type'> & {
 		/** Number gets a stepper; date, time and color types open this library's pickers. */
 		type?: InputType;
+		/** Accessible names of the built-in buttons and pickers. */
+		labels?: Partial<InputLabels>;
+		/** The `<input>` element. Bindable. */
+		ref?: HTMLInputElement | null;
+	};
+
+	const defaultLabels: InputLabels = {
+		increase: 'Increase',
+		decrease: 'Decrease',
+		chooseDate: 'Choose date',
+		chooseTime: 'Choose time',
+		chooseColor: 'Choose color'
 	};
 
 	let {
@@ -39,13 +60,15 @@
 		style,
 		disabled,
 		readonly,
+		labels,
+		ref = $bindable(null),
 		...rest
 	}: Props = $props();
 
 	const pickers = ['date', 'time', 'datetime-local', 'month', 'week'];
 
 	const id = $props.id();
-	let input: HTMLInputElement | undefined = $state();
+	let mergedLabels = $derived({ ...defaultLabels, ...labels });
 	let wrapperEl: HTMLElement | undefined = $state();
 	let popoverEl: HTMLElement | undefined = $state();
 	let open = $state(false);
@@ -58,18 +81,18 @@
 
 	/* Updates the native input and fires the events typing would, so bind:value and handlers follow */
 	function set(next: string) {
-		if (!input) return;
-		input.value = next;
-		input.dispatchEvent(new Event('input', { bubbles: true }));
-		input.dispatchEvent(new Event('change', { bubbles: true }));
+		if (!ref) return;
+		ref.value = next;
+		ref.dispatchEvent(new Event('input', { bubbles: true }));
+		ref.dispatchEvent(new Event('change', { bubbles: true }));
 	}
 
 	function step(direction: 1 | -1) {
-		if (!input) return;
-		if (direction === 1) input.stepUp();
-		else input.stepDown();
-		set(input.value);
-		input.focus();
+		if (!ref) return;
+		if (direction === 1) ref.stepUp();
+		else ref.stepDown();
+		set(ref.value);
+		ref.focus();
 	}
 
 	async function show() {
@@ -80,7 +103,7 @@
 
 	function close(restoreFocus = false) {
 		open = false;
-		if (restoreFocus) input?.focus();
+		if (restoreFocus) ref?.focus();
 	}
 
 	function toggle() {
@@ -139,7 +162,7 @@
 			{...rest}
 			{type}
 			bind:value
-			bind:this={input}
+			bind:this={ref}
 			{disabled}
 			{readonly}
 			class={['input', { 'input--with-controls': type !== 'color' }]}
@@ -153,7 +176,7 @@
 					<button
 						type="button"
 						tabindex="-1"
-						aria-label="Increase"
+						aria-label={mergedLabels.increase}
 						disabled={inactive}
 						onclick={() => step(1)}
 					>
@@ -162,7 +185,7 @@
 					<button
 						type="button"
 						tabindex="-1"
-						aria-label="Decrease"
+						aria-label={mergedLabels.decrease}
 						disabled={inactive}
 						onclick={() => step(-1)}
 					>
@@ -172,7 +195,7 @@
 					{@const Icon = type === 'time' ? Clock : CalendarIcon}
 					<button
 						type="button"
-						aria-label={type === 'time' ? 'Choose time' : 'Choose date'}
+						aria-label={type === 'time' ? mergedLabels.chooseTime : mergedLabels.chooseDate}
 						aria-haspopup="dialog"
 						aria-expanded={open}
 						aria-controls="{id}-picker"
@@ -190,13 +213,13 @@
 				id="{id}-picker"
 				role="dialog"
 				aria-label={type === 'color'
-					? 'Choose color'
+					? mergedLabels.chooseColor
 					: type === 'time'
-						? 'Choose time'
-						: 'Choose date'}
+						? mergedLabels.chooseTime
+						: mergedLabels.chooseDate}
 				class={['input-popover', `input-popover--${side}`]}
 				bind:this={popoverEl}
-				transition:scale={{ duration: 140, start: 0.95 }}
+				transition:scale={{ duration: prefersReducedMotion.current ? 0 : 140, start: 0.95 }}
 			>
 				{#if type === 'date' || type === 'week' || type === 'month'}
 					<Calendar
@@ -232,228 +255,301 @@
 		{/if}
 	</span>
 {:else}
-	<input {...rest} {type} bind:value {disabled} {readonly} {style} class={['input', className]} />
+	<input
+		{...rest}
+		{type}
+		bind:value
+		bind:this={ref}
+		{disabled}
+		{readonly}
+		{style}
+		class={['input', className]}
+	/>
 {/if}
 
 <style>
-	.input {
-		box-sizing: border-box;
-		width: 100%;
-		min-width: 0;
-		height: 32px;
-		padding: 0 10px;
-		font-family: inherit;
-		font-size: 13px;
-		color: var(--color-text);
-		background-color: transparent;
-		border: 1px solid var(--color-border-strong);
-		border-radius: 10px;
-		outline: none;
-		transition: border-color 200ms ease;
-	}
+	@layer svelte-ui {
+		.input {
+			box-sizing: border-box;
+			width: 100%;
+			min-width: 0;
+			height: 32px;
+			padding: 0 10px;
+			font-family: inherit;
+			font-size: 13px;
+			color: var(--color-text);
+			background-color: transparent;
+			border: 1px solid var(--color-border-strong);
+			border-radius: 10px;
+			outline: none;
+			transition: border-color 200ms ease;
+		}
 
-	.input::selection {
-		color: var(--color-accent-foreground);
-		background-color: var(--color-accent);
-	}
+		.input::selection {
+			color: var(--color-accent-foreground);
+			background-color: var(--color-accent);
+		}
 
-	.input[type='file'] {
-		padding: 0 10px 0 4px;
-		color: var(--color-text-muted);
-		cursor: pointer;
-	}
+		.input[type='file'] {
+			padding: 0 10px 0 4px;
+			color: var(--color-text-muted);
+			cursor: pointer;
+		}
 
-	.input::file-selector-button {
-		height: 24px;
-		margin: 3px 8px 0 0;
-		padding: 0 8px;
-		font-family: inherit;
-		font-size: 13px;
-		font-weight: 500;
-		color: var(--color-text);
-		background-color: var(--color-surface);
-		border: none;
-		border-radius: 6px;
-		cursor: pointer;
-	}
+		.input::file-selector-button {
+			height: 24px;
+			margin: 3px 8px 0 0;
+			padding: 0 8px;
+			font-family: inherit;
+			font-size: 13px;
+			font-weight: 500;
+			color: var(--color-text);
+			background-color: var(--color-surface);
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+		}
 
-	.input[type='search'] {
-		padding-right: 4px;
-	}
+		.input[type='search'] {
+			padding-right: 4px;
+		}
 
-	/* Native clear button as a ghost button with a gradient X */
-	.input::-webkit-search-cancel-button {
-		appearance: none;
-		width: 24px;
-		height: 24px;
-		margin: 0;
-		border-radius: 6px;
-		background:
-			linear-gradient(45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
-			linear-gradient(-45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
-			transparent;
-		background-size:
-			10px 10px,
-			10px 10px,
-			auto;
-		background-position: center;
-		background-repeat: no-repeat;
-		cursor: pointer;
-	}
+		/* Native clear button as a ghost button with a gradient X */
+		.input::-webkit-search-cancel-button {
+			appearance: none;
+			width: 24px;
+			height: 24px;
+			margin: 0;
+			border-radius: 6px;
+			background:
+				linear-gradient(45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
+				linear-gradient(-45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
+				transparent;
+			background-size:
+				10px 10px,
+				10px 10px,
+				auto;
+			background-position: center;
+			background-repeat: no-repeat;
+			cursor: pointer;
+		}
 
-	.input::-webkit-search-cancel-button:hover {
-		background-color: var(--color-surface);
-	}
+		.input::-webkit-search-cancel-button:hover {
+			background-color: var(--color-surface);
+		}
 
-	.input[type='color'] {
-		width: 64px;
-		padding: 3px;
-		cursor: pointer;
-	}
+		.input[type='color'] {
+			width: 64px;
+			padding: 3px;
+			cursor: pointer;
+		}
 
-	.input::-webkit-color-swatch-wrapper {
-		padding: 0;
-	}
+		.input::-webkit-color-swatch-wrapper {
+			padding: 0;
+		}
 
-	.input::-webkit-color-swatch {
-		border: none;
-		border-radius: 6px;
-	}
+		.input::-webkit-color-swatch {
+			border: none;
+			border-radius: 6px;
+		}
 
-	.input::-moz-color-swatch {
-		border: none;
-		border-radius: 6px;
-	}
+		.input::-moz-color-swatch {
+			border: none;
+			border-radius: 6px;
+		}
 
-	/* Number and date/time types: custom buttons replace the native spinners and picker icon */
-	.input-wrapper {
-		position: relative;
-		display: flex;
-		width: 100%;
-		min-width: 0;
-	}
+		/* Number and date/time types: custom buttons replace the native spinners and picker icon */
+		.input-wrapper {
+			position: relative;
+			display: flex;
+			width: 100%;
+			min-width: 0;
+		}
 
-	.input-wrapper--color {
-		width: fit-content;
-	}
+		.input-wrapper--color {
+			width: fit-content;
+		}
 
-	.input-popover {
-		position: absolute;
-		left: 0;
-		z-index: 60;
-		display: flex;
-		gap: 12px;
-		padding: 12px;
-		background-color: var(--color-bg);
-		border: 1px solid var(--color-border);
-		border-radius: 14px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-	}
+		.input-popover {
+			position: absolute;
+			left: 0;
+			z-index: 60;
+			display: flex;
+			gap: 12px;
+			padding: 12px;
+			background-color: var(--color-bg);
+			border: 1px solid var(--color-border);
+			border-radius: 14px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+		}
 
-	.input-popover--bottom {
-		top: calc(100% + 8px);
-		transform-origin: top left;
-	}
+		.input-popover--bottom {
+			top: calc(100% + 8px);
+			transform-origin: top left;
+		}
 
-	.input-popover--top {
-		bottom: calc(100% + 8px);
-		transform-origin: bottom left;
-	}
+		.input-popover--top {
+			bottom: calc(100% + 8px);
+			transform-origin: bottom left;
+		}
 
-	.input--with-controls {
-		padding-right: 32px;
-	}
+		.input--with-controls {
+			padding-right: 32px;
+		}
 
-	.input[type='number'] {
-		appearance: textfield;
-	}
+		.input[type='number'] {
+			appearance: textfield;
+		}
 
-	.input::-webkit-inner-spin-button,
-	.input::-webkit-outer-spin-button,
-	.input::-webkit-calendar-picker-indicator {
-		display: none;
-		appearance: none;
-		margin: 0;
-	}
+		.input::-webkit-inner-spin-button,
+		.input::-webkit-outer-spin-button,
+		.input::-webkit-calendar-picker-indicator {
+			display: none;
+			appearance: none;
+			margin: 0;
+		}
 
-	.input::-webkit-datetime-edit-fields-wrapper {
-		padding: 0;
-	}
+		.input::-webkit-datetime-edit-fields-wrapper {
+			padding: 0;
+		}
 
-	.input::-webkit-datetime-edit-text {
-		color: var(--color-text-muted);
-	}
+		.input::-webkit-datetime-edit-text {
+			color: var(--color-text-muted);
+		}
 
-	.input-controls {
-		position: absolute;
-		top: 4px;
-		right: 4px;
-		bottom: 4px;
-		display: flex;
-		flex-direction: column;
-	}
+		.input-controls {
+			position: absolute;
+			top: 4px;
+			right: 4px;
+			bottom: 4px;
+			display: flex;
+			flex-direction: column;
+		}
 
-	.input-controls button {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		justify-content: center;
-		width: 24px;
-		padding: 0;
-		color: var(--color-text-muted);
-		background-color: transparent;
-		border: none;
-		border-radius: 6px;
-		cursor: pointer;
-		transition:
-			background-color 200ms ease,
-			color 200ms ease;
-	}
+		.input-controls button {
+			display: flex;
+			flex: 1;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			padding: 0;
+			color: var(--color-text-muted);
+			background-color: transparent;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			transition:
+				background-color 200ms ease,
+				color 200ms ease;
+		}
 
-	.input-controls button:hover:not(:disabled) {
-		color: var(--color-text);
-		background-color: var(--color-surface);
-	}
+		.input-controls button:hover:not(:disabled) {
+			color: var(--color-text);
+			background-color: var(--color-surface);
+		}
 
-	.input-controls button:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
+		.input-controls button:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
 
-	.input-controls :global(svg) {
-		width: 14px;
-		height: 14px;
-	}
+		.input-controls :global(svg) {
+			width: 14px;
+			height: 14px;
+		}
 
-	/* Two stacked stepper buttons are half height */
-	.input-controls button:not(:only-child) {
-		border-radius: 4px;
-	}
+		/* Two stacked stepper buttons are half height */
+		.input-controls button:not(:only-child) {
+			border-radius: 4px;
+		}
 
-	.input-controls button:not(:only-child) :global(svg) {
-		width: 12px;
-		height: 12px;
-	}
+		.input-controls button:not(:only-child) :global(svg) {
+			width: 12px;
+			height: 12px;
+		}
 
-	.input::placeholder {
-		color: var(--color-text-faint);
-	}
+		.input::placeholder {
+			color: var(--color-text-faint);
+		}
 
-	.input:focus-visible {
-		border-color: var(--color-accent);
-		outline: 1px solid var(--color-accent);
-	}
+		.input:focus-visible {
+			border-color: var(--color-accent);
+			outline: 1px solid var(--color-accent);
+		}
 
-	.input[aria-invalid='true'] {
-		border-color: var(--color-destructive);
-	}
+		.input[aria-invalid='true'] {
+			border-color: var(--color-destructive);
+		}
 
-	.input[aria-invalid='true']:focus-visible {
-		outline-color: var(--color-destructive);
-	}
+		.input[aria-invalid='true']:focus-visible {
+			outline-color: var(--color-destructive);
+		}
 
-	.input:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
+		.input:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.input,
+			.input-controls button {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.input:focus-visible {
+				border-color: Highlight;
+				outline: 2px solid Highlight;
+			}
+
+			.input[aria-invalid='true'] {
+				border-width: 2px;
+				border-style: dashed;
+			}
+
+			.input:disabled,
+			.input-controls button:disabled {
+				color: GrayText;
+				border-color: GrayText;
+				opacity: 1;
+			}
+
+			.input-controls button:hover:not(:disabled) {
+				outline: 1px solid Highlight;
+			}
+
+			.input-controls button:focus-visible {
+				outline: 2px solid Highlight;
+			}
+		}
+
+		@media (pointer: coarse) {
+			.input {
+				min-height: 44px;
+			}
+
+			.input-controls {
+				top: 0;
+				right: 0;
+				bottom: 0;
+			}
+
+			.input-controls button {
+				min-width: 44px;
+			}
+
+			.input-controls:has(button:not(:only-child)) {
+				flex-direction: row;
+			}
+
+			.input--with-controls {
+				padding-right: 48px;
+			}
+
+			.input[type='number'].input--with-controls {
+				padding-right: 92px;
+			}
+		}
 	}
 </style>

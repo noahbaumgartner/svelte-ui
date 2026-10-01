@@ -3,13 +3,29 @@
 	import Input from '../input/Input.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'onselect'> & {
+		/** The root element. Bindable. */
+		ref?: HTMLDivElement | null;
 		/** Bindable, `#rrggbb` like `<input type="color">`. */
 		value?: string;
 		/** Called on every change while dragging or typing. */
 		onselect?: (value: string) => void;
+		/** Accessible names of the controls, e.g. to translate them. */
+		labels?: {
+			area?: string;
+			areaValue?: (saturation: number, brightness: number) => string;
+			hue?: string;
+			hex?: string;
+		};
 	};
 
-	let { value = $bindable('#000000'), onselect, class: className, ...rest }: Props = $props();
+	let {
+		ref = $bindable(null),
+		value = $bindable('#000000'),
+		onselect,
+		labels,
+		class: className,
+		...rest
+	}: Props = $props();
 
 	type Hsv = { h: number; s: number; v: number };
 
@@ -105,14 +121,15 @@
 	}
 </script>
 
-<div {...rest} class={['color-picker', className]}>
+<div {...rest} bind:this={ref} class={['color-picker', className]}>
 	<div
 		class="color-picker-area"
 		role="slider"
 		tabindex="0"
-		aria-label="Saturation and brightness"
+		aria-label={labels?.area ?? 'Saturation and brightness'}
 		aria-valuenow={Math.round(hsv.s * 100)}
-		aria-valuetext="Saturation {Math.round(hsv.s * 100)}%, brightness {Math.round(hsv.v * 100)}%"
+		aria-valuetext={labels?.areaValue?.(Math.round(hsv.s * 100), Math.round(hsv.v * 100)) ??
+			`Saturation ${Math.round(hsv.s * 100)}%, brightness ${Math.round(hsv.v * 100)}%`}
 		style:--hue={hsv.h}
 		onpointerdown={(event) => drag(event, (x, y) => emit({ h: hsv.h, s: x, v: 1 - y }))}
 		onkeydown={areaKeydown}
@@ -129,7 +146,7 @@
 		class="color-picker-hue"
 		role="slider"
 		tabindex="0"
-		aria-label="Hue"
+		aria-label={labels?.hue ?? 'Hue'}
 		aria-valuemin={0}
 		aria-valuemax={360}
 		aria-valuenow={Math.round(hsv.h)}
@@ -145,89 +162,125 @@
 
 	<div class="color-picker-footer">
 		<span class="color-picker-swatch" style:background-color={value}></span>
-		<Input value={hexText} aria-label="Hex color" spellcheck="false" oninput={hexInput} />
+		<Input
+			value={hexText}
+			aria-label={labels?.hex ?? 'Hex color'}
+			spellcheck="false"
+			oninput={hexInput}
+		/>
 	</div>
 </div>
 
 <style>
-	.color-picker {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-		width: 224px;
-		user-select: none;
-	}
+	@layer svelte-ui {
+		.color-picker {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			width: 224px;
+			user-select: none;
+		}
 
-	.color-picker-area {
-		position: relative;
-		height: 150px;
-		border-radius: 8px;
-		background:
-			linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent),
-			hsl(var(--hue) 100% 50%);
-		outline: none;
-		cursor: crosshair;
-		touch-action: none;
-	}
+		.color-picker-area {
+			position: relative;
+			height: 150px;
+			border-radius: 8px;
+			background:
+				linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent),
+				hsl(var(--hue) 100% 50%);
+			outline: none;
+			cursor: crosshair;
+			touch-action: none;
+		}
 
-	.color-picker-hue {
-		position: relative;
-		height: 12px;
-		margin: 0 6px;
-		border-radius: 999px;
-		background: linear-gradient(
-			to right,
-			#f00 0%,
-			#ff0 17%,
-			#0f0 33%,
-			#0ff 50%,
-			#00f 67%,
-			#f0f 83%,
-			#f00 100%
-		);
-		outline: none;
-		cursor: pointer;
-		touch-action: none;
-	}
+		.color-picker-hue {
+			position: relative;
+			height: 12px;
+			margin: 0 6px;
+			border-radius: 999px;
+			background: linear-gradient(
+				to right,
+				#f00 0%,
+				#ff0 17%,
+				#0f0 33%,
+				#0ff 50%,
+				#00f 67%,
+				#f0f 83%,
+				#f00 100%
+			);
+			outline: none;
+			cursor: pointer;
+			touch-action: none;
+		}
 
-	/* Let the hue thumb reach both ends of the rounded track */
-	.color-picker-hue::before {
-		content: '';
-		position: absolute;
-		inset: 0 -6px;
-	}
+		/* Let the hue thumb reach both ends of the rounded track */
+		.color-picker-hue::before {
+			content: '';
+			position: absolute;
+			inset: 0 -6px;
+		}
 
-	.color-picker-thumb {
-		position: absolute;
-		top: 50%;
-		width: 14px;
-		height: 14px;
-		box-sizing: border-box;
-		border: 2px solid #fff;
-		border-radius: 999px;
-		box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
-		transform: translate(-50%, -50%);
-		pointer-events: none;
-	}
+		.color-picker-thumb {
+			position: absolute;
+			top: 50%;
+			width: 14px;
+			height: 14px;
+			box-sizing: border-box;
+			border: 2px solid #fff;
+			border-radius: 999px;
+			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+			transform: translate(-50%, -50%);
+			pointer-events: none;
+		}
 
-	.color-picker-area:focus-visible .color-picker-thumb,
-	.color-picker-hue:focus-visible .color-picker-thumb {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
-	}
+		.color-picker-area:focus-visible .color-picker-thumb,
+		.color-picker-hue:focus-visible .color-picker-thumb {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px;
+		}
 
-	.color-picker-footer {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-	}
+		@media (pointer: coarse) {
+			.color-picker-hue::before {
+				inset: -16px -6px;
+			}
+		}
 
-	.color-picker-swatch {
-		flex-shrink: 0;
-		width: 32px;
-		height: 32px;
-		box-sizing: border-box;
-		border: 1px solid var(--color-border);
-		border-radius: 10px;
+		@media (forced-colors: active) {
+			.color-picker-area,
+			.color-picker-hue {
+				border: 1px solid CanvasText;
+			}
+
+			.color-picker-thumb {
+				forced-color-adjust: none;
+				border-color: Canvas;
+				box-shadow: 0 0 0 2px CanvasText;
+			}
+
+			.color-picker-area:focus-visible .color-picker-thumb,
+			.color-picker-hue:focus-visible .color-picker-thumb {
+				outline-color: Highlight;
+			}
+
+			.color-picker-swatch {
+				forced-color-adjust: none;
+				border-color: CanvasText;
+			}
+		}
+
+		.color-picker-footer {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.color-picker-swatch {
+			flex-shrink: 0;
+			width: 32px;
+			height: 32px;
+			box-sizing: border-box;
+			border: 1px solid var(--color-border);
+			border-radius: 10px;
+		}
 	}
 </style>

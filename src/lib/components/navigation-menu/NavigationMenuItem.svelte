@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import type { Attachment } from 'svelte/attachments';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { scale, slide } from 'svelte/transition';
 	import ChevronDown from '@lucide/svelte/icons/chevron-down';
 	import { getNavigationMenuContext } from './context.js';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
 		/** Links the item. Ignored when the item has `items`. */
 		href?: string;
 		/** Marks the item as the current page, or the section containing it. */
@@ -16,16 +17,25 @@
 		/** Number of columns the panel lays its links out in. Ignored in a vertical menu. */
 		columns?: 1 | 2 | 3;
 		children: Snippet;
+		ref?: HTMLLIElement | null;
 	};
 
-	let { href, active = false, items, columns = 1, children }: Props = $props();
+	let {
+		href,
+		active = false,
+		items,
+		columns = 1,
+		class: className,
+		children,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 
 	const id = $props.id();
 	const menu = getNavigationMenuContext();
 	const gap = 8;
 	const edge = 8;
 
-	let itemEl: HTMLLIElement;
 	let triggerEl: HTMLButtonElement | undefined = $state();
 	let contentEl: HTMLElement | undefined = $state();
 	let position = $state({ top: 0, left: 0 });
@@ -81,11 +91,11 @@
 		if (!open || menu.vertical) return;
 
 		function handlePointerDown(event: PointerEvent) {
-			if (!itemEl.contains(event.target as Node)) close();
+			if (!ref?.contains(event.target as Node)) close();
 		}
 
 		function handleKeydown(event: KeyboardEvent) {
-			if (event.key === 'Escape') close({ restoreFocus: itemEl.contains(document.activeElement) });
+			if (event.key === 'Escape') close({ restoreFocus: ref?.contains(document.activeElement) });
 		}
 
 		window.addEventListener('pointerdown', handlePointerDown);
@@ -103,11 +113,12 @@
 </script>
 
 <li
-	class={['navigation-menu-item', { 'navigation-menu-item--vertical': menu.vertical }]}
-	bind:this={itemEl}
+	{...rest}
+	class={['navigation-menu-item', { 'navigation-menu-item--vertical': menu.vertical }, className]}
+	bind:this={ref}
 	onfocusout={(event) => {
-		if (open && !menu.vertical && !itemEl.contains(event.relatedTarget as Node | null))
-			menu.close();
+		rest.onfocusout?.(event);
+		if (open && !menu.vertical && !ref?.contains(event.relatedTarget as Node | null)) menu.close();
 	}}
 >
 	{#if items}
@@ -163,95 +174,126 @@
 </li>
 
 <style>
-	.navigation-menu-item {
-		display: flex;
-	}
+	@layer svelte-ui {
+		.navigation-menu-item {
+			display: flex;
+		}
 
-	.navigation-menu-item--vertical {
-		flex-direction: column;
-	}
+		.navigation-menu-item--vertical {
+			flex-direction: column;
+		}
 
-	.navigation-menu-item--vertical .navigation-menu-trigger {
-		justify-content: space-between;
-		width: 100%;
-		text-align: left;
-	}
+		.navigation-menu-item--vertical .navigation-menu-trigger {
+			justify-content: space-between;
+			width: 100%;
+			text-align: left;
+		}
 
-	.navigation-menu-trigger {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-		padding: 0;
-		background: none;
-		border: none;
-		border-radius: 4px;
-		font: inherit;
-		font-size: 14px;
-		line-height: 28px;
-		color: var(--color-text);
-		text-decoration: none;
-		outline: none;
-		cursor: pointer;
-		transition: opacity 200ms;
-	}
+		.navigation-menu-trigger {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			padding: 0;
+			background: none;
+			border: none;
+			border-radius: 4px;
+			font: inherit;
+			font-size: 14px;
+			line-height: 28px;
+			color: var(--color-text);
+			text-decoration: none;
+			outline: none;
+			cursor: pointer;
+			transition: opacity 200ms;
+		}
 
-	.navigation-menu-trigger:hover {
-		opacity: 0.6;
-	}
+		.navigation-menu-trigger:hover {
+			opacity: 0.6;
+		}
 
-	.navigation-menu-trigger:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
-	}
+		.navigation-menu-trigger:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px;
+		}
 
-	.navigation-menu-trigger--active {
-		font-weight: 500;
-	}
+		.navigation-menu-trigger--active {
+			font-weight: 500;
+		}
 
-	.navigation-menu-item :global(.navigation-menu-chevron) {
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-		transition: rotate 200ms ease;
-	}
+		.navigation-menu-item :global(.navigation-menu-chevron) {
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+			transition: rotate 200ms ease;
+		}
 
-	.navigation-menu-trigger[aria-expanded='true'] :global(.navigation-menu-chevron) {
-		rotate: 180deg;
-	}
+		.navigation-menu-trigger[aria-expanded='true'] :global(.navigation-menu-chevron) {
+			rotate: 180deg;
+		}
 
-	.navigation-menu-content {
-		position: fixed;
-		inset: auto;
-		box-sizing: border-box;
-		max-width: calc(100vw - 16px);
-		margin: 0;
-		padding: 6px;
-		overflow: visible;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		transform-origin: top left;
-		user-select: none;
-	}
+		.navigation-menu-content {
+			position: fixed;
+			inset: auto;
+			box-sizing: border-box;
+			max-width: calc(100vw - 16px);
+			margin: 0;
+			padding: 6px;
+			overflow: visible;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-radius: 12px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			transform-origin: top left;
+			user-select: none;
+		}
 
-	.navigation-menu-links {
-		display: grid;
-		grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
-		width: min(var(--columns) * 240px, 100vw - 30px);
-		gap: 2px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
+		.navigation-menu-links {
+			display: grid;
+			grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+			width: min(var(--columns) * 240px, 100vw - 30px);
+			gap: 2px;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 
-	.navigation-menu-sub {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		margin: 4px 0 0;
-		padding: 0;
-		list-style: none;
+		.navigation-menu-sub {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			margin: 4px 0 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.navigation-menu-trigger,
+			.navigation-menu-item :global(.navigation-menu-chevron) {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.navigation-menu-trigger:hover {
+				opacity: 1;
+				text-decoration: underline;
+			}
+
+			.navigation-menu-trigger--active {
+				text-decoration: underline;
+			}
+
+			.navigation-menu-trigger:focus-visible {
+				outline-color: Highlight;
+			}
+		}
+
+		@media (pointer: coarse) {
+			.navigation-menu-trigger {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
 	}
 </style>

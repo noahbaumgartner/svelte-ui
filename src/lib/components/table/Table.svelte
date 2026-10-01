@@ -47,6 +47,13 @@
 		selected?: T[];
 		/** Identifies rows across data updates; defaults to the row object itself. */
 		rowId?: (row: T) => unknown;
+		/** Locale used to compare strings when sorting. Defaults to the runtime locale. */
+		locale?: string;
+		/** Accessible names of the selection checkboxes. */
+		labels?: { selectAll?: string; selectRow?: string };
+		/** Rendered in a full-width row while `data` is empty. */
+		empty?: Snippet;
+		ref?: HTMLTableElement | null;
 	};
 
 	let {
@@ -56,9 +63,16 @@
 		selection,
 		selected = $bindable([]),
 		rowId = (row) => row,
+		locale,
+		labels,
+		empty,
+		ref = $bindable(null),
 		class: className,
 		...rest
 	}: Props = $props();
+
+	const selectAllLabel = $derived(labels?.selectAll ?? 'Select all rows');
+	const selectRowLabel = $derived(labels?.selectRow ?? 'Select row');
 
 	const columnId = (column: TableColumn<T>) => column.id ?? column.key ?? column.header;
 
@@ -70,7 +84,7 @@
 	function compare(a: unknown, b: unknown) {
 		if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
 		if (typeof a === 'number' && typeof b === 'number') return a - b;
-		return String(a).localeCompare(String(b), undefined, { numeric: true });
+		return String(a).localeCompare(String(b), locale, { numeric: true });
 	}
 
 	const rows = $derived.by(() => {
@@ -114,14 +128,14 @@
 </script>
 
 <div class="table-container">
-	<table {...rest} class={['table', className]}>
+	<table {...rest} bind:this={ref} class={['table', className]}>
 		<thead>
 			<tr>
 				{#if selection}
 					<th scope="col" class="table-select">
 						{#if selection === 'multiple'}
 							<Checkbox
-								aria-label="Select all rows"
+								aria-label={selectAllLabel}
 								checked={allSelected}
 								indeterminate={someSelected}
 								onchange={toggleAll}
@@ -165,7 +179,7 @@
 					{#if selection}
 						<td class="table-select">
 							<Checkbox
-								aria-label="Select row"
+								aria-label={selectRowLabel}
 								checked={isSelected}
 								onchange={() => toggleRow(row)}
 							/>
@@ -181,96 +195,139 @@
 						</td>
 					{/each}
 				</tr>
+			{:else}
+				{#if empty}
+					<tr>
+						<td class="table-empty" colspan={columns.length + (selection ? 1 : 0)}>
+							{@render empty()}
+						</td>
+					</tr>
+				{/if}
 			{/each}
 		</tbody>
 	</table>
 </div>
 
 <style>
-	.table-container {
-		width: 100%;
-		overflow-x: auto;
-	}
+	@layer svelte-ui {
+		.table-container {
+			width: 100%;
+			overflow-x: auto;
+		}
 
-	.table {
-		width: 100%;
-		border-collapse: collapse;
-		font-size: 13px;
-		color: var(--color-text);
-	}
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 13px;
+			color: var(--color-text);
+		}
 
-	th,
-	td {
-		padding: 10px 12px;
-		white-space: nowrap;
-		border-bottom: 1px solid var(--color-border);
-	}
+		th,
+		td {
+			padding: 10px 12px;
+			white-space: nowrap;
+			border-bottom: 1px solid var(--color-border);
+		}
 
-	th {
-		font-weight: 500;
-		color: var(--color-text-muted);
-	}
+		th {
+			font-weight: 500;
+			color: var(--color-text-muted);
+		}
 
-	tbody tr:last-child td {
-		border-bottom: none;
-	}
+		tbody tr:last-child td {
+			border-bottom: none;
+		}
 
-	tbody tr:hover,
-	tbody tr[data-selected] {
-		background-color: var(--color-surface);
-	}
+		tbody tr:hover,
+		tbody tr[data-selected] {
+			background-color: var(--color-surface);
+		}
 
-	.table-left {
-		text-align: left;
-	}
+		.table-left {
+			text-align: left;
+		}
 
-	.table-center {
-		text-align: center;
-	}
+		.table-center {
+			text-align: center;
+		}
 
-	.table-right {
-		text-align: right;
-	}
+		.table-right {
+			text-align: right;
+		}
 
-	.table-select {
-		width: 16px;
-		padding-right: 0;
-		line-height: 0;
-	}
+		.table-select {
+			width: 16px;
+			padding-right: 0;
+			line-height: 0;
+		}
 
-	.table-sort {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-		margin: -2px -4px;
-		padding: 2px 4px;
-		font: inherit;
-		color: inherit;
-		background: none;
-		border: none;
-		border-radius: 6px;
-		outline: none;
-		cursor: pointer;
-		transition: color 200ms ease;
-	}
+		.table-sort {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			margin: -2px -4px;
+			padding: 2px 4px;
+			font: inherit;
+			color: inherit;
+			background: none;
+			border: none;
+			border-radius: 6px;
+			outline: none;
+			cursor: pointer;
+			transition: color 200ms ease;
+		}
 
-	.table-sort:hover,
-	th[aria-sort='ascending'] .table-sort,
-	th[aria-sort='descending'] .table-sort {
-		color: var(--color-text);
-	}
+		.table-sort:hover,
+		th[aria-sort='ascending'] .table-sort,
+		th[aria-sort='descending'] .table-sort {
+			color: var(--color-text);
+		}
 
-	.table-sort:focus-visible {
-		outline: 2px solid var(--color-accent);
-	}
+		.table-sort:focus-visible {
+			outline: 2px solid var(--color-accent);
+		}
 
-	.table-sort :global(.table-sort-icon) {
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-	}
+		.table-sort :global(.table-sort-icon) {
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+		}
 
-	.table-sort :global(.table-sort-icon--idle) {
-		opacity: 0.5;
+		.table-sort :global(.table-sort-icon--idle) {
+			opacity: 0.5;
+		}
+
+		.table-empty {
+			text-align: center;
+			color: var(--color-text-muted);
+		}
+
+		@media (pointer: coarse) {
+			.table-sort {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+
+		@media (forced-colors: active) {
+			tbody tr[data-selected] {
+				outline: 2px solid Highlight;
+				outline-offset: -2px;
+			}
+
+			.table-sort:focus-visible {
+				outline-color: Highlight;
+			}
+
+			.table-sort :global(.table-sort-icon--idle) {
+				opacity: 1;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.table-sort {
+				transition: none;
+			}
+		}
 	}
 </style>

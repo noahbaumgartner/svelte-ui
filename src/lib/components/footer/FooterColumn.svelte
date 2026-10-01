@@ -6,29 +6,32 @@
 		heading: string;
 		/** Links, one per line. */
 		children: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { heading, class: className, children, ...rest }: Props = $props();
+	let { heading, class: className, children, ref = $bindable(null), ...rest }: Props = $props();
 </script>
 
-<div {...rest} class={['footer-column', className]}>
+<div {...rest} bind:this={ref} class={['footer-column', className]}>
 	<span class="footer-column-heading">{heading}</span>
 	{@render children()}
 </div>
 
 <style>
-	.footer-column {
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 8px;
-		color: color-mix(in srgb, #fff, #000 17%);
-	}
+	@layer svelte-ui {
+		.footer-column {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 8px;
+			color: color-mix(in srgb, #fff, #000 17%);
+		}
 
-	.footer-column-heading {
-		font-weight: 600;
-		color: #fff;
-		user-select: none;
+		.footer-column-heading {
+			font-weight: 600;
+			color: #fff;
+			user-select: none;
+		}
 	}
 </style>

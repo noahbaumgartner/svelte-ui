@@ -1,17 +1,26 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { setNavigationMenuContext } from './context.js';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
 		/** Accessible name of the navigation landmark. */
 		label?: string;
 		/** `vertical` stacks the items and expands submenus in place, e.g. in a mobile menu. */
 		orientation?: 'horizontal' | 'vertical';
 		/** `NavigationMenuItem`s. */
 		children: Snippet;
+		ref?: HTMLElement | null;
 	};
 
-	let { label = 'Main', orientation = 'horizontal', children }: Props = $props();
+	let {
+		label = 'Main',
+		orientation = 'horizontal',
+		class: className,
+		children,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 
 	const openDelay = 200;
 	const closeDelay = 200;
@@ -62,8 +71,14 @@
 </script>
 
 <nav
+	{...rest}
+	bind:this={ref}
 	aria-label={label}
-	class={['navigation-menu', { 'navigation-menu--vertical': orientation === 'vertical' }]}
+	class={[
+		'navigation-menu',
+		{ 'navigation-menu--vertical': orientation === 'vertical' },
+		className
+	]}
 >
 	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<ul class="navigation-menu-list" onkeydown={handleKeydown}>
@@ -72,24 +87,26 @@
 </nav>
 
 <style>
-	.navigation-menu {
-		display: flex;
-		user-select: none;
-	}
+	@layer svelte-ui {
+		.navigation-menu {
+			display: flex;
+			user-select: none;
+		}
 
-	.navigation-menu-list {
-		display: flex;
-		align-items: center;
-		gap: 24px;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
+		.navigation-menu-list {
+			display: flex;
+			align-items: center;
+			gap: 24px;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 
-	.navigation-menu--vertical .navigation-menu-list {
-		flex-direction: column;
-		align-items: stretch;
-		gap: 4px;
-		width: 100%;
+		.navigation-menu--vertical .navigation-menu-list {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 4px;
+			width: 100%;
+		}
 	}
 </style>

@@ -5,21 +5,24 @@
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
 		/** The page content next to the sidebar. */
 		children: Snippet;
+		ref?: HTMLElement | null;
 	};
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { ref = $bindable(null), class: className, children, ...rest }: Props = $props();
 </script>
 
-<main {...rest} class={['sidebar-inset', className]}>
+<main {...rest} bind:this={ref} class={['sidebar-inset', className]}>
 	{@render children()}
 </main>
 
 <style>
-	.sidebar-inset {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		min-width: 0;
-		background-color: var(--color-bg);
+	@layer svelte-ui {
+		.sidebar-inset {
+			display: flex;
+			flex-direction: column;
+			flex: 1;
+			min-width: 0;
+			background-color: var(--color-bg);
+		}
 	}
 </style>

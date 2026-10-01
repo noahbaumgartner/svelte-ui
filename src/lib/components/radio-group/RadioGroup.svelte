@@ -11,6 +11,7 @@
 		disabled?: boolean;
 		required?: boolean;
 		orientation?: 'vertical' | 'horizontal';
+		ref?: HTMLDivElement | null;
 		/** Horizontal Fields, each with a RadioGroupItem and a Label. */
 		children: Snippet;
 	};
@@ -21,6 +22,7 @@
 		disabled = false,
 		required = false,
 		orientation = 'vertical',
+		ref = $bindable(null),
 		class: className,
 		children,
 		...rest
@@ -49,6 +51,7 @@
 
 <div
 	{...rest}
+	bind:this={ref}
 	role="radiogroup"
 	aria-disabled={disabled || undefined}
 	aria-required={required || undefined}
@@ -59,28 +62,30 @@
 </div>
 
 <style>
-	.radio-group {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-	}
+	@layer svelte-ui {
+		.radio-group {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
 
-	.radio-group--horizontal {
-		flex-direction: row;
-		flex-wrap: wrap;
-		gap: 12px 24px;
-	}
+		.radio-group--horizontal {
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 12px 24px;
+		}
 
-	.radio-group--horizontal > :global(.field) {
-		width: auto;
-	}
+		.radio-group--horizontal > :global(.field) {
+			width: auto;
+		}
 
-	/* aria-invalid is not allowed on a radio, so the group carries it */
-	.radio-group[aria-invalid='true'] :global(.radio input) {
-		border-color: var(--color-destructive);
-	}
+		/* aria-invalid is not allowed on a radio, so the group carries it */
+		.radio-group[aria-invalid='true'] :global(.radio input) {
+			border-color: var(--color-destructive);
+		}
 
-	.radio-group[aria-invalid='true'] :global(.label) {
-		color: var(--color-destructive);
+		.radio-group[aria-invalid='true'] :global(.label) {
+			color: var(--color-destructive);
+		}
 	}
 </style>

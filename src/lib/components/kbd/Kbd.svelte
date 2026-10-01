@@ -4,43 +4,52 @@
 
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
 		children: Snippet;
+		ref?: HTMLElement | null;
 	};
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { class: className, children, ref = $bindable(null), ...rest }: Props = $props();
 </script>
 
-<kbd {...rest} class={['kbd', className]}>{@render children()}</kbd>
+<kbd {...rest} bind:this={ref} class={['kbd', className]}>{@render children()}</kbd>
 
 <style>
-	.kbd {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 4px;
-		box-sizing: border-box;
-		width: fit-content;
-		min-width: 20px;
-		height: 20px;
-		padding: 0 4px;
-		font-family: inherit;
-		font-size: 12px;
-		line-height: 1;
-		background-color: var(--color-surface);
-		color: var(--color-text-muted);
-		border-radius: 4px;
-		pointer-events: none;
-		user-select: none;
-	}
+	@layer svelte-ui {
+		.kbd {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 4px;
+			box-sizing: border-box;
+			width: fit-content;
+			min-width: 20px;
+			height: 20px;
+			padding: 0 4px;
+			font-family: inherit;
+			font-size: 12px;
+			line-height: 1;
+			background-color: var(--color-surface);
+			color: var(--color-text-muted);
+			border-radius: 4px;
+			pointer-events: none;
+			user-select: none;
+		}
 
-	.kbd :global(svg) {
-		width: 12px;
-		height: 12px;
-		flex-shrink: 0;
-	}
+		.kbd :global(svg) {
+			width: 12px;
+			height: 12px;
+			flex-shrink: 0;
+		}
 
-	:global(.button--primary) .kbd,
-	:global(.tooltip-content) .kbd {
-		background-color: color-mix(in srgb, currentColor 20%, transparent);
-		color: inherit;
+		:global(.button--primary) .kbd,
+		:global(.tooltip-content) .kbd {
+			background-color: color-mix(in srgb, currentColor 20%, transparent);
+			color: inherit;
+		}
+
+		@media (forced-colors: active) {
+			.kbd {
+				border: 1px solid CanvasText;
+			}
+		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { tick, type Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
 	import Button from '../button/Button.svelte';
@@ -13,10 +13,22 @@
 		parseMonth,
 		parseWeek,
 		sameDay,
-		startOfWeek
+		startOfWeek,
+		weekdayNames
 	} from './dates.js';
 
-	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'onselect'> & {
+	type Labels = {
+		previousMonth: string;
+		nextMonth: string;
+		previousYear: string;
+		nextYear: string;
+		/** Hidden header of the week number column in week mode. */
+		week: string;
+	};
+
+	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'onselect' | 'children'> & {
+		/** The root element. Bindable. */
+		ref?: HTMLDivElement | null;
 		/** Picks a day (`YYYY-MM-DD`), an ISO week (`YYYY-Www`) or a month (`YYYY-MM`), matching the input types. */
 		mode?: 'date' | 'week' | 'month';
 		/** Bindable, in the format of the mode. */
@@ -27,21 +39,42 @@
 		max?: string;
 		/** BCP 47 locale for month and weekday names. Defaults to the browser's. */
 		locale?: string;
+		/** First day of the week, 0 (Sunday) to 6 (Saturday). Week mode always starts on Monday, like ISO weeks. */
+		firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+		/** Texts for the navigation buttons and the week column, e.g. to translate them. */
+		labels?: Partial<Labels>;
+		/** Replaces the content of a day cell. Not used in month mode. */
+		day?: Snippet<[date: Date]>;
 		onselect?: (value: string) => void;
 	};
 
+	const defaultLabels: Labels = {
+		previousMonth: 'Previous month',
+		nextMonth: 'Next month',
+		previousYear: 'Previous year',
+		nextYear: 'Next year',
+		week: 'Week'
+	};
+
 	let {
+		ref = $bindable(null),
 		mode = 'date',
 		value = $bindable(''),
 		min,
 		max,
 		locale,
+		firstDayOfWeek = 1,
+		labels,
+		day: dayContent,
 		onselect,
 		class: className,
 		...rest
 	}: Props = $props();
 
 	const today = new Date();
+
+	let text = $derived({ ...defaultLabels, ...labels });
+	let firstDay = $derived(mode === 'week' ? 1 : firstDayOfWeek);
 
 	function parse(input: string | undefined) {
 		if (mode === 'week') return parseWeek(input);
@@ -73,14 +106,10 @@
 			: new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(focused)
 	);
 
-	let weekdays = $derived(
-		Array.from({ length: 7 }, (_, i) =>
-			new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(new Date(2024, 0, 1 + i))
-		)
-	);
+	let weekdays = $derived(weekdayNames(locale, firstDay));
 
 	let weeks = $derived.by(() => {
-		const start = startOfWeek(new Date(focused.getFullYear(), focused.getMonth(), 1));
+		const start = startOfWeek(new Date(focused.getFullYear(), focused.getMonth(), 1), firstDay);
 		return Array.from({ length: 6 }, (_, w) =>
 			Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d))
 		);
@@ -125,11 +154,12 @@
 			ArrowRight: unit(1),
 			ArrowUp: unit(-columns),
 			ArrowDown: unit(columns),
-			Home: mode === 'month' ? new Date(focused.getFullYear(), 0, 1) : startOfWeek(focused),
+			Home:
+				mode === 'month' ? new Date(focused.getFullYear(), 0, 1) : startOfWeek(focused, firstDay),
 			End:
 				mode === 'month'
 					? new Date(focused.getFullYear(), 11, 1)
-					: addDays(startOfWeek(focused), 6),
+					: addDays(startOfWeek(focused, firstDay), 6),
 			PageUp:
 				mode === 'month'
 					? new Date(focused.getFullYear() - 1, focused.getMonth(), 1)
@@ -147,13 +177,13 @@
 	}
 </script>
 
-<div {...rest} class={['calendar', `calendar--${mode}`, className]}>
+<div {...rest} bind:this={ref} class={['calendar', `calendar--${mode}`, className]}>
 	<div class="calendar-header">
 		<Button
 			variant="ghost"
 			size="sm"
 			icon={ChevronLeft}
-			label={mode === 'month' ? 'Previous year' : 'Previous month'}
+			label={mode === 'month' ? text.previousYear : text.previousMonth}
 			onclick={() => page(-1)}
 		/>
 		<span class="calendar-title" aria-live="polite">{title}</span>
@@ -161,7 +191,7 @@
 			variant="ghost"
 			size="sm"
 			icon={ChevronRight}
-			label={mode === 'month' ? 'Next year' : 'Next month'}
+			label={mode === 'month' ? text.nextYear : text.nextMonth}
 			onclick={() => page(1)}
 		/>
 	</div>
@@ -202,7 +232,7 @@
 			<thead>
 				<tr>
 					{#if mode === 'week'}<th class="calendar-weeknumber" scope="col"
-							><span class="calendar-hidden">Week</span></th
+							><span class="calendar-hidden">{text.week}</span></th
 						>{/if}
 					{#each weekdays as weekday (weekday)}
 						<th scope="col">{weekday}</th>
@@ -236,7 +266,7 @@
 									disabled={outOfRange(day)}
 									onclick={() => select(day)}
 								>
-									{day.getDate()}
+									{#if dayContent}{@render dayContent(day)}{:else}{day.getDate()}{/if}
 								</button>
 							</td>
 						{/each}
@@ -248,154 +278,211 @@
 </div>
 
 <style>
-	.calendar {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		width: fit-content;
-		font-size: 13px;
-		color: var(--color-text);
-		user-select: none;
-	}
+	@layer svelte-ui {
+		.calendar {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			width: fit-content;
+			font-size: 13px;
+			color: var(--color-text);
+			user-select: none;
+		}
 
-	.calendar-header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 8px;
-	}
+		.calendar-header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+		}
 
-	.calendar-title {
-		font-weight: 600;
-		text-transform: capitalize;
-	}
+		.calendar-title {
+			font-weight: 600;
+			text-transform: capitalize;
+		}
 
-	.calendar-grid {
-		border-collapse: collapse;
-		border-spacing: 0;
-		table-layout: fixed;
-	}
+		.calendar-grid {
+			border-collapse: collapse;
+			border-spacing: 0;
+			table-layout: fixed;
+		}
 
-	.calendar-grid th {
-		height: 28px;
-		padding: 0;
-		font-size: 12px;
-		font-weight: 400;
-		color: var(--color-text-muted);
-	}
+		.calendar-grid th {
+			height: 28px;
+			padding: 0;
+			font-size: 12px;
+			font-weight: 400;
+			color: var(--color-text-muted);
+		}
 
-	.calendar-grid td {
-		width: 32px;
-		padding: 1px 0;
-	}
+		.calendar-grid td {
+			width: 32px;
+			padding: 1px 0;
+		}
 
-	.calendar-weeknumber {
-		width: 28px;
-		padding-right: 4px;
-		font-variant-numeric: tabular-nums;
-	}
+		.calendar-weeknumber {
+			width: 28px;
+			padding-right: 4px;
+			font-variant-numeric: tabular-nums;
+		}
 
-	.calendar-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		overflow: hidden;
-		clip-path: inset(50%);
-		white-space: nowrap;
-	}
+		.calendar-hidden {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
 
-	.calendar-months {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		gap: 4px;
-		width: 224px;
-	}
+		.calendar-months {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 4px;
+			width: 224px;
+		}
 
-	.calendar-cell {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 32px;
-		height: 32px;
-		padding: 0;
-		font-family: inherit;
-		font-size: 13px;
-		font-variant-numeric: tabular-nums;
-		color: var(--color-text);
-		background-color: transparent;
-		border: none;
-		border-radius: 8px;
-		outline: none;
-		cursor: pointer;
-		transition:
-			background-color 200ms ease,
-			color 200ms ease;
-	}
+		.calendar-cell {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 32px;
+			height: 32px;
+			padding: 0;
+			font-family: inherit;
+			font-size: 13px;
+			font-variant-numeric: tabular-nums;
+			color: var(--color-text);
+			background-color: transparent;
+			border: none;
+			border-radius: 8px;
+			outline: none;
+			cursor: pointer;
+			transition:
+				background-color 200ms ease,
+				color 200ms ease;
+		}
 
-	.calendar-months .calendar-cell {
-		width: 100%;
-		height: 40px;
-		text-transform: capitalize;
-	}
+		.calendar-months .calendar-cell {
+			width: 100%;
+			height: 40px;
+			text-transform: capitalize;
+		}
 
-	.calendar-cell:hover:not(:disabled) {
-		background-color: var(--color-surface);
-	}
+		.calendar-cell:hover:not(:disabled) {
+			background-color: var(--color-surface);
+		}
 
-	.calendar-cell:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: -2px;
-	}
+		.calendar-cell:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: -2px;
+		}
 
-	.calendar-cell--outside {
-		color: var(--color-text-faint);
-	}
+		.calendar-cell--outside {
+			color: var(--color-text-faint);
+		}
 
-	.calendar-cell--today {
-		font-weight: 600;
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
+		.calendar-cell--today {
+			font-weight: 600;
+			text-decoration: underline;
+			text-underline-offset: 4px;
+		}
 
-	.calendar-cell:disabled {
-		cursor: not-allowed;
-		opacity: 0.35;
-	}
+		.calendar-cell:disabled {
+			cursor: not-allowed;
+			opacity: 0.35;
+		}
 
-	.calendar-cell--selected,
-	.calendar-cell--selected:hover:not(:disabled),
-	.calendar-row--selected .calendar-cell,
-	.calendar-row--selected .calendar-cell:hover:not(:disabled) {
-		color: var(--color-accent-foreground);
-		background-color: var(--color-accent);
-	}
+		.calendar-cell--selected,
+		.calendar-cell--selected:hover:not(:disabled),
+		.calendar-row--selected .calendar-cell,
+		.calendar-row--selected .calendar-cell:hover:not(:disabled) {
+			color: var(--color-accent-foreground);
+			background-color: var(--color-accent);
+		}
 
-	.calendar-cell--selected:focus-visible,
-	.calendar-row--selected .calendar-cell:focus-visible {
-		outline-color: var(--color-accent-foreground);
-	}
+		.calendar-cell--selected:focus-visible,
+		.calendar-row--selected .calendar-cell:focus-visible {
+			outline-color: var(--color-accent-foreground);
+		}
 
-	/* Week mode: a row reads as one pill */
-	.calendar--week tbody tr:hover .calendar-cell:not(:disabled) {
-		background-color: var(--color-surface);
-	}
+		/* Week mode: a row reads as one pill */
+		.calendar--week tbody tr:hover .calendar-cell:not(:disabled) {
+			background-color: var(--color-surface);
+		}
 
-	.calendar--week tbody tr.calendar-row--selected .calendar-cell {
-		background-color: var(--color-accent);
-	}
+		.calendar--week tbody tr.calendar-row--selected .calendar-cell {
+			background-color: var(--color-accent);
+		}
 
-	.calendar--week .calendar-cell {
-		width: 100%;
-		border-radius: 0;
-	}
+		.calendar--week .calendar-cell {
+			width: 100%;
+			border-radius: 0;
+		}
 
-	.calendar--week td:nth-child(2) .calendar-cell {
-		border-start-start-radius: 8px;
-		border-end-start-radius: 8px;
-	}
+		.calendar--week td:nth-child(2) .calendar-cell {
+			border-start-start-radius: 8px;
+			border-end-start-radius: 8px;
+		}
 
-	.calendar--week td:last-child .calendar-cell {
-		border-start-end-radius: 8px;
-		border-end-end-radius: 8px;
+		@media (pointer: coarse) {
+			.calendar-grid td {
+				width: 44px;
+			}
+
+			.calendar-cell {
+				min-width: 44px;
+				min-height: 44px;
+			}
+
+			.calendar-months {
+				width: 252px;
+			}
+
+			.calendar-months .calendar-cell {
+				min-height: 44px;
+			}
+
+			.calendar--week .calendar-cell {
+				min-width: 0;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.calendar-cell:disabled {
+				color: GrayText;
+				opacity: 1;
+			}
+
+			.calendar-cell:focus-visible {
+				outline-color: Highlight;
+			}
+
+			.calendar-cell--selected,
+			.calendar-cell--selected:hover:not(:disabled),
+			.calendar-row--selected .calendar-cell,
+			.calendar-row--selected .calendar-cell:hover:not(:disabled),
+			.calendar--week tbody tr.calendar-row--selected .calendar-cell {
+				forced-color-adjust: none;
+				color: HighlightText;
+				background-color: Highlight;
+			}
+
+			.calendar-cell--selected:focus-visible,
+			.calendar-row--selected .calendar-cell:focus-visible {
+				outline-color: CanvasText;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.calendar-cell {
+				transition: none;
+			}
+		}
+
+		.calendar--week td:last-child .calendar-cell {
+			border-start-end-radius: 8px;
+			border-end-end-radius: 8px;
+		}
 	}
 </style>

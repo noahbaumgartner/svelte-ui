@@ -8,13 +8,14 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import type { Attachment } from 'svelte/attachments';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 	import type { TransitionConfig } from 'svelte/transition';
 	import NavigationMenu from '../navigation-menu/NavigationMenu.svelte';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
 		/** Whether the mobile menu is open. Bindable. */
 		open?: boolean;
 		/** Accessible name of the navigation landmark. */
@@ -30,6 +31,7 @@
 		trigger: Snippet<[NavbarTriggerProps, boolean]>;
 		/** `NavigationMenuItem`s, shown inline on desktop and stacked in the mobile menu. */
 		children: Snippet;
+		ref?: HTMLElement | null;
 	};
 
 	let {
@@ -38,7 +40,10 @@
 		logo,
 		actions,
 		trigger,
-		children
+		children,
+		class: className,
+		ref = $bindable(null),
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
@@ -111,7 +116,7 @@
 	});
 </script>
 
-<header class="navbar" bind:offsetHeight={height}>
+<header {...rest} bind:this={ref} class={['navbar', className]} bind:offsetHeight={height}>
 	<div class="navbar-bar">
 		<div class="navbar-start">
 			{#if logo}{@render logo()}{/if}
@@ -144,123 +149,141 @@
 </header>
 
 <style>
-	.navbar {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		background-color: var(--color-bg);
-		user-select: none;
-	}
+	@layer svelte-ui {
+		.navbar {
+			position: sticky;
+			top: 0;
+			z-index: 50;
+			background-color: var(--color-bg);
+			user-select: none;
+		}
 
-	.navbar-bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 16px;
-		padding: 14px 16px;
-	}
+		.navbar-bar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			padding: 14px 16px;
+		}
 
-	.navbar-start {
-		display: flex;
-		align-items: center;
-		gap: 40px;
-		min-width: 0;
-	}
+		.navbar-start {
+			display: flex;
+			align-items: center;
+			gap: 40px;
+			min-width: 0;
+		}
 
-	.navbar-end {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-	}
+		.navbar-end {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
 
-	.navbar-desktop {
-		display: none;
-	}
-
-	.navbar-trigger {
-		display: flex;
-	}
-
-	/* Mobile menu: full-height, left-aligned rows below the bar */
-	.navbar-panel {
-		position: absolute;
-		top: 100%;
-		left: 0;
-		right: 0;
-		box-sizing: border-box;
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		background-color: var(--color-bg);
-	}
-
-	.navbar-panel :global(.navigation-menu) {
-		padding: 40px 16px 32px;
-	}
-
-	.navbar-panel :global(.navigation-menu-list) {
-		gap: 0;
-	}
-
-	/* Rows are padded into the gutter so the focus background has room; the text stays aligned */
-	.navbar-panel :global(.navigation-menu-trigger) {
-		box-sizing: content-box;
-		gap: 8px;
-		margin-inline: -10px;
-		padding: 10px;
-		border-radius: 10px;
-		font-size: 22px;
-		font-weight: 600;
-		line-height: 1.2;
-	}
-
-	.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
-		outline: none;
-		background-color: var(--color-surface);
-	}
-
-	.navbar-panel :global(.navigation-menu-chevron) {
-		width: 20px;
-		height: 20px;
-		color: var(--color-text-muted);
-	}
-
-	.navbar-panel :global(.navigation-menu-sub) {
-		gap: 0;
-		margin: 0 -10px;
-		padding-bottom: 8px;
-	}
-
-	/* Sub-items show only their title */
-	.navbar-panel :global(.navigation-menu-link) {
-		font-size: 17px;
-		color: var(--color-text-secondary);
-	}
-
-	.navbar-panel :global(.navigation-menu-link-title) {
-		font-weight: 400;
-	}
-
-	.navbar-panel :global(.navigation-menu-link--active) {
-		background-color: transparent;
-		color: var(--color-text);
-	}
-
-	.navbar-panel :global(.navigation-menu-link--active .navigation-menu-link-title) {
-		font-weight: 500;
-	}
-
-	.navbar-panel :global(:is(.navigation-menu-link-icon, .navigation-menu-link-description)) {
-		display: none;
-	}
-
-	@media (min-width: 640px) {
 		.navbar-desktop {
+			display: none;
+		}
+
+		.navbar-trigger {
 			display: flex;
 		}
 
-		.navbar-trigger,
+		/* Mobile menu: full-height, left-aligned rows below the bar */
 		.navbar-panel {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			right: 0;
+			box-sizing: border-box;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			background-color: var(--color-bg);
+		}
+
+		.navbar-panel :global(.navigation-menu) {
+			padding: 40px 16px 32px;
+		}
+
+		.navbar-panel :global(.navigation-menu-list) {
+			gap: 0;
+		}
+
+		/* Rows are padded into the gutter so the focus background has room; the text stays aligned */
+		.navbar-panel :global(.navigation-menu-trigger) {
+			box-sizing: content-box;
+			gap: 8px;
+			margin-inline: -10px;
+			padding: 10px;
+			border-radius: 10px;
+			font-size: 22px;
+			font-weight: 600;
+			line-height: 1.2;
+		}
+
+		.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
+			outline: none;
+			background-color: var(--color-surface);
+		}
+
+		.navbar-panel :global(.navigation-menu-chevron) {
+			width: 20px;
+			height: 20px;
+			color: var(--color-text-muted);
+		}
+
+		.navbar-panel :global(.navigation-menu-sub) {
+			gap: 0;
+			margin: 0 -10px;
+			padding-bottom: 8px;
+		}
+
+		/* Sub-items show only their title */
+		.navbar-panel :global(.navigation-menu-link) {
+			font-size: 17px;
+			color: var(--color-text-secondary);
+		}
+
+		.navbar-panel :global(.navigation-menu-link-title) {
+			font-weight: 400;
+		}
+
+		.navbar-panel :global(.navigation-menu-link--active) {
+			background-color: transparent;
+			color: var(--color-text);
+		}
+
+		.navbar-panel :global(.navigation-menu-link--active .navigation-menu-link-title) {
+			font-weight: 500;
+		}
+
+		.navbar-panel :global(:is(.navigation-menu-link-icon, .navigation-menu-link-description)) {
 			display: none;
+		}
+
+		@media (min-width: 640px) {
+			.navbar-desktop {
+				display: flex;
+			}
+
+			.navbar-trigger,
+			.navbar-panel {
+				display: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
+				outline: 2px solid Highlight;
+			}
+
+			.navbar-panel :global(.navigation-menu-link--active) {
+				text-decoration: underline;
+			}
+		}
+
+		@media (pointer: coarse) {
+			.navbar-panel :global(.navigation-menu-trigger) {
+				min-height: 0;
+			}
 		}
 	}
 </style>

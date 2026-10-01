@@ -50,8 +50,15 @@ export function addMonths(date: Date, months: number) {
 	return result;
 }
 
-export function startOfWeek(date: Date) {
-	return addDays(date, -((date.getDay() + 6) % 7));
+/** `firstDay` is 0 (Sunday) to 6 (Saturday); defaults to Monday. */
+export function startOfWeek(date: Date, firstDay = 1) {
+	return addDays(date, -((date.getDay() - firstDay + 7) % 7));
+}
+
+/** Short weekday names starting at `firstDay` (0 is Sunday). */
+export function weekdayNames(locale: string | undefined, firstDay = 1) {
+	const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' });
+	return Array.from({ length: 7 }, (_, i) => formatter.format(new Date(2024, 0, 7 + firstDay + i)));
 }
 
 export function sameDay(a: Date | undefined, b: Date | undefined) {

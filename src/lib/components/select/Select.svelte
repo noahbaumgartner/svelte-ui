@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts" generics="T extends string | number | null">
-	import { tick } from 'svelte';
+	import { tick, type Snippet } from 'svelte';
 	import { scale } from 'svelte/transition';
 	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
@@ -25,6 +25,12 @@
 		/** Form field name; submits the value through a hidden input. */
 		name?: string;
 		onchange?: (value: T) => void;
+		/** Text shown in the list when there are no options. */
+		labels?: { empty?: string };
+		/** Replaces the content of each option. */
+		option?: Snippet<[option: SelectOption<T>, selected: boolean]>;
+		/** The trigger button. */
+		ref?: HTMLButtonElement | null;
 	};
 
 	let {
@@ -33,8 +39,11 @@
 		placeholder = 'Select',
 		name,
 		disabled = false,
+		ref = $bindable(null),
 		class: className,
 		onchange,
+		labels,
+		option: optionContent,
 		...rest
 	}: Props = $props();
 
@@ -46,12 +55,17 @@
 	let open = $state(false);
 	let wrapperEl: HTMLSpanElement;
 	let triggerEl: HTMLButtonElement;
+	const emptyLabel = $derived(labels?.empty ?? 'No options');
 	let listEl: HTMLDivElement | undefined = $state();
 	let placement: 'top' | 'bottom' = $state('bottom');
 	let position: { top?: number; bottom?: number; left: number; width: number; height: number } =
 		$state({ left: 0, width: 0, height: maxHeight });
 
 	let current = $derived(options.find((option) => option.value === value));
+
+	function reducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
 
 	function items() {
 		return Array.from(
@@ -171,6 +185,12 @@
 	<button
 		{...rest}
 		bind:this={triggerEl}
+		{@attach (node) => {
+			ref = node;
+			return () => {
+				if (ref === node) ref = null;
+			};
+		}}
 		type="button"
 		role="combobox"
 		aria-haspopup="listbox"
@@ -215,7 +235,7 @@
 				if (!wrapperEl.contains(event.relatedTarget as Node | null)) close();
 			}}
 			{@attach popover}
-			transition:scale={{ duration: 140, start: 0.95 }}
+			transition:scale={{ duration: reducedMotion() ? 0 : 140, start: 0.95 }}
 		>
 			{#each options as option (option.value)}
 				{@const selected = option.value === value}
@@ -228,164 +248,226 @@
 					class={['select-option', { 'select-option--selected': selected }]}
 					onclick={() => choose(option)}
 				>
-					<span class="select-option-label">{option.label}</span>
+					{#if optionContent}
+						<span class="select-option-label">{@render optionContent(option, selected)}</span>
+					{:else}
+						<span class="select-option-label">{option.label}</span>
+					{/if}
 					<span class="select-option-check">
 						{#if selected}<Check aria-hidden="true" />{/if}
 					</span>
 				</button>
+			{:else}
+				<div class="select-empty">{emptyLabel}</div>
 			{/each}
 		</div>
 	{/if}
 </span>
 
 <style>
-	.select {
-		display: flex;
-		width: 100%;
-		min-width: 0;
-	}
+	@layer svelte-ui {
+		.select {
+			display: flex;
+			width: 100%;
+			min-width: 0;
+		}
 
-	/* Looks like an Input */
-	.select-trigger {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 8px;
-		box-sizing: border-box;
-		width: 100%;
-		min-width: 0;
-		height: 32px;
-		padding: 0 8px 0 10px;
-		font-family: inherit;
-		font-size: 13px;
-		color: var(--color-text);
-		text-align: left;
-		background-color: transparent;
-		border: 1px solid var(--color-border-strong);
-		border-radius: 10px;
-		outline: none;
-		cursor: pointer;
-		transition: border-color 200ms ease;
-	}
+		/* Looks like an Input */
+		.select-trigger {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 8px;
+			box-sizing: border-box;
+			width: 100%;
+			min-width: 0;
+			height: 32px;
+			padding: 0 8px 0 10px;
+			font-family: inherit;
+			font-size: 13px;
+			color: var(--color-text);
+			text-align: left;
+			background-color: transparent;
+			border: 1px solid var(--color-border-strong);
+			border-radius: 10px;
+			outline: none;
+			cursor: pointer;
+			transition: border-color 200ms ease;
+		}
 
-	.select-trigger:focus-visible,
-	.select-trigger[aria-expanded='true'] {
-		border-color: var(--color-accent);
-		outline: 1px solid var(--color-accent);
-	}
+		.select-trigger:focus-visible,
+		.select-trigger[aria-expanded='true'] {
+			border-color: var(--color-accent);
+			outline: 1px solid var(--color-accent);
+		}
 
-	.select-trigger[aria-invalid='true'] {
-		border-color: var(--color-destructive);
-	}
+		.select-trigger[aria-invalid='true'] {
+			border-color: var(--color-destructive);
+		}
 
-	.select-trigger[aria-invalid='true']:is(:focus-visible, [aria-expanded='true']) {
-		outline-color: var(--color-destructive);
-	}
+		.select-trigger[aria-invalid='true']:is(:focus-visible, [aria-expanded='true']) {
+			outline-color: var(--color-destructive);
+		}
 
-	.select-trigger:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
+		.select-trigger:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
 
-	.select-value {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
+		.select-value {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-	.select-value--placeholder {
-		color: var(--color-text-faint);
-	}
+		.select-value--placeholder {
+			color: var(--color-text-faint);
+		}
 
-	.select-trigger :global(.select-chevron) {
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-		color: var(--color-text-muted);
-	}
+		.select-trigger :global(.select-chevron) {
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+			color: var(--color-text-muted);
+		}
 
-	.select-list {
-		position: fixed;
-		inset: auto;
-		flex-direction: column;
-		gap: 2px;
-		box-sizing: border-box;
-		max-width: calc(100vw - 16px);
-		margin: 0;
-		padding: 4px;
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-radius: 10px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-		outline: none;
-		user-select: none;
-	}
+		.select-list {
+			position: fixed;
+			inset: auto;
+			flex-direction: column;
+			gap: 2px;
+			box-sizing: border-box;
+			max-width: calc(100vw - 16px);
+			margin: 0;
+			padding: 4px;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-radius: 10px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			outline: none;
+			user-select: none;
+		}
 
-	.select-list:popover-open {
-		display: flex;
-	}
+		.select-list:popover-open {
+			display: flex;
+		}
 
-	.select-list--bottom {
-		transform-origin: top left;
-	}
+		.select-list--bottom {
+			transform-origin: top left;
+		}
 
-	.select-list--top {
-		transform-origin: bottom left;
-	}
+		.select-list--top {
+			transform-origin: bottom left;
+		}
 
-	.select-option {
-		display: flex;
-		flex-shrink: 0;
-		align-items: center;
-		gap: 10px;
-		width: 100%;
-		padding: 8px 10px;
-		font: inherit;
-		font-size: 13px;
-		color: var(--color-text);
-		text-align: left;
-		background-color: transparent;
-		border: none;
-		border-radius: 6px;
-		outline: none;
-		cursor: pointer;
-		transition: background-color 150ms ease;
-	}
+		.select-option {
+			display: flex;
+			flex-shrink: 0;
+			align-items: center;
+			gap: 10px;
+			width: 100%;
+			padding: 8px 10px;
+			font: inherit;
+			font-size: 13px;
+			color: var(--color-text);
+			text-align: left;
+			background-color: transparent;
+			border: none;
+			border-radius: 6px;
+			outline: none;
+			cursor: pointer;
+			transition: background-color 150ms ease;
+		}
 
-	/* Plain :focus, so the current option also shows after opening with the mouse */
-	.select-option:hover:not(:disabled),
-	.select-option:focus {
-		background-color: var(--color-surface);
-	}
+		/* Plain :focus, so the current option also shows after opening with the mouse */
+		.select-option:hover:not(:disabled),
+		.select-option:focus {
+			background-color: var(--color-surface);
+		}
 
-	.select-option:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
+		.select-option:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
 
-	.select-option--selected {
-		font-weight: 600;
-	}
+		.select-option--selected {
+			font-weight: 600;
+		}
 
-	.select-option-label {
-		flex-grow: 1;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
+		.select-option-label {
+			flex-grow: 1;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-	.select-option-check {
-		display: flex;
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-	}
+		.select-option-check {
+			display: flex;
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+		}
 
-	.select-option-check :global(svg) {
-		width: 14px;
-		height: 14px;
+		.select-option-check :global(svg) {
+			width: 14px;
+			height: 14px;
+		}
+
+		.select-empty {
+			padding: 8px 10px;
+			font-size: 13px;
+			color: var(--color-text-muted);
+		}
+
+		@media (pointer: coarse) {
+			.select-trigger {
+				min-height: 44px;
+			}
+
+			.select-option {
+				min-height: 44px;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.select-trigger {
+				border-color: ButtonText;
+			}
+
+			.select-trigger:disabled {
+				border-color: GrayText;
+				color: GrayText;
+			}
+
+			.select-trigger:focus-visible,
+			.select-trigger[aria-expanded='true'] {
+				border-color: Highlight;
+				outline: 2px solid Highlight;
+			}
+
+			.select-list {
+				border-color: CanvasText;
+			}
+
+			.select-option:hover:not(:disabled),
+			.select-option:focus {
+				outline: 2px solid Highlight;
+				outline-offset: -2px;
+			}
+
+			.select-option:disabled {
+				color: GrayText;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.select-trigger,
+			.select-option {
+				transition: none;
+			}
+		}
 	}
 </style>

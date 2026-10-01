@@ -7,15 +7,16 @@
 		errors?: (string | undefined)[];
 		/** Custom content instead of `errors`. */
 		children?: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { errors = [], class: className, children, ...rest }: Props = $props();
+	let { errors = [], class: className, children, ref = $bindable(null), ...rest }: Props = $props();
 
 	let messages = $derived([...new Set(errors.filter(Boolean))]);
 </script>
 
 {#if children || messages.length}
-	<div {...rest} role="alert" class={['field-error', className]}>
+	<div {...rest} bind:this={ref} role="alert" class={['field-error', className]}>
 		{#if children}
 			{@render children()}
 		{:else if messages.length === 1}
@@ -29,17 +30,25 @@
 {/if}
 
 <style>
-	.field-error {
-		font-size: 12px;
-		line-height: 1.5;
-		color: var(--color-destructive);
-	}
+	@layer svelte-ui {
+		.field-error {
+			font-size: 12px;
+			line-height: 1.5;
+			color: var(--color-destructive);
+		}
 
-	ul {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		margin: 0;
-		padding-left: 16px;
+		ul {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			margin: 0;
+			padding-left: 16px;
+		}
+
+		@media (forced-colors: active) {
+			.field-error {
+				color: CanvasText;
+			}
+		}
 	}
 </style>

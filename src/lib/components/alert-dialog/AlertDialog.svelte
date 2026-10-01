@@ -7,10 +7,16 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLDialogAttributes } from 'svelte/elements';
 
-	type Props = {
+	type Props = Omit<
+		HTMLDialogAttributes,
+		'open' | 'title' | 'children' | 'role' | 'aria-labelledby' | 'aria-describedby'
+	> & {
 		/** Whether the dialog is open. Bindable. Escape closes it. */
 		open?: boolean;
+		/** The dialog element. Bindable. */
+		ref?: HTMLDialogElement | null;
 		title: string;
 		description?: string;
 		/** Renders the trigger. Spread the given props onto it, e.g. `<Button {...props} />`. Omit to control `open` yourself. */
@@ -21,10 +27,19 @@
 		children?: Snippet;
 	};
 
-	let { open = $bindable(false), title, description, trigger, actions, children }: Props = $props();
+	let {
+		open = $bindable(false),
+		ref = $bindable(null),
+		title,
+		description,
+		trigger,
+		actions,
+		children,
+		class: className,
+		...rest
+	}: Props = $props();
 
 	const id = $props.id();
-	let dialogEl: HTMLDialogElement;
 
 	const triggerProps: AlertDialogTriggerProps = {
 		onclick: () => (open = true),
@@ -36,13 +51,14 @@
 	}
 
 	$effect(() => {
-		if (open && !dialogEl.open) {
-			dialogEl.showModal();
-			Array.from(dialogEl.querySelectorAll<HTMLElement>('.alert-dialog-actions :is(button, a)'))
+		if (!ref) return;
+		if (open && !ref.open) {
+			ref.showModal();
+			Array.from(ref.querySelectorAll<HTMLElement>('.alert-dialog-actions :is(button, a)'))
 				.at(-1)
 				?.focus();
-		} else if (!open && dialogEl.open) {
-			dialogEl.close();
+		} else if (!open && ref.open) {
+			ref.close();
 		}
 	});
 </script>
@@ -50,11 +66,12 @@
 {@render trigger?.(triggerProps)}
 
 <dialog
-	bind:this={dialogEl}
+	{...rest}
+	bind:this={ref}
 	role="alertdialog"
 	aria-labelledby="{id}-title"
 	aria-describedby={description ? `${id}-description` : undefined}
-	class="alert-dialog"
+	class={['alert-dialog', className]}
 	onkeydown={(event) => {
 		if (event.key !== 'Escape') return;
 		event.preventDefault();
@@ -79,83 +96,98 @@
 </dialog>
 
 <style>
-	/* Locks page scrolling while open; the gutter keeps the layout from shifting */
-	:global(html:has(.alert-dialog[open])) {
-		overflow: hidden;
-		scrollbar-gutter: stable;
-	}
+	@layer svelte-ui {
+		/* Locks page scrolling while open; the gutter keeps the layout from shifting */
+		:global(html:has(.alert-dialog[open])) {
+			overflow: hidden;
+			scrollbar-gutter: stable;
+		}
 
-	.alert-dialog {
-		box-sizing: border-box;
-		width: calc(100% - 32px);
-		max-width: 420px;
-		padding: 20px;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-radius: 14px;
-		box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
-		outline: none;
-		opacity: 0;
-		scale: 0.95;
-		transition:
-			opacity 140ms ease,
-			scale 140ms ease,
-			display 140ms allow-discrete,
-			overlay 140ms allow-discrete;
-	}
-
-	.alert-dialog[open] {
-		opacity: 1;
-		scale: 1;
-	}
-
-	.alert-dialog::backdrop {
-		background-color: rgba(0, 0, 0, 0);
-		transition:
-			background-color 140ms ease,
-			display 140ms allow-discrete,
-			overlay 140ms allow-discrete;
-	}
-
-	.alert-dialog[open]::backdrop {
-		background-color: rgba(0, 0, 0, 0.4);
-	}
-
-	@starting-style {
-		.alert-dialog[open] {
+		.alert-dialog {
+			box-sizing: border-box;
+			width: calc(100% - 32px);
+			max-width: 420px;
+			padding: 20px;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-radius: 14px;
+			box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+			outline: none;
 			opacity: 0;
 			scale: 0.95;
+			transition:
+				opacity 140ms ease,
+				scale 140ms ease,
+				display 140ms allow-discrete,
+				overlay 140ms allow-discrete;
+		}
+
+		.alert-dialog[open] {
+			opacity: 1;
+			scale: 1;
+		}
+
+		.alert-dialog::backdrop {
+			background-color: rgba(0, 0, 0, 0);
+			transition:
+				background-color 140ms ease,
+				display 140ms allow-discrete,
+				overlay 140ms allow-discrete;
 		}
 
 		.alert-dialog[open]::backdrop {
-			background-color: rgba(0, 0, 0, 0);
+			background-color: rgba(0, 0, 0, 0.4);
 		}
-	}
 
-	.alert-dialog-title {
-		margin: 0;
-		font-size: 15px;
-		font-weight: 600;
-	}
+		@starting-style {
+			.alert-dialog[open] {
+				opacity: 0;
+				scale: 0.95;
+			}
 
-	.alert-dialog-description {
-		margin: 6px 0 0;
-		font-size: 13px;
-		line-height: 1.5;
-		color: var(--color-text-muted);
-	}
+			.alert-dialog[open]::backdrop {
+				background-color: rgba(0, 0, 0, 0);
+			}
+		}
 
-	.alert-dialog-body {
-		margin-top: 16px;
-		font-size: 13px;
-	}
+		.alert-dialog-title {
+			margin: 0;
+			font-size: 15px;
+			font-weight: 600;
+		}
 
-	.alert-dialog-actions {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 4px;
-		margin-top: 20px;
+		.alert-dialog-description {
+			margin: 6px 0 0;
+			font-size: 13px;
+			line-height: 1.5;
+			color: var(--color-text-muted);
+		}
+
+		.alert-dialog-body {
+			margin-top: 16px;
+			font-size: 13px;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.alert-dialog,
+			.alert-dialog::backdrop {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.alert-dialog {
+				border-color: CanvasText;
+			}
+		}
+
+		.alert-dialog-actions {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 4px;
+			margin-top: 20px;
+		}
 	}
 </style>

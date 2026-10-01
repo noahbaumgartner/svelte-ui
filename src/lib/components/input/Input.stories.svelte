@@ -30,7 +30,8 @@
 				options: types
 			},
 			placeholder: { control: 'text' },
-			disabled: { control: 'boolean' }
+			disabled: { control: 'boolean' },
+			labels: { control: 'object' }
 		},
 		args: {
 			type: 'text',
@@ -65,6 +66,21 @@
 			<Input {...args} aria-label="Filled" value="Ada Lovelace" />
 			<Input {...args} aria-label="Invalid" value="ada lovelace" aria-invalid="true" />
 			<Input {...args} aria-label="Disabled" value="Ada Lovelace" disabled />
+		</div>
+	{/snippet}
+</Story>
+
+<Story name="Labels" parameters={{ controls: { exclude: ['labels', 'type'] } }}>
+	{#snippet template(args)}
+		<div style={column}>
+			<Input
+				{...args}
+				type="number"
+				aria-label="Menge"
+				value={1}
+				labels={{ increase: 'Erhöhen', decrease: 'Verringern' }}
+			/>
+			<Input {...args} type="date" aria-label="Datum" labels={{ chooseDate: 'Datum wählen' }} />
 		</div>
 	{/snippet}
 </Story>

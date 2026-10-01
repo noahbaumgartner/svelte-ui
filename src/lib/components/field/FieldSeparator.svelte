@@ -6,12 +6,13 @@
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 		/** Optional text in the middle of the line, e.g. "Or continue with". */
 		children?: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { class: className, children, ref = $bindable(null), ...rest }: Props = $props();
 </script>
 
-<div {...rest} role="separator" class={['field-separator', className]}>
+<div {...rest} bind:this={ref} role="separator" class={['field-separator', className]}>
 	<Separator style="flex: 1;" />
 	{#if children}
 		<span class="field-separator-content">{@render children()}</span>
@@ -20,12 +21,14 @@
 </div>
 
 <style>
-	.field-separator {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		min-height: 20px;
-		font-size: 13px;
-		color: var(--color-text-muted);
+	@layer svelte-ui {
+		.field-separator {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			min-height: 20px;
+			font-size: 13px;
+			color: var(--color-text-muted);
+		}
 	}
 </style>

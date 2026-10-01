@@ -8,9 +8,17 @@
 		seed?: string;
 		/** Film grain overlay. */
 		grain?: boolean;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { colors, seed = '', grain = true, class: className, ...rest }: Props = $props();
+	let {
+		colors,
+		seed = '',
+		grain = true,
+		class: className,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 
 	function hashSeed(str: string) {
 		let h = 0;
@@ -44,6 +52,7 @@
 
 <div
 	{...rest}
+	bind:this={ref}
 	class={['mesh-gradient', grain && 'mesh-gradient--grain', className]}
 	style:background-color={colors[0]}
 	aria-hidden="true"
@@ -62,25 +71,33 @@
 </div>
 
 <style>
-	.mesh-gradient {
-		position: relative;
-		overflow: hidden;
-	}
+	@layer svelte-ui {
+		.mesh-gradient {
+			position: relative;
+			overflow: hidden;
+		}
 
-	.mesh-gradient-blob {
-		position: absolute;
-		border-radius: 50%;
-		transform: translate(-50%, -50%);
-	}
+		.mesh-gradient-blob {
+			position: absolute;
+			border-radius: 50%;
+			transform: translate(-50%, -50%);
+		}
 
-	.mesh-gradient--grain::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-		background-size: 160px 160px;
-		opacity: 0.55;
-		mix-blend-mode: overlay;
-		pointer-events: none;
+		.mesh-gradient--grain::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+			background-size: 160px 160px;
+			opacity: 0.55;
+			mix-blend-mode: overlay;
+			pointer-events: none;
+		}
+
+		@media (forced-colors: active) {
+			.mesh-gradient {
+				forced-color-adjust: none;
+			}
+		}
 	}
 </style>

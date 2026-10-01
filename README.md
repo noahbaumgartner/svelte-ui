@@ -44,17 +44,17 @@ Then use the components:
 
 ### Theming
 
-All colours are derived from two variables, `--base` and `--ink`, mixed into a grey scale. Light and dark mode follow `prefers-color-scheme` by default; force one with a `data-theme` attribute on `<html>`:
+All colours are derived from two variables, `--ui-base` and `--ui-ink`, mixed into a grey scale. Light and dark mode follow `prefers-color-scheme` by default; force one with a `data-theme` attribute on `<html>`:
 
 ```html
 <html data-theme="dark"></html>
 ```
 
-Set `--accent` to colour checked controls, primary buttons and focus rings. It defaults to `--ink`, and the foreground colour on top of it is picked automatically for contrast:
+Set `--ui-accent` to colour checked controls, primary buttons and focus rings. It defaults to `--ui-ink`, and the foreground colour on top of it is picked automatically for contrast:
 
 ```css
 :root {
-	--accent: #2563eb;
+	--ui-accent: #2563eb;
 }
 ```
 
@@ -94,3 +94,7 @@ Components live in `src/lib/components/<name>/`, each next to its `.stories.svel
 ## Releasing
 
 Publishing a GitHub release triggers [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which sets the package version from the release tag (e.g. `v0.2.0` → `0.2.0`), type-checks, and stages the publish on npm with provenance. The staged version then has to be approved with 2FA (`npm stage approve <stage-id>` or on npmjs.com).
+
+## License
+
+[MIT](LICENSE)

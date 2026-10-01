@@ -14,9 +14,9 @@
 
 <script lang="ts" generics="T extends string">
 	import type { Snippet } from 'svelte';
-	import type { ClassValue } from 'svelte/elements';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onchange'> & {
 		/** Value of the selected option. Bindable. */
 		value?: T;
 		/** The tabs. When every option has an `href` they render as links in a `<nav>` instead. */
@@ -24,10 +24,12 @@
 		/** Accessible name for the tab list. */
 		label?: string;
 		size?: 'sm' | 'md';
-		class?: ClassValue;
+		ref?: HTMLDivElement | null;
 		/** Optional panel below the tabs; receives the selected value. Omit to render the content yourself. */
 		children?: Snippet<[value: T]>;
 		onchange?: (value: T) => void;
+		/** Replaces the content of each tab (icon and label). */
+		tab?: Snippet<[option: TabsOption<T>, selected: boolean]>;
 	};
 
 	let {
@@ -35,9 +37,12 @@
 		options,
 		label,
 		size = 'md',
+		ref = $bindable(null),
 		class: className,
 		children,
-		onchange
+		onchange,
+		tab,
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
@@ -95,7 +100,7 @@
 	}
 </script>
 
-<div class={['tabs', `tabs--${size}`, className]}>
+<div {...rest} bind:this={ref} class={['tabs', `tabs--${size}`, className]}>
 	<div
 		class={[
 			'tabs-scroller',
@@ -114,8 +119,12 @@
 						aria-current={option.value === value ? 'page' : undefined}
 						class={['tabs-tab', { 'tabs-tab--selected': option.value === value }]}
 					>
-						{#if option.icon}<option.icon class="tabs-icon" aria-hidden="true" />{/if}
-						{option.label}
+						{#if tab}
+							{@render tab(option, option.value === value)}
+						{:else}
+							{#if option.icon}<option.icon class="tabs-icon" aria-hidden="true" />{/if}
+							{option.label}
+						{/if}
 					</a>
 					<!-- eslint-enable svelte/no-navigation-without-resolve -->
 				{/each}
@@ -136,8 +145,12 @@
 						class={['tabs-tab', { 'tabs-tab--selected': i === selectedIndex }]}
 						onclick={() => select(option)}
 					>
-						{#if option.icon}<option.icon class="tabs-icon" aria-hidden="true" />{/if}
-						{option.label}
+						{#if tab}
+							{@render tab(option, i === selectedIndex)}
+						{:else}
+							{#if option.icon}<option.icon class="tabs-icon" aria-hidden="true" />{/if}
+							{option.label}
+						{/if}
 					</button>
 				{/each}
 			</div>
@@ -157,124 +170,168 @@
 </div>
 
 <style>
-	.tabs {
-		display: flex;
-		flex-direction: column;
-		gap: 12px;
-		min-width: 0;
-		max-width: 100%;
-	}
+	@layer svelte-ui {
+		.tabs {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			min-width: 0;
+			max-width: 100%;
+		}
 
-	.tabs-scroller {
-		--fade-start: 0px;
-		--fade-end: 0px;
-		display: flex;
-		max-width: 100%;
-		overflow-x: auto;
-		scrollbar-width: none;
-		mask-image: linear-gradient(
-			to right,
-			transparent,
-			#000 var(--fade-start),
-			#000 calc(100% - var(--fade-end)),
-			transparent
-		);
-	}
+		.tabs-scroller {
+			--fade-start: 0px;
+			--fade-end: 0px;
+			display: flex;
+			max-width: 100%;
+			overflow-x: auto;
+			scrollbar-width: none;
+			mask-image: linear-gradient(
+				to right,
+				transparent,
+				#000 var(--fade-start),
+				#000 calc(100% - var(--fade-end)),
+				transparent
+			);
+		}
 
-	.tabs-scroller::-webkit-scrollbar {
-		display: none;
-	}
+		.tabs-scroller::-webkit-scrollbar {
+			display: none;
+		}
 
-	.tabs-scroller--start {
-		--fade-start: 32px;
-	}
+		.tabs-scroller--start {
+			--fade-start: 32px;
+		}
 
-	.tabs-scroller--end {
-		--fade-end: 32px;
-	}
+		.tabs-scroller--end {
+			--fade-end: 32px;
+		}
 
-	.tabs-list {
-		display: inline-flex;
-		flex-shrink: 0;
-		gap: 2px;
-		padding: 3px;
-		background-color: var(--color-surface);
-		border-radius: 10px;
-	}
+		.tabs-list {
+			display: inline-flex;
+			flex-shrink: 0;
+			gap: 2px;
+			padding: 3px;
+			background-color: var(--color-surface);
+			border-radius: 10px;
+		}
 
-	.tabs-tab {
-		display: inline-flex;
-		flex-shrink: 0;
-		align-items: center;
-		justify-content: center;
-		gap: 6px;
-		box-sizing: border-box;
-		height: 26px;
-		padding: 0 12px;
-		font-family: inherit;
-		font-size: 13px;
-		font-weight: 500;
-		color: var(--color-text-muted);
-		text-decoration: none;
-		white-space: nowrap;
-		background-color: transparent;
-		border: none;
-		border-radius: 7px;
-		outline: none;
-		cursor: pointer;
-		user-select: none;
-		transition:
-			background-color 200ms ease,
-			color 200ms ease;
-	}
+		.tabs-tab {
+			display: inline-flex;
+			flex-shrink: 0;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			box-sizing: border-box;
+			height: 26px;
+			padding: 0 12px;
+			font-family: inherit;
+			font-size: 13px;
+			font-weight: 500;
+			color: var(--color-text-muted);
+			text-decoration: none;
+			white-space: nowrap;
+			background-color: transparent;
+			border: none;
+			border-radius: 7px;
+			outline: none;
+			cursor: pointer;
+			user-select: none;
+			transition:
+				background-color 200ms ease,
+				color 200ms ease;
+		}
 
-	.tabs-tab:hover:not(:disabled) {
-		color: var(--color-text);
-	}
+		.tabs-tab:hover:not(:disabled) {
+			color: var(--color-text);
+		}
 
-	/* Inside the tab, so the scroller does not clip it */
-	.tabs-tab:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: -2px;
-	}
+		/* Inside the tab, so the scroller does not clip it */
+		.tabs-tab:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: -2px;
+		}
 
-	.tabs-tab:disabled {
-		cursor: not-allowed;
-		opacity: 0.5;
-	}
+		.tabs-tab:disabled {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
 
-	.tabs-tab--selected {
-		color: var(--color-text);
-		background-color: var(--color-bg);
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
-	}
+		.tabs-tab--selected {
+			color: var(--color-text);
+			background-color: var(--color-bg);
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+		}
 
-	.tabs-tab :global(.tabs-icon) {
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-	}
+		.tabs-tab :global(.tabs-icon) {
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+		}
 
-	.tabs--sm .tabs-list {
-		border-radius: 8px;
-	}
+		.tabs--sm .tabs-list {
+			border-radius: 8px;
+		}
 
-	.tabs--sm .tabs-tab {
-		height: 22px;
-		padding: 0 10px;
-		font-size: 12px;
-		border-radius: 5px;
-	}
+		.tabs--sm .tabs-tab {
+			height: 22px;
+			padding: 0 10px;
+			font-size: 12px;
+			border-radius: 5px;
+		}
 
-	.tabs-panel {
-		font-size: 13px;
-		color: var(--color-text);
-		border-radius: 6px;
-		outline: none;
-	}
+		.tabs-panel {
+			font-size: 13px;
+			color: var(--color-text);
+			border-radius: 6px;
+			outline: none;
+		}
 
-	.tabs-panel:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
+		.tabs-panel:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px;
+		}
+
+		@media (pointer: coarse) {
+			.tabs-tab,
+			.tabs--sm .tabs-tab {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.tabs-list {
+				border: 1px solid CanvasText;
+			}
+
+			.tabs-tab {
+				color: ButtonText;
+			}
+
+			.tabs-tab--selected {
+				color: HighlightText;
+				background-color: Highlight;
+				box-shadow: none;
+			}
+
+			.tabs-tab:disabled {
+				color: GrayText;
+			}
+
+			.tabs-tab:focus-visible {
+				outline-color: CanvasText;
+			}
+
+			.tabs-panel:focus-visible {
+				outline-color: Highlight;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.tabs-tab {
+				transition: none;
+			}
+		}
 	}
 </style>

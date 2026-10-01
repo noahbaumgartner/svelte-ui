@@ -11,12 +11,21 @@
 		children?: Snippet;
 		/** Below the description, e.g. a Link. */
 		footer?: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { title, meta, class: className, children, footer, ...rest }: Props = $props();
+	let {
+		title,
+		meta,
+		class: className,
+		children,
+		footer,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 </script>
 
-<div {...rest} class={['entry', className]}>
+<div {...rest} bind:this={ref} class={['entry', className]}>
 	<div class="entry-heading">
 		<h3 class="entry-title">{title}</h3>
 		{#if meta}
@@ -32,52 +41,54 @@
 </div>
 
 <style>
-	.entry {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 10px;
-		box-sizing: border-box;
-		padding: 24px;
-		color: var(--color-text);
-		border: 1px solid var(--color-border-strong);
-		border-radius: 14px;
-	}
-
-	.entry-heading {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		column-gap: 8px;
-	}
-
-	.entry-title {
-		margin: 0;
-		font-size: 20px;
-		font-weight: 500;
-	}
-
-	.entry-meta {
-		font-size: 14px;
-		color: var(--color-text-muted);
-		white-space: nowrap;
-	}
-
-	.entry-description {
-		margin: 0;
-		max-width: 640px;
-	}
-
-	.entry-footer {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 8px;
-	}
-
-	@media (min-width: 768px) {
+	@layer svelte-ui {
 		.entry {
-			padding: 32px;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 10px;
+			box-sizing: border-box;
+			padding: 24px;
+			color: var(--color-text);
+			border: 1px solid var(--color-border-strong);
+			border-radius: 14px;
+		}
+
+		.entry-heading {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			column-gap: 8px;
+		}
+
+		.entry-title {
+			margin: 0;
+			font-size: 20px;
+			font-weight: 500;
+		}
+
+		.entry-meta {
+			font-size: 14px;
+			color: var(--color-text-muted);
+			white-space: nowrap;
+		}
+
+		.entry-description {
+			margin: 0;
+			max-width: 640px;
+		}
+
+		.entry-footer {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 8px;
+		}
+
+		@media (min-width: 768px) {
+			.entry {
+				padding: 32px;
+			}
 		}
 	}
 </style>

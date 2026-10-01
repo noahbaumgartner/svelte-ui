@@ -7,14 +7,17 @@
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 		children: Snippet;
+		ref?: HTMLDivElement | null;
+		/** Accessible name of the close button shown on mobile. */
+		labels?: { close?: string };
 	};
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { ref = $bindable(null), labels, class: className, children, ...rest }: Props = $props();
 
 	const sidebar = getSidebarContext();
 </script>
 
-<div {...rest} class={['sidebar-header', className]}>
+<div {...rest} bind:this={ref} class={['sidebar-header', className]}>
 	<div class="sidebar-header-content">
 		{@render children()}
 	</div>
@@ -23,25 +26,27 @@
 			variant="ghost"
 			size="sm"
 			icon={X}
-			label="Close sidebar"
+			label={labels?.close ?? 'Close sidebar'}
 			onclick={sidebar.closeMobile}
 		/>
 	{/if}
 </div>
 
 <style>
-	.sidebar-header {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		padding: 8px;
-	}
+	@layer svelte-ui {
+		.sidebar-header {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 8px;
+		}
 
-	.sidebar-header-content {
-		display: flex;
-		flex: 1;
-		flex-direction: column;
-		gap: 8px;
-		min-width: 0;
+		.sidebar-header-content {
+			display: flex;
+			flex: 1;
+			flex-direction: column;
+			gap: 8px;
+			min-width: 0;
+		}
 	}
 </style>

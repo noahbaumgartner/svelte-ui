@@ -1,50 +1,48 @@
-:root
-{
-	color-scheme: light;
-	--base: #fff;
-	--ink: #000;
+@layer svelte-ui {
+	:root {
+		color-scheme: light;
+		--ui-base: #fff;
+		--ui-ink: #000;
 
-	--color-bg: var(--base);
-	--color-surface: color-mix(in srgb, var(--base), var(--ink) 6%);
-	--color-border: color-mix(in srgb, var(--base), var(--ink) 10%);
-	--color-border-strong: color-mix(in srgb, var(--base), var(--ink) 17%);
-	--color-text-faint: color-mix(in srgb, var(--base), var(--ink) 36%);
-	--color-text-muted: color-mix(in srgb, var(--base), var(--ink) 55%);
-	--color-text-secondary: color-mix(in srgb, var(--base), var(--ink) 75%);
-	--color-emphasis: color-mix(in srgb, var(--base), var(--ink) 85%);
-	--color-text: var(--ink);
-	--color-ink: var(--ink);
-	--color-base: var(--base);
+		--color-bg: var(--ui-base);
+		--color-surface: color-mix(in srgb, var(--ui-base), var(--ui-ink) 6%);
+		--color-border: color-mix(in srgb, var(--ui-base), var(--ui-ink) 10%);
+		--color-border-strong: color-mix(in srgb, var(--ui-base), var(--ui-ink) 17%);
+		--color-text-faint: color-mix(in srgb, var(--ui-base), var(--ui-ink) 36%);
+		--color-text-muted: color-mix(in srgb, var(--ui-base), var(--ui-ink) 55%);
+		--color-text-secondary: color-mix(in srgb, var(--ui-base), var(--ui-ink) 75%);
+		--color-emphasis: color-mix(in srgb, var(--ui-base), var(--ui-ink) 85%);
+		--color-text: var(--ui-ink);
+		--color-ink: var(--ui-ink);
+		--color-base: var(--ui-base);
 
-	/* Hover states */
-	--color-surface-hover: color-mix(in srgb, var(--base), var(--ink) 12%);
-	--color-surface-active: color-mix(in srgb, var(--base), var(--ink) 17%);
-	--color-ink-hover: color-mix(in srgb, var(--base), var(--ink) 80%);
+		/* Hover states */
+		--color-surface-hover: color-mix(in srgb, var(--ui-base), var(--ui-ink) 12%);
+		--color-surface-active: color-mix(in srgb, var(--ui-base), var(--ui-ink) 17%);
+		--color-ink-hover: color-mix(in srgb, var(--ui-base), var(--ui-ink) 80%);
 
-	/* Accent */
-	--color-accent: var(--accent, var(--ink));
-	--color-accent-hover: color-mix(in srgb, var(--base), var(--color-accent) 80%);
-	--color-accent-foreground: oklch(from var(--color-accent) clamp(0, (0.65 - l) * 1000, 1) 0 0);
+		/* Accent */
+		--color-accent: var(--ui-accent, var(--ui-ink));
+		--color-accent-hover: color-mix(in srgb, var(--ui-base), var(--color-accent) 80%);
+		--color-accent-foreground: oklch(from var(--color-accent) clamp(0, (0.65 - l) * 1000, 1) 0 0);
 
-	/* Validation errors; the only non-gray color */
-	--color-destructive: #dc2626;
-}
+		/* Validation errors; the only non-gray color */
+		--color-destructive: #dc2626;
+	}
 
-@media (prefers-color-scheme: dark)
-{
-	:root:not([data-theme='light'])
-	{
-		--base: #0a0a0a;
-		--ink: #fff;
+	@media (prefers-color-scheme: dark) {
+		:root:not([data-theme='light']) {
+			--ui-base: #0a0a0a;
+			--ui-ink: #fff;
+			color-scheme: dark;
+			--color-destructive: #f87171;
+		}
+	}
+
+	:root[data-theme='dark'] {
+		--ui-base: #0a0a0a;
+		--ui-ink: #fff;
 		color-scheme: dark;
 		--color-destructive: #f87171;
 	}
-}
-
-:root[data-theme='dark']
-{
-	--base: #0a0a0a;
-	--ink: #fff;
-	color-scheme: dark;
-	--color-destructive: #f87171;
 }

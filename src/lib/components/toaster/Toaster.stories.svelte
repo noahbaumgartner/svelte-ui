@@ -11,7 +11,9 @@
 		component: Toaster,
 		tags: ['autodocs'],
 		argTypes: {
-			label: { control: 'text' }
+			label: { control: 'text' },
+			labels: { control: 'object' },
+			locale: { control: 'text' }
 		},
 		args: {
 			label: 'Notifications'
@@ -63,6 +65,15 @@
 				Long
 			</Button>
 		</div>
+	{/snippet}
+</Story>
+
+<Story name="Locale" parameters={{ controls: { exclude: ['label', 'labels', 'locale'] } }}>
+	{#snippet template()}
+		<Toaster labels={{ region: 'Benachrichtigungen', dismiss: 'Schließen' }} locale="de" />
+		<Button variant="secondary" onclick={() => toast('Änderungen gespeichert', { icon: Check })}>
+			Speichern
+		</Button>
 	{/snippet}
 </Story>
 

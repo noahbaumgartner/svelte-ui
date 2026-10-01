@@ -47,9 +47,9 @@ const preview: Preview = {
 				delete root.dataset.theme;
 			}
 			if (globals.accent && globals.accent !== 'ink') {
-				root.style.setProperty('--accent', globals.accent);
+				root.style.setProperty('--ui-accent', globals.accent);
 			} else {
-				root.style.removeProperty('--accent');
+				root.style.removeProperty('--ui-accent');
 			}
 			return story();
 		}

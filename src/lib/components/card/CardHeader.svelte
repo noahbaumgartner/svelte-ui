@@ -4,26 +4,30 @@
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children'> & {
 		/** CardTitle, CardDescription and optionally a CardAction. */
+		/** The root element. Bindable. */
+		ref?: HTMLDivElement | null;
 		children: Snippet;
 	};
 
-	let { class: className, children, ...rest }: Props = $props();
+	let { ref = $bindable(null), class: className, children, ...rest }: Props = $props();
 </script>
 
-<div {...rest} class={['card-header', className]}>
+<div {...rest} bind:this={ref} class={['card-header', className]}>
 	{@render children()}
 </div>
 
 <style>
-	.card-header {
-		display: grid;
-		grid-auto-rows: min-content;
-		align-items: start;
-		gap: 4px;
-		padding-inline: var(--card-spacing);
-	}
+	@layer svelte-ui {
+		.card-header {
+			display: grid;
+			grid-auto-rows: min-content;
+			align-items: start;
+			gap: 4px;
+			padding-inline: var(--card-spacing);
+		}
 
-	.card-header:has(> :global(.card-action)) {
-		grid-template-columns: 1fr auto;
+		.card-header:has(> :global(.card-action)) {
+			grid-template-columns: 1fr auto;
+		}
 	}
 </style>

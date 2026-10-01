@@ -59,6 +59,12 @@
 	{/snippet}
 </Story>
 
+<Story name="Labels" parameters={{ controls: { exclude: ['decreaseLabel', 'increaseLabel'] } }}>
+	{#snippet template(args)}
+		<NumberStepper {...args} label="Gäste" decreaseLabel="Weniger" increaseLabel="Mehr" />
+	{/snippet}
+</Story>
+
 <Story
 	name="Test: counts up and down within its limits"
 	tags={['!dev', '!autodocs']}

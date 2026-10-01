@@ -13,6 +13,11 @@
 		disabled?: boolean;
 		/** Names what is counted; the accessible name of the group and part of the button labels. */
 		label: string;
+		/** Prefix of the decrease button's name, followed by `label`. */
+		decreaseLabel?: string;
+		/** Prefix of the increase button's name, followed by `label`. */
+		increaseLabel?: string;
+		ref?: HTMLDivElement | null;
 		onchange?: (value: number) => void;
 	};
 
@@ -24,6 +29,9 @@
 		size = 'sm',
 		disabled = false,
 		label,
+		decreaseLabel = 'Decrease',
+		increaseLabel = 'Increase',
+		ref = $bindable(null),
 		class: className,
 		onchange,
 		...rest
@@ -37,6 +45,7 @@
 
 <div
 	{...rest}
+	bind:this={ref}
 	role="group"
 	aria-label={label}
 	class={['number-stepper', `number-stepper--${size}`, className]}
@@ -45,7 +54,7 @@
 		variant="outline"
 		{size}
 		icon={Minus}
-		label="Decrease {label}"
+		label="{decreaseLabel} {label}"
 		disabled={disabled || value <= min}
 		onclick={() => set(value - step)}
 	/>
@@ -54,29 +63,38 @@
 		variant="outline"
 		{size}
 		icon={Plus}
-		label="Increase {label}"
+		label="{increaseLabel} {label}"
 		disabled={disabled || value >= max}
 		onclick={() => set(value + step)}
 	/>
 </div>
 
 <style>
-	.number-stepper {
-		display: inline-flex;
-		align-items: center;
-		gap: 4px;
-		font-size: 13px;
-		color: var(--color-text);
-	}
+	@layer svelte-ui {
+		.number-stepper {
+			display: inline-flex;
+			align-items: center;
+			gap: 4px;
+			font-size: 13px;
+			color: var(--color-text);
+		}
 
-	.number-stepper--sm {
-		font-size: 12px;
-	}
+		.number-stepper--sm {
+			font-size: 12px;
+		}
 
-	.number-stepper-value {
-		min-width: 24px;
-		font-weight: 600;
-		font-variant-numeric: tabular-nums;
-		text-align: center;
+		.number-stepper-value {
+			min-width: 24px;
+			font-weight: 600;
+			font-variant-numeric: tabular-nums;
+			text-align: center;
+		}
+
+		@media (pointer: coarse) {
+			.number-stepper :global(.button) {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
 	}
 </style>

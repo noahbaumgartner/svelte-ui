@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { slide } from 'svelte/transition';
 	import type { LucideIcon } from '@lucide/svelte';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
@@ -7,7 +8,7 @@
 	import Button from '../button/Button.svelte';
 	import ContextMenu from '../context-menu/ContextMenu.svelte';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children' | 'onclick'> & {
 		/** Links the item. Ignored when the item has `items`. */
 		href?: string;
 		/** Any Lucide icon (import from `svelte-ui/icons`). Stays visible when the sidebar is collapsed to icons. */
@@ -24,6 +25,9 @@
 		menu?: Snippet;
 		onclick?: () => void;
 		children: Snippet;
+		/** Accessible name of the menu trigger. */
+		labels?: { more?: string };
+		ref?: HTMLLIElement | null;
 	};
 
 	let {
@@ -35,11 +39,19 @@
 		expanded = $bindable(false),
 		menu,
 		onclick,
-		children
+		children,
+		labels,
+		ref = $bindable(null),
+		class: className,
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
 	let classes = $derived(['sidebar-menu-button', { 'sidebar-menu-button--active': active }]);
+
+	function reducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
 
 	function toggle() {
 		expanded = !expanded;
@@ -54,7 +66,11 @@
 	{#if items}<ChevronRight class="sidebar-menu-item-chevron" aria-hidden="true" />{/if}
 {/snippet}
 
-<li class={['sidebar-menu-item', { 'sidebar-menu-item--has-menu': menu }]}>
+<li
+	{...rest}
+	bind:this={ref}
+	class={['sidebar-menu-item', { 'sidebar-menu-item--has-menu': menu }, className]}
+>
 	{#if items}
 		<button
 			type="button"
@@ -81,7 +97,13 @@
 		<div class="sidebar-menu-item-menu">
 			<ContextMenu align="end">
 				{#snippet trigger(props)}
-					<Button {...props} variant="ghost" size="sm" icon={Ellipsis} label="More" />
+					<Button
+						{...props}
+						variant="ghost"
+						size="sm"
+						icon={Ellipsis}
+						label={labels?.more ?? 'More'}
+					/>
 				{/snippet}
 				{@render menu()}
 			</ContextMenu>
@@ -89,133 +111,192 @@
 	{/if}
 
 	{#if items && expanded}
-		<ul id="{id}-items" class="sidebar-menu-sub" transition:slide={{ duration: 200 }}>
+		<ul
+			id="{id}-items"
+			class="sidebar-menu-sub"
+			transition:slide={{ duration: reducedMotion() ? 0 : 200 }}
+		>
 			{@render items()}
 		</ul>
 	{/if}
 </li>
 
 <style>
-	.sidebar-menu-item {
-		position: relative;
-		min-width: 0;
-	}
+	@layer svelte-ui {
+		.sidebar-menu-item {
+			position: relative;
+			min-width: 0;
+		}
 
-	.sidebar-menu-button {
-		display: flex;
-		align-items: center;
-		gap: 8px;
-		width: 100%;
-		height: 32px;
-		padding: 0 8px;
-		box-sizing: border-box;
-		overflow: hidden;
-		background-color: transparent;
-		border: none;
-		border-radius: 8px;
-		font: inherit;
-		font-size: 13px;
-		color: var(--color-text-secondary);
-		text-align: left;
-		text-decoration: none;
-		outline: none;
-		cursor: pointer;
-		transition:
-			background-color 150ms ease,
-			color 150ms ease,
-			width 200ms ease;
-	}
+		.sidebar-menu-button {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			width: 100%;
+			height: 32px;
+			padding: 0 8px;
+			box-sizing: border-box;
+			overflow: hidden;
+			background-color: transparent;
+			border: none;
+			border-radius: 8px;
+			font: inherit;
+			font-size: 13px;
+			color: var(--color-text-secondary);
+			text-align: left;
+			text-decoration: none;
+			outline: none;
+			cursor: pointer;
+			transition:
+				background-color 150ms ease,
+				color 150ms ease,
+				width 200ms ease;
+		}
 
-	.sidebar-menu-button:hover {
-		background-color: var(--color-surface);
-		color: var(--color-text);
-	}
+		.sidebar-menu-button:hover {
+			background-color: var(--color-surface);
+			color: var(--color-text);
+		}
 
-	.sidebar-menu-button:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: -2px;
-	}
+		.sidebar-menu-button:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: -2px;
+		}
 
-	.sidebar-menu-button--active {
-		background-color: var(--color-surface);
-		color: var(--color-text);
-		font-weight: 500;
-	}
+		.sidebar-menu-button--active {
+			background-color: var(--color-surface);
+			color: var(--color-text);
+			font-weight: 500;
+		}
 
-	.sidebar-menu-item--has-menu > .sidebar-menu-button {
-		padding-right: 36px;
-	}
+		.sidebar-menu-item--has-menu > .sidebar-menu-button {
+			padding-right: 36px;
+		}
 
-	.sidebar-menu-item :global(.sidebar-menu-item-icon) {
-		width: 16px;
-		height: 16px;
-		flex-shrink: 0;
-	}
+		.sidebar-menu-item :global(.sidebar-menu-item-icon) {
+			width: 16px;
+			height: 16px;
+			flex-shrink: 0;
+		}
 
-	.sidebar-menu-item-label {
-		flex: 1;
-		min-width: 0;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
+		.sidebar-menu-item-label {
+			flex: 1;
+			min-width: 0;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
-	.sidebar-menu-item-badge {
-		font-size: 12px;
-		font-variant-numeric: tabular-nums;
-		color: var(--color-text-muted);
-	}
+		.sidebar-menu-item-badge {
+			font-size: 12px;
+			font-variant-numeric: tabular-nums;
+			color: var(--color-text-muted);
+		}
 
-	.sidebar-menu-item :global(.sidebar-menu-item-chevron) {
-		width: 14px;
-		height: 14px;
-		flex-shrink: 0;
-		color: var(--color-text-muted);
-		transition: rotate 200ms ease;
-	}
+		.sidebar-menu-item :global(.sidebar-menu-item-chevron) {
+			width: 14px;
+			height: 14px;
+			flex-shrink: 0;
+			color: var(--color-text-muted);
+			transition: rotate 200ms ease;
+		}
 
-	.sidebar-menu-button[aria-expanded='true'] :global(.sidebar-menu-item-chevron) {
-		rotate: 90deg;
-	}
+		.sidebar-menu-button[aria-expanded='true'] :global(.sidebar-menu-item-chevron) {
+			rotate: 90deg;
+		}
 
-	/* Menu trigger, shown while the item is hovered or the menu has focus */
-	.sidebar-menu-item-menu {
-		position: absolute;
-		top: 2px;
-		right: 2px;
-		opacity: 0;
-		transition: opacity 150ms ease;
-	}
-
-	.sidebar-menu-item:hover > .sidebar-menu-item-menu,
-	.sidebar-menu-item-menu:focus-within {
-		opacity: 1;
-	}
-
-	@media (hover: none) {
+		/* Menu trigger, shown while the item is hovered or the menu has focus */
 		.sidebar-menu-item-menu {
+			position: absolute;
+			top: 2px;
+			right: 2px;
+			opacity: 0;
+			transition: opacity 150ms ease;
+		}
+
+		.sidebar-menu-item:hover > .sidebar-menu-item-menu,
+		.sidebar-menu-item-menu:focus-within {
 			opacity: 1;
 		}
-	}
 
-	.sidebar-menu-sub {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		margin: 2px 0 2px 15px;
-		padding: 0 0 0 8px;
-		list-style: none;
-		border-left: 1px solid var(--color-border);
-	}
+		@media (hover: none) {
+			.sidebar-menu-item-menu {
+				opacity: 1;
+			}
+		}
 
-	/* Collapsed to icons: a square button with the label clipped (it stays the accessible name) */
-	:global(.sidebar--collapsed-icon) .sidebar-menu-item .sidebar-menu-button {
-		width: 32px;
-		padding: 0 8px;
-	}
+		.sidebar-menu-sub {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+			margin: 2px 0 2px 15px;
+			padding: 0 0 0 8px;
+			list-style: none;
+			border-left: 1px solid var(--color-border);
+		}
 
-	:global(.sidebar--collapsed-icon) .sidebar-menu-item-menu,
-	:global(.sidebar--collapsed-icon) .sidebar-menu-sub {
-		display: none;
+		/* Collapsed to icons: a square button with the label clipped (it stays the accessible name) */
+		:global(.sidebar--collapsed-icon) .sidebar-menu-item .sidebar-menu-button {
+			width: 32px;
+			padding: 0 8px;
+		}
+
+		@media (pointer: coarse) {
+			.sidebar-menu-button {
+				min-height: 44px;
+			}
+
+			.sidebar-menu-item-menu {
+				top: 0;
+				right: 0;
+			}
+
+			.sidebar-menu-item-menu :global(.button) {
+				min-width: 44px;
+				min-height: 44px;
+			}
+
+			.sidebar-menu-item--has-menu > .sidebar-menu-button {
+				padding-right: 48px;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.sidebar-menu-button {
+				color: ButtonText;
+			}
+
+			.sidebar-menu-button:hover {
+				outline: 1px solid Highlight;
+				outline-offset: -1px;
+			}
+
+			.sidebar-menu-button--active {
+				background-color: Highlight;
+				color: HighlightText;
+			}
+
+			.sidebar-menu-button:focus-visible {
+				outline: 2px solid CanvasText;
+				outline-offset: -2px;
+			}
+
+			.sidebar-menu-sub {
+				border-left-color: CanvasText;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.sidebar-menu-button,
+			.sidebar-menu-item :global(.sidebar-menu-item-chevron),
+			.sidebar-menu-item-menu {
+				transition: none;
+			}
+		}
+
+		:global(.sidebar--collapsed-icon) .sidebar-menu-item-menu,
+		:global(.sidebar--collapsed-icon) .sidebar-menu-sub {
+			display: none;
+		}
 	}
 </style>

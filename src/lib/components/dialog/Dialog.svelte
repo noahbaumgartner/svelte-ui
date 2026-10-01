@@ -7,11 +7,17 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLDialogAttributes } from 'svelte/elements';
 	import { X } from '@lucide/svelte';
 	import Button from '../button/Button.svelte';
 	import Spinner from '../spinner/Spinner.svelte';
 
-	type Props = {
+	type Props = Omit<
+		HTMLDialogAttributes,
+		'open' | 'title' | 'children' | 'aria-labelledby' | 'aria-describedby'
+	> & {
+		/** The dialog element. Bindable. */
+		ref?: HTMLDialogElement | null;
 		/** Whether the dialog is open. Bindable. Escape, the close button and a click on the backdrop close it. */
 		open?: boolean;
 		title: string;
@@ -24,20 +30,25 @@
 		actions?: Snippet<[close: () => void]>;
 		/** Grays out the content and actions, makes them inert and shows a centered Spinner. The close button keeps working. */
 		loading?: boolean;
+		/** Accessible name of the close button. */
+		closeLabel?: string;
 	};
 
 	let {
+		ref = $bindable(null),
 		open = $bindable(false),
 		title,
 		description,
 		trigger,
 		children,
 		actions,
-		loading = false
+		loading = false,
+		closeLabel = 'Close',
+		class: className,
+		...rest
 	}: Props = $props();
 
 	const id = $props.id();
-	let dialogEl: HTMLDialogElement;
 
 	const triggerProps: DialogTriggerProps = {
 		onclick: () => (open = true),
@@ -49,10 +60,11 @@
 	}
 
 	$effect(() => {
-		if (open && !dialogEl.open) {
-			dialogEl.showModal();
-		} else if (!open && dialogEl.open) {
-			dialogEl.close();
+		if (!ref) return;
+		if (open && !ref.open) {
+			ref.showModal();
+		} else if (!open && ref.open) {
+			ref.close();
 		}
 	});
 </script>
@@ -60,11 +72,12 @@
 {@render trigger?.(triggerProps)}
 
 <dialog
-	bind:this={dialogEl}
+	{...rest}
+	bind:this={ref}
 	aria-labelledby="{id}-title"
 	aria-describedby={description ? `${id}-description` : undefined}
 	aria-busy={loading || undefined}
-	class="dialog"
+	class={['dialog', className]}
 	onkeydown={(event) => {
 		if (event.key !== 'Escape') return;
 		event.preventDefault();
@@ -77,8 +90,8 @@
 	onclose={() => (open = false)}
 	onclick={(event) => {
 		// Clicks on the ::backdrop target the <dialog> itself, outside its box
-		if (event.target !== dialogEl) return;
-		const rect = dialogEl.getBoundingClientRect();
+		if (event.target !== ref || !ref) return;
+		const rect = ref.getBoundingClientRect();
 		const inside =
 			event.clientX >= rect.left &&
 			event.clientX <= rect.right &&
@@ -105,121 +118,149 @@
 		<Spinner class="dialog-spinner" size="lg" />
 	{/if}
 	<!-- Last in the DOM so the content, not the close button, gets the initial focus -->
-	<Button class="dialog-close" variant="ghost" size="sm" icon={X} label="Close" onclick={close} />
+	<Button
+		class="dialog-close"
+		variant="ghost"
+		size="sm"
+		icon={X}
+		label={closeLabel}
+		onclick={close}
+	/>
 </dialog>
 
 <style>
-	/* Locks page scrolling while open; the gutter keeps the layout from shifting */
-	:global(html:has(.dialog[open])) {
-		overflow: hidden;
-		scrollbar-gutter: stable;
-	}
+	@layer svelte-ui {
+		/* Locks page scrolling while open; the gutter keeps the layout from shifting */
+		:global(html:has(.dialog[open])) {
+			overflow: hidden;
+			scrollbar-gutter: stable;
+		}
 
-	.dialog {
-		box-sizing: border-box;
-		width: calc(100% - 32px);
-		max-width: 480px;
-		max-height: calc(100% - 32px);
-		flex-direction: column;
-		padding: 0;
-		overflow: hidden;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-radius: 14px;
-		box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
-		outline: none;
-		opacity: 0;
-		scale: 0.95;
-		transition:
-			opacity 140ms ease,
-			scale 140ms ease,
-			display 140ms allow-discrete,
-			overlay 140ms allow-discrete;
-	}
-
-	.dialog[open] {
-		display: flex;
-		opacity: 1;
-		scale: 1;
-	}
-
-	.dialog::backdrop {
-		background-color: rgba(0, 0, 0, 0);
-		transition:
-			background-color 140ms ease,
-			display 140ms allow-discrete,
-			overlay 140ms allow-discrete;
-	}
-
-	.dialog[open]::backdrop {
-		background-color: rgba(0, 0, 0, 0.4);
-	}
-
-	@starting-style {
-		.dialog[open] {
+		.dialog {
+			box-sizing: border-box;
+			width: calc(100% - 32px);
+			max-width: 480px;
+			max-height: calc(100% - 32px);
+			flex-direction: column;
+			padding: 0;
+			overflow: hidden;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-radius: 14px;
+			box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+			outline: none;
 			opacity: 0;
 			scale: 0.95;
+			transition:
+				opacity 140ms ease,
+				scale 140ms ease,
+				display 140ms allow-discrete,
+				overlay 140ms allow-discrete;
+		}
+
+		.dialog[open] {
+			display: flex;
+			opacity: 1;
+			scale: 1;
+		}
+
+		.dialog::backdrop {
+			background-color: rgba(0, 0, 0, 0);
+			transition:
+				background-color 140ms ease,
+				display 140ms allow-discrete,
+				overlay 140ms allow-discrete;
 		}
 
 		.dialog[open]::backdrop {
-			background-color: rgba(0, 0, 0, 0);
+			background-color: rgba(0, 0, 0, 0.4);
 		}
-	}
 
-	.dialog-content,
-	.dialog-actions {
-		transition: opacity 140ms ease;
-	}
+		@starting-style {
+			.dialog[open] {
+				opacity: 0;
+				scale: 0.95;
+			}
 
-	.dialog-content {
-		min-height: 0;
-		padding: 20px;
-		overflow-y: auto;
-	}
+			.dialog[open]::backdrop {
+				background-color: rgba(0, 0, 0, 0);
+			}
+		}
 
-	.dialog-title {
-		margin: 0;
-		padding-right: 32px;
-		font-size: 15px;
-		font-weight: 600;
-	}
+		.dialog-content,
+		.dialog-actions {
+			transition: opacity 140ms ease;
+		}
 
-	.dialog-description {
-		margin: 6px 0 0;
-		font-size: 13px;
-		line-height: 1.5;
-		color: var(--color-text-muted);
-	}
+		.dialog-content {
+			min-height: 0;
+			padding: 20px;
+			overflow-y: auto;
+		}
 
-	.dialog-body {
-		margin-top: 16px;
-		font-size: 13px;
-	}
+		.dialog-title {
+			margin: 0;
+			padding-right: 32px;
+			font-size: 15px;
+			font-weight: 600;
+		}
 
-	.dialog-actions {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-end;
-		gap: 4px;
-		padding: 16px;
-		border-top: 1px solid var(--color-border);
-	}
+		.dialog-description {
+			margin: 6px 0 0;
+			font-size: 13px;
+			line-height: 1.5;
+			color: var(--color-text-muted);
+		}
 
-	.dialog-dimmed {
-		opacity: 0.4;
-		user-select: none;
-	}
+		.dialog-body {
+			margin-top: 16px;
+			font-size: 13px;
+		}
 
-	.dialog :global(.dialog-spinner) {
-		position: absolute;
-		inset: 0;
-		margin: auto;
-	}
+		.dialog-actions {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-end;
+			gap: 4px;
+			padding: 16px;
+			border-top: 1px solid var(--color-border);
+		}
 
-	.dialog :global(.dialog-close) {
-		position: absolute;
-		top: 14px;
-		right: 14px;
+		@media (prefers-reduced-motion: reduce) {
+			.dialog,
+			.dialog::backdrop,
+			.dialog-content,
+			.dialog-actions {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.dialog {
+				border-color: CanvasText;
+			}
+
+			.dialog-actions {
+				border-top-color: CanvasText;
+			}
+		}
+
+		.dialog-dimmed {
+			opacity: 0.4;
+			user-select: none;
+		}
+
+		.dialog :global(.dialog-spinner) {
+			position: absolute;
+			inset: 0;
+			margin: auto;
+		}
+
+		.dialog :global(.dialog-close) {
+			position: absolute;
+			top: 14px;
+			right: 14px;
+		}
 	}
 </style>

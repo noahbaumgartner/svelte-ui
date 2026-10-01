@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAnchorAttributes } from 'svelte/elements';
 	import type { LucideIcon } from '@lucide/svelte';
 
-	type Props = {
+	type Props = Omit<HTMLAnchorAttributes, 'children' | 'title' | 'href' | 'media'> & {
 		/** Makes the whole card a link. */
 		href?: string;
 		/** Bold lead-in before the description, followed by a colon. */
@@ -15,7 +16,9 @@
 		orientation?: 'vertical' | 'horizontal';
 		/** Square media that fills the frame, e.g. a MeshGradient or an `<img>`. */
 		media: Snippet;
-		class?: string;
+		/** Custom description content instead of `description`. */
+		children?: Snippet;
+		ref?: HTMLElement | null;
 	};
 
 	let {
@@ -26,12 +29,17 @@
 		icon: Icon,
 		orientation = 'vertical',
 		media,
-		class: className
+		children,
+		class: className,
+		ref = $bindable(null),
+		...rest
 	}: Props = $props();
 </script>
 
 <svelte:element
 	this={href ? 'a' : 'div'}
+	{...rest}
+	bind:this={ref}
 	{href}
 	class={['preview-card', `preview-card--${orientation}`, className]}
 >
@@ -43,8 +51,8 @@
 	</div>
 	<div class="preview-card-info">
 		<p class="preview-card-headline">
-			<span class="preview-card-title">{title}{description ? ':' : ''}</span>
-			{description}
+			<span class="preview-card-title">{title}{description || children ? ':' : ''}</span>
+			{#if children}{@render children()}{:else}{description}{/if}
 		</p>
 		{#if meta}
 			<span class="preview-card-meta">{meta}</span>
@@ -53,114 +61,123 @@
 </svelte:element>
 
 <style>
-	.preview-card {
-		display: flex;
-		gap: 20px;
-		color: var(--color-text);
-		text-decoration: none;
-		border-radius: 14px;
-		outline: none;
-	}
-
-	a.preview-card:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: 2px;
-	}
-
-	.preview-card--vertical {
-		flex-direction: column;
-	}
-
-	.preview-card--horizontal {
-		align-items: center;
-	}
-
-	.preview-card-media {
-		position: relative;
-		flex-shrink: 0;
-		aspect-ratio: 1;
-		overflow: hidden;
-		border-radius: 14px;
-	}
-
-	.preview-card--horizontal .preview-card-media {
-		width: 140px;
-	}
-
-	.preview-card-media > :global(:not(.preview-card-icon)) {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		border-radius: inherit;
-		transition: transform 300ms ease;
-	}
-
-	a.preview-card:hover .preview-card-media > :global(:not(.preview-card-icon)) {
-		transform: scale(1.05);
-	}
-
-	.preview-card-icon {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 40px;
-		height: 40px;
-		color: var(--color-base);
-		background-color: var(--color-ink);
-		border-radius: 14px 0 0 0;
-	}
-
-	.preview-card-icon :global(svg) {
-		width: 20px;
-		height: 20px;
-	}
-
-	.preview-card--horizontal .preview-card-icon {
-		width: 32px;
-		height: 32px;
-	}
-
-	.preview-card--horizontal .preview-card-icon :global(svg) {
-		width: 16px;
-		height: 16px;
-	}
-
-	.preview-card-info {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		min-width: 0;
-	}
-
-	.preview-card-headline {
-		margin: 0;
-		font-size: 16px;
-	}
-
-	.preview-card-title {
-		font-weight: 600;
-	}
-
-	.preview-card-meta {
-		font-size: 14px;
-		color: var(--color-text-muted);
-	}
-
-	@media (min-width: 640px) {
-		.preview-card--horizontal .preview-card-media {
-			width: 168px;
+	@layer svelte-ui {
+		.preview-card {
+			display: flex;
+			gap: 20px;
+			color: var(--color-text);
+			text-decoration: none;
+			border-radius: 14px;
+			outline: none;
 		}
-	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.preview-card-media > :global(*) {
-			transition: none;
+		a.preview-card:focus-visible {
+			outline: 2px solid var(--color-accent);
+			outline-offset: 2px;
+		}
+
+		.preview-card--vertical {
+			flex-direction: column;
+		}
+
+		.preview-card--horizontal {
+			align-items: center;
+		}
+
+		.preview-card-media {
+			position: relative;
+			flex-shrink: 0;
+			aspect-ratio: 1;
+			overflow: hidden;
+			border-radius: 14px;
+		}
+
+		.preview-card--horizontal .preview-card-media {
+			width: 140px;
+		}
+
+		.preview-card-media > :global(:not(.preview-card-icon)) {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			border-radius: inherit;
+			transition: transform 300ms ease;
+		}
+
+		a.preview-card:hover .preview-card-media > :global(:not(.preview-card-icon)) {
+			transform: scale(1.05);
+		}
+
+		.preview-card-icon {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			color: var(--color-base);
+			background-color: var(--color-ink);
+			border-radius: 14px 0 0 0;
+		}
+
+		.preview-card-icon :global(svg) {
+			width: 20px;
+			height: 20px;
+		}
+
+		.preview-card--horizontal .preview-card-icon {
+			width: 32px;
+			height: 32px;
+		}
+
+		.preview-card--horizontal .preview-card-icon :global(svg) {
+			width: 16px;
+			height: 16px;
+		}
+
+		.preview-card-info {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			min-width: 0;
+		}
+
+		.preview-card-headline {
+			margin: 0;
+			font-size: 16px;
+		}
+
+		.preview-card-title {
+			font-weight: 600;
+		}
+
+		.preview-card-meta {
+			font-size: 14px;
+			color: var(--color-text-muted);
+		}
+
+		@media (min-width: 640px) {
+			.preview-card--horizontal .preview-card-media {
+				width: 168px;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.preview-card-media > :global(*) {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.preview-card-icon {
+				outline: 1px solid CanvasText;
+				outline-offset: -1px;
+			}
 		}
 	}
 </style>

@@ -14,11 +14,12 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 	import { fade } from 'svelte/transition';
 
 	type Side = 'top' | 'right' | 'bottom' | 'left';
 
-	type Props = {
+	type Props = Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & {
 		/** Whether the tooltip is shown. Bindable. */
 		open?: boolean;
 		/** Preferred side; flips to the opposite one when there is not enough room. */
@@ -29,9 +30,19 @@
 		trigger: Snippet<[TooltipTriggerProps]>;
 		/** Tooltip content; may contain `Kbd` / `KbdGroup`. */
 		children: Snippet;
+		ref?: HTMLSpanElement | null;
 	};
 
-	let { open = $bindable(false), side = 'top', delay = 0, trigger, children }: Props = $props();
+	let {
+		open = $bindable(false),
+		side = 'top',
+		delay = 0,
+		trigger,
+		children,
+		ref = $bindable(null),
+		class: className,
+		...rest
+	}: Props = $props();
 
 	const id = $props.id();
 	const gap = 6;
@@ -44,6 +55,10 @@
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	// A click dismisses the tooltip until the pointer leaves the trigger.
 	let pressed = false;
+
+	function reducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
 
 	function show(wait: number) {
 		clearTimeout(timer);
@@ -135,7 +150,7 @@
 	});
 </script>
 
-<span class="tooltip">
+<span {...rest} bind:this={ref} class={['tooltip', className]}>
 	{@render trigger(triggerProps)}
 
 	{#if open}
@@ -148,7 +163,7 @@
 			style:left="{position.left}px"
 			style:--tooltip-arrow="{position.arrow}px"
 			{@attach popover}
-			transition:fade={{ duration: 100 }}
+			transition:fade={{ duration: reducedMotion() ? 0 : 100 }}
 		>
 			{@render children()}
 			<span class="tooltip-arrow" aria-hidden="true"></span>
@@ -157,68 +172,82 @@
 </span>
 
 <style>
-	.tooltip {
-		display: inline-flex;
-		height: fit-content;
-	}
+	@layer svelte-ui {
+		.tooltip {
+			display: inline-flex;
+			height: fit-content;
+		}
 
-	.tooltip-content {
-		position: fixed;
-		inset: auto;
-		margin: 0;
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-		width: max-content;
-		max-width: 280px;
-		padding: 6px 10px;
-		overflow: visible;
-		font-size: 12px;
-		line-height: 1.4;
-		text-wrap: balance;
-		background-color: var(--color-ink);
-		color: var(--color-base);
-		border: none;
-		border-radius: 10px;
-		pointer-events: none;
-	}
+		.tooltip-content {
+			position: fixed;
+			inset: auto;
+			margin: 0;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			width: max-content;
+			max-width: 280px;
+			padding: 6px 10px;
+			overflow: visible;
+			font-size: 12px;
+			line-height: 1.4;
+			text-wrap: balance;
+			background-color: var(--color-ink);
+			color: var(--color-base);
+			border: none;
+			border-radius: 10px;
+			pointer-events: none;
+		}
 
-	.tooltip-content :global(:is(.kbd, .kbd-group)) {
-		font-size: inherit;
-	}
+		.tooltip-content :global(:is(.kbd, .kbd-group)) {
+			font-size: inherit;
+		}
 
-	.tooltip-arrow {
-		position: absolute;
-		width: 8px;
-		height: 8px;
-		background-color: inherit;
-		border-radius: 2px;
-		transform: rotate(45deg);
-	}
+		.tooltip-arrow {
+			position: absolute;
+			width: 8px;
+			height: 8px;
+			background-color: inherit;
+			border-radius: 2px;
+			transform: rotate(45deg);
+		}
 
-	.tooltip-content--top .tooltip-arrow,
-	.tooltip-content--bottom .tooltip-arrow {
-		left: calc(var(--tooltip-arrow) - 4px);
-	}
+		.tooltip-content--top .tooltip-arrow,
+		.tooltip-content--bottom .tooltip-arrow {
+			left: calc(var(--tooltip-arrow) - 4px);
+		}
 
-	.tooltip-content--left .tooltip-arrow,
-	.tooltip-content--right .tooltip-arrow {
-		top: calc(var(--tooltip-arrow) - 4px);
-	}
+		.tooltip-content--left .tooltip-arrow,
+		.tooltip-content--right .tooltip-arrow {
+			top: calc(var(--tooltip-arrow) - 4px);
+		}
 
-	.tooltip-content--top .tooltip-arrow {
-		bottom: -3px;
-	}
+		.tooltip-content--top .tooltip-arrow {
+			bottom: -3px;
+		}
 
-	.tooltip-content--bottom .tooltip-arrow {
-		top: -3px;
-	}
+		.tooltip-content--bottom .tooltip-arrow {
+			top: -3px;
+		}
 
-	.tooltip-content--left .tooltip-arrow {
-		right: -3px;
-	}
+		.tooltip-content--left .tooltip-arrow {
+			right: -3px;
+		}
 
-	.tooltip-content--right .tooltip-arrow {
-		left: -3px;
+		.tooltip-content--right .tooltip-arrow {
+			left: -3px;
+		}
+
+		@media (forced-colors: active) {
+			.tooltip-content {
+				border: 1px solid CanvasText;
+				background-color: Canvas;
+				color: CanvasText;
+			}
+
+			.tooltip-arrow {
+				display: none;
+			}
+		}
 	}
 </style>

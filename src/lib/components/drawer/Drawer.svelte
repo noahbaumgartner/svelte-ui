@@ -7,9 +7,15 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import type { HTMLDialogAttributes } from 'svelte/elements';
 	import { X } from '@lucide/svelte';
 
-	type Props = {
+	type Props = Omit<
+		HTMLDialogAttributes,
+		'open' | 'title' | 'children' | 'aria-labelledby' | 'aria-describedby'
+	> & {
+		/** The dialog element. Bindable. */
+		ref?: HTMLDialogElement | null;
 		/**
 		 * Whether the drawer is open. Bindable. A sheet from the bottom on phones, a panel on the right from 768px up.
 		 * Escape, the handle or close button, dragging it away and a click on the backdrop close it.
@@ -23,12 +29,25 @@
 		children?: Snippet;
 		/** Optional Buttons in the footer, stacked at full width with the primary one last; it ends up on top. Call `close` to close the drawer. */
 		actions?: Snippet<[close: () => void]>;
+		/** Accessible name of the handle and close button. */
+		closeLabel?: string;
 	};
 
-	let { open = $bindable(false), title, description, trigger, children, actions }: Props = $props();
+	let {
+		ref = $bindable(null),
+		open = $bindable(false),
+		title,
+		description,
+		trigger,
+		children,
+		actions,
+		closeLabel = 'Close',
+		class: className,
+		style,
+		...rest
+	}: Props = $props();
 
 	const id = $props.id();
-	let dialogEl: HTMLDialogElement;
 
 	const triggerProps: DrawerTriggerProps = {
 		onclick: () => (open = true),
@@ -40,10 +59,11 @@
 	}
 
 	$effect(() => {
-		if (open && !dialogEl.open) {
-			dialogEl.showModal();
-		} else if (!open && dialogEl.open) {
-			dialogEl.close();
+		if (!ref) return;
+		if (open && !ref.open) {
+			ref.showModal();
+		} else if (!open && ref.open) {
+			ref.close();
 		}
 	});
 
@@ -77,7 +97,8 @@
 			const velocity = offset / Math.max(1, e.timeStamp - startTime);
 			const dismiss =
 				e.type === 'pointerup' &&
-				(offset > (sideways ? dialogEl.offsetWidth : dialogEl.offsetHeight) / 3 || velocity > 0.5);
+				(offset > (sideways ? (ref?.offsetWidth ?? 0) : (ref?.offsetHeight ?? 0)) / 3 ||
+					velocity > 0.5);
 			dragging = false;
 			offset = 0;
 			if (dismiss) close();
@@ -94,10 +115,12 @@
 {@render trigger?.(triggerProps)}
 
 <dialog
-	bind:this={dialogEl}
+	{...rest}
+	bind:this={ref}
 	aria-labelledby="{id}-title"
 	aria-describedby={description ? `${id}-description` : undefined}
-	class={['drawer', { 'drawer--dragging': dragging }]}
+	class={['drawer', { 'drawer--dragging': dragging }, className]}
+	{style}
 	style:translate={dragging ? (sideways ? `${offset}px 0` : `0 ${offset}px`) : undefined}
 	onkeydown={(event) => {
 		if (event.key !== 'Escape') return;
@@ -111,8 +134,8 @@
 	onclose={() => (open = false)}
 	onclick={(event) => {
 		// Clicks on the ::backdrop target the <dialog> itself, outside its box
-		if (event.target !== dialogEl) return;
-		const rect = dialogEl.getBoundingClientRect();
+		if (event.target !== ref || !ref) return;
+		const rect = ref.getBoundingClientRect();
 		const inside =
 			event.clientX >= rect.left &&
 			event.clientX <= rect.right &&
@@ -138,7 +161,7 @@
 	<button
 		type="button"
 		class="drawer-handle"
-		aria-label="Close"
+		aria-label={closeLabel}
 		onpointerdown={startDrag}
 		onclick={() => {
 			if (!dragged) close();
@@ -150,219 +173,247 @@
 </dialog>
 
 <style>
-	/* Locks page scrolling while open; the gutter keeps the layout from shifting */
-	:global(html:has(.drawer[open])) {
-		overflow: hidden;
-		scrollbar-gutter: stable;
-	}
+	@layer svelte-ui {
+		/* Locks page scrolling while open; the gutter keeps the layout from shifting */
+		:global(html:has(.drawer[open])) {
+			overflow: hidden;
+			scrollbar-gutter: stable;
+		}
 
-	.drawer {
-		box-sizing: border-box;
-		width: 100%;
-		max-width: 560px;
-		max-height: calc(100dvh - 48px);
-		flex-direction: column;
-		/* Pinned to the bottom edge */
-		margin: auto auto 0;
-		padding: 0 0 env(safe-area-inset-bottom);
-		overflow: hidden;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-		border: 1px solid var(--color-border);
-		border-bottom: 0;
-		border-radius: 16px 16px 0 0;
-		box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
-		outline: none;
-		translate: 0 100%;
-		transition:
-			translate 260ms cubic-bezier(0.32, 0.72, 0, 1),
-			display 260ms allow-discrete,
-			overlay 260ms allow-discrete;
-	}
-
-	.drawer[open] {
-		display: flex;
-		translate: 0 0;
-	}
-
-	/* Follows the finger directly */
-	.drawer--dragging {
-		transition: none;
-	}
-
-	.drawer::backdrop {
-		background-color: rgba(0, 0, 0, 0);
-		transition:
-			background-color 260ms ease,
-			display 260ms allow-discrete,
-			overlay 260ms allow-discrete;
-	}
-
-	.drawer[open]::backdrop {
-		background-color: rgba(0, 0, 0, 0.4);
-	}
-
-	@starting-style {
-		.drawer[open] {
+		.drawer {
+			box-sizing: border-box;
+			width: 100%;
+			max-width: 560px;
+			max-height: calc(100dvh - 48px);
+			flex-direction: column;
+			/* Pinned to the bottom edge */
+			margin: auto auto 0;
+			padding: 0 0 env(safe-area-inset-bottom);
+			overflow: hidden;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+			border: 1px solid var(--color-border);
+			border-bottom: 0;
+			border-radius: 16px 16px 0 0;
+			box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+			outline: none;
 			translate: 0 100%;
+			transition:
+				translate 260ms cubic-bezier(0.32, 0.72, 0, 1),
+				display 260ms allow-discrete,
+				overlay 260ms allow-discrete;
+		}
+
+		.drawer[open] {
+			display: flex;
+			translate: 0 0;
+		}
+
+		/* Follows the finger directly */
+		.drawer--dragging {
+			transition: none;
+		}
+
+		.drawer::backdrop {
+			background-color: rgba(0, 0, 0, 0);
+			transition:
+				background-color 260ms ease,
+				display 260ms allow-discrete,
+				overlay 260ms allow-discrete;
 		}
 
 		.drawer[open]::backdrop {
-			background-color: rgba(0, 0, 0, 0);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.drawer,
-		.drawer::backdrop {
-			transition-duration: 0ms;
-		}
-	}
-
-	.drawer-header {
-		flex-shrink: 0;
-		/* Room for the handle */
-		padding: 28px 20px 12px;
-		cursor: grab;
-		user-select: none;
-		/* Dragging must not scroll the page or get cancelled by the browser */
-		touch-action: none;
-	}
-
-	.drawer--dragging .drawer-header,
-	.drawer--dragging .drawer-handle {
-		cursor: grabbing;
-	}
-
-	.drawer-title {
-		margin: 0;
-		font-size: 15px;
-		font-weight: 600;
-	}
-
-	.drawer-description {
-		margin: 6px 0 0;
-		font-size: 13px;
-		line-height: 1.5;
-		color: var(--color-text-muted);
-	}
-
-	.drawer-body {
-		min-height: 0;
-		padding: 4px 20px 20px;
-		overflow-y: auto;
-		overscroll-behavior: contain;
-		font-size: 13px;
-	}
-
-	/* Stacked, the primary action (last in the markup) on top */
-	.drawer-actions {
-		display: flex;
-		flex-shrink: 0;
-		flex-direction: column-reverse;
-		gap: 8px;
-		padding: 4px 20px 20px;
-	}
-
-	.drawer-actions :global(.button) {
-		width: 100%;
-	}
-
-	.drawer-handle {
-		position: absolute;
-		top: 0;
-		left: 50%;
-		padding: 10px 24px;
-		background: none;
-		border: 0;
-		border-radius: 8px;
-		cursor: grab;
-		translate: -50% 0;
-		touch-action: none;
-		-webkit-tap-highlight-color: transparent;
-	}
-
-	.drawer-handle:focus-visible {
-		outline: 2px solid var(--color-accent);
-		outline-offset: -4px;
-	}
-
-	.drawer-handle-bar {
-		display: block;
-		width: 36px;
-		height: 4px;
-		background-color: var(--color-border-strong);
-		border-radius: 2px;
-		transition: background-color 120ms ease;
-	}
-
-	.drawer-handle:hover .drawer-handle-bar {
-		background-color: var(--color-text-faint);
-	}
-
-	.drawer-handle :global(.drawer-handle-icon) {
-		display: none;
-		width: 16px;
-		height: 16px;
-	}
-
-	/* Larger screens: a floating panel on the right, with a close button instead of the handle */
-	@media (min-width: 768px) {
-		.drawer {
-			width: 400px;
-			max-width: calc(100% - 48px);
-			height: calc(100dvh - 2 * var(--drawer-inset));
-			max-height: none;
-			/* Floats with a gap to the screen edges */
-			--drawer-inset: 8px;
-			margin: var(--drawer-inset) var(--drawer-inset) var(--drawer-inset) auto;
-			padding: 0;
-			border: 1px solid var(--color-border);
-			border-radius: 20px;
-			box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
-			translate: calc(100% + var(--drawer-inset)) 0;
+			background-color: rgba(0, 0, 0, 0.4);
 		}
 
 		@starting-style {
 			.drawer[open] {
-				translate: calc(100% + var(--drawer-inset)) 0;
+				translate: 0 100%;
+			}
+
+			.drawer[open]::backdrop {
+				background-color: rgba(0, 0, 0, 0);
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.drawer,
+			.drawer::backdrop,
+			.drawer-handle-bar {
+				transition: none;
+			}
+		}
+
+		@media (forced-colors: active) {
+			.drawer {
+				border: 1px solid CanvasText;
+			}
+
+			.drawer-handle-bar {
+				background-color: ButtonText;
+			}
+
+			.drawer-handle:focus-visible {
+				outline-color: Highlight;
+			}
+		}
+
+		@media (pointer: coarse) {
+			.drawer-handle {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-sizing: border-box;
+				min-width: 44px;
+				min-height: 44px;
 			}
 		}
 
 		.drawer-header {
-			padding: 20px 56px 12px 20px;
+			flex-shrink: 0;
+			/* Room for the handle */
+			padding: 28px 20px 12px;
+			cursor: grab;
+			user-select: none;
+			/* Dragging must not scroll the page or get cancelled by the browser */
+			touch-action: none;
 		}
 
-		/* Pushes the actions to the bottom */
+		.drawer--dragging .drawer-header,
+		.drawer--dragging .drawer-handle {
+			cursor: grabbing;
+		}
+
+		.drawer-title {
+			margin: 0;
+			font-size: 15px;
+			font-weight: 600;
+		}
+
+		.drawer-description {
+			margin: 6px 0 0;
+			font-size: 13px;
+			line-height: 1.5;
+			color: var(--color-text-muted);
+		}
+
 		.drawer-body {
-			flex: 1;
+			min-height: 0;
+			padding: 4px 20px 20px;
+			overflow-y: auto;
+			overscroll-behavior: contain;
+			font-size: 13px;
+		}
+
+		/* Stacked, the primary action (last in the markup) on top */
+		.drawer-actions {
+			display: flex;
+			flex-shrink: 0;
+			flex-direction: column-reverse;
+			gap: 8px;
+			padding: 4px 20px 20px;
+		}
+
+		.drawer-actions :global(.button) {
+			width: 100%;
 		}
 
 		.drawer-handle {
-			top: 14px;
-			right: 14px;
-			left: auto;
-			padding: 6px;
-			color: var(--color-text-muted);
-			cursor: pointer;
-			translate: none;
-		}
-
-		.drawer-handle:hover {
-			color: var(--color-text);
-			background-color: var(--color-surface);
+			position: absolute;
+			top: 0;
+			left: 50%;
+			padding: 10px 24px;
+			background: none;
+			border: 0;
+			border-radius: 8px;
+			cursor: grab;
+			translate: -50% 0;
+			touch-action: none;
+			-webkit-tap-highlight-color: transparent;
 		}
 
 		.drawer-handle:focus-visible {
-			outline-offset: 2px;
+			outline: 2px solid var(--color-accent);
+			outline-offset: -4px;
 		}
 
 		.drawer-handle-bar {
-			display: none;
+			display: block;
+			width: 36px;
+			height: 4px;
+			background-color: var(--color-border-strong);
+			border-radius: 2px;
+			transition: background-color 120ms ease;
+		}
+
+		.drawer-handle:hover .drawer-handle-bar {
+			background-color: var(--color-text-faint);
 		}
 
 		.drawer-handle :global(.drawer-handle-icon) {
-			display: block;
+			display: none;
+			width: 16px;
+			height: 16px;
+		}
+
+		/* Larger screens: a floating panel on the right, with a close button instead of the handle */
+		@media (min-width: 768px) {
+			.drawer {
+				width: 400px;
+				max-width: calc(100% - 48px);
+				height: calc(100dvh - 2 * var(--drawer-inset));
+				max-height: none;
+				/* Floats with a gap to the screen edges */
+				--drawer-inset: 8px;
+				margin: var(--drawer-inset) var(--drawer-inset) var(--drawer-inset) auto;
+				padding: 0;
+				border: 1px solid var(--color-border);
+				border-radius: 20px;
+				box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+				translate: calc(100% + var(--drawer-inset)) 0;
+			}
+
+			@starting-style {
+				.drawer[open] {
+					translate: calc(100% + var(--drawer-inset)) 0;
+				}
+			}
+
+			.drawer-header {
+				padding: 20px 56px 12px 20px;
+			}
+
+			/* Pushes the actions to the bottom */
+			.drawer-body {
+				flex: 1;
+			}
+
+			.drawer-handle {
+				top: 14px;
+				right: 14px;
+				left: auto;
+				padding: 6px;
+				color: var(--color-text-muted);
+				cursor: pointer;
+				translate: none;
+			}
+
+			.drawer-handle:hover {
+				color: var(--color-text);
+				background-color: var(--color-surface);
+			}
+
+			.drawer-handle:focus-visible {
+				outline-offset: 2px;
+			}
+
+			.drawer-handle-bar {
+				display: none;
+			}
+
+			.drawer-handle :global(.drawer-handle-icon) {
+				display: block;
+			}
 		}
 	}
 </style>

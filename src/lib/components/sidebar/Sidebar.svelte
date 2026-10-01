@@ -14,23 +14,33 @@
 		collapsible?: 'offcanvas' | 'icon' | 'none';
 		/** `SidebarHeader`, `SidebarContent` and `SidebarFooter`. */
 		children: Snippet;
+		/** Accessible names of the close buttons shown on mobile. */
+		labels?: { close?: string };
+		ref?: HTMLElement | null;
 	};
 
 	let {
 		side = 'left',
 		variant = 'sidebar',
 		collapsible = 'offcanvas',
+		ref = $bindable(null),
+		labels,
 		class: className,
 		children,
 		...rest
 	}: Props = $props();
 
 	const sidebar = getSidebarContext();
+	const closeLabel = $derived(labels?.close ?? 'Close sidebar');
 
 	let collapsed = $derived(!sidebar.mobile && !sidebar.open && collapsible !== 'none');
 	let hidden = $derived(
 		sidebar.mobile ? !sidebar.openMobile : collapsed && collapsible === 'offcanvas'
 	);
+
+	function reducedMotion() {
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
 
 	$effect(() => {
 		if (!sidebar.openMobile) return;
@@ -48,15 +58,16 @@
 	<button
 		type="button"
 		tabindex="-1"
-		aria-label="Close sidebar"
+		aria-label={closeLabel}
 		class="sidebar-backdrop"
 		onclick={sidebar.closeMobile}
-		transition:fade={{ duration: 200 }}
+		transition:fade={{ duration: reducedMotion() ? 0 : 200 }}
 	></button>
 {/if}
 
 <aside
 	{...rest}
+	bind:this={ref}
 	id={sidebar.id}
 	inert={hidden}
 	data-state={collapsed ? 'collapsed' : 'expanded'}
@@ -78,7 +89,7 @@
 					variant="ghost"
 					size="sm"
 					icon={X}
-					label="Close sidebar"
+					label={closeLabel}
 					onclick={sidebar.closeMobile}
 				/>
 			</div>
@@ -88,130 +99,153 @@
 </aside>
 
 <style>
-	.sidebar {
-		position: sticky;
-		top: 0;
-		display: flex;
-		flex-shrink: 0;
-		width: var(--sidebar-width);
-		height: var(--sidebar-height);
-		overflow: hidden;
-		transition: width 200ms ease;
-	}
+	@layer svelte-ui {
+		.sidebar {
+			position: sticky;
+			top: 0;
+			display: flex;
+			flex-shrink: 0;
+			width: var(--sidebar-width);
+			height: var(--sidebar-height);
+			overflow: hidden;
+			transition: width 200ms ease;
+		}
 
-	/* The inner panel keeps its width while the outer one shrinks, so it slides out instead of squashing */
-	.sidebar--left {
-		justify-content: flex-end;
-	}
+		/* The inner panel keeps its width while the outer one shrinks, so it slides out instead of squashing */
+		.sidebar--left {
+			justify-content: flex-end;
+		}
 
-	.sidebar--right {
-		order: 1;
-		justify-content: flex-start;
-	}
+		.sidebar--right {
+			order: 1;
+			justify-content: flex-start;
+		}
 
-	.sidebar--collapsed-offcanvas {
-		width: 0;
-	}
+		.sidebar--collapsed-offcanvas {
+			width: 0;
+		}
 
-	.sidebar--collapsed-icon {
-		width: var(--sidebar-width-icon);
-	}
+		.sidebar--collapsed-icon {
+			width: var(--sidebar-width-icon);
+		}
 
-	.sidebar-inner {
-		display: flex;
-		flex-direction: column;
-		flex-shrink: 0;
-		box-sizing: border-box;
-		width: var(--sidebar-width);
-		height: 100%;
-		background-color: var(--color-bg);
-		color: var(--color-text);
-	}
+		.sidebar-inner {
+			display: flex;
+			flex-direction: column;
+			flex-shrink: 0;
+			box-sizing: border-box;
+			width: var(--sidebar-width);
+			height: 100%;
+			background-color: var(--color-bg);
+			color: var(--color-text);
+		}
 
-	.sidebar--collapsible-icon .sidebar-inner {
-		width: 100%;
-	}
+		.sidebar--collapsible-icon .sidebar-inner {
+			width: 100%;
+		}
 
-	/* Variants */
+		/* Variants */
 
-	.sidebar--sidebar.sidebar--left .sidebar-inner {
-		border-right: 1px solid var(--color-border);
-	}
+		.sidebar--sidebar.sidebar--left .sidebar-inner {
+			border-right: 1px solid var(--color-border);
+		}
 
-	.sidebar--sidebar.sidebar--right .sidebar-inner {
-		border-left: 1px solid var(--color-border);
-	}
+		.sidebar--sidebar.sidebar--right .sidebar-inner {
+			border-left: 1px solid var(--color-border);
+		}
 
-	.sidebar--floating .sidebar-inner {
-		width: calc(var(--sidebar-width) - 16px);
-		height: calc(100% - 16px);
-		margin: 8px;
-		border: 1px solid var(--color-border);
-		border-radius: 12px;
-		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-	}
+		.sidebar--floating .sidebar-inner {
+			width: calc(var(--sidebar-width) - 16px);
+			height: calc(100% - 16px);
+			margin: 8px;
+			border: 1px solid var(--color-border);
+			border-radius: 12px;
+			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+		}
 
-	.sidebar--floating.sidebar--collapsible-icon .sidebar-inner {
-		width: calc(100% - 16px);
-	}
+		.sidebar--floating.sidebar--collapsible-icon .sidebar-inner {
+			width: calc(100% - 16px);
+		}
 
-	.sidebar--floating.sidebar--collapsed-icon {
-		width: calc(var(--sidebar-width-icon) + 16px);
-	}
+		.sidebar--floating.sidebar--collapsed-icon {
+			width: calc(var(--sidebar-width-icon) + 16px);
+		}
 
-	/* Mobile drawer */
+		/* Mobile drawer */
 
-	.sidebar--mobile {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		z-index: 50;
-		width: 100%;
-		height: auto;
-		transform: translateX(-100%);
-		transition: transform 200ms ease;
-	}
+		.sidebar--mobile {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			z-index: 50;
+			width: 100%;
+			height: auto;
+			transform: translateX(-100%);
+			transition: transform 200ms ease;
+		}
 
-	.sidebar--mobile .sidebar-inner {
-		width: 100%;
-	}
+		.sidebar--mobile .sidebar-inner {
+			width: 100%;
+		}
 
-	.sidebar--mobile.sidebar--sidebar .sidebar-inner {
-		border-inline: none;
-	}
+		.sidebar--mobile.sidebar--sidebar .sidebar-inner {
+			border-inline: none;
+		}
 
-	.sidebar--mobile.sidebar--floating .sidebar-inner {
-		width: calc(100% - 16px);
-	}
+		.sidebar--mobile.sidebar--floating .sidebar-inner {
+			width: calc(100% - 16px);
+		}
 
-	.sidebar--mobile.sidebar--right {
-		left: auto;
-		right: 0;
-		transform: translateX(100%);
-	}
+		.sidebar--mobile.sidebar--right {
+			left: auto;
+			right: 0;
+			transform: translateX(100%);
+		}
 
-	.sidebar--mobile.sidebar--open-mobile {
-		transform: none;
-	}
+		.sidebar--mobile.sidebar--open-mobile {
+			transform: none;
+		}
 
-	/* Fallback for sidebars without a `SidebarHeader`, which otherwise holds the close button */
-	.sidebar-close {
-		display: flex;
-		justify-content: flex-end;
-		padding: 8px 8px 0;
-	}
+		/* Fallback for sidebars without a `SidebarHeader`, which otherwise holds the close button */
+		.sidebar-close {
+			display: flex;
+			justify-content: flex-end;
+			padding: 8px 8px 0;
+		}
 
-	.sidebar-inner:has(:global(.sidebar-header)) .sidebar-close {
-		display: none;
-	}
+		.sidebar-inner:has(:global(.sidebar-header)) .sidebar-close {
+			display: none;
+		}
 
-	.sidebar-backdrop {
-		position: fixed;
-		inset: 0;
-		z-index: 49;
-		padding: 0;
-		background-color: rgba(0, 0, 0, 0.4);
-		border: none;
+		.sidebar-backdrop {
+			position: fixed;
+			inset: 0;
+			z-index: 49;
+			padding: 0;
+			background-color: rgba(0, 0, 0, 0.4);
+			border: none;
+		}
+
+		@media (forced-colors: active) {
+			.sidebar--floating .sidebar-inner {
+				border-color: CanvasText;
+			}
+
+			.sidebar--mobile .sidebar-inner {
+				border: 1px solid CanvasText;
+			}
+
+			.sidebar-backdrop {
+				background-color: transparent;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.sidebar,
+			.sidebar--mobile {
+				transition: none;
+			}
+		}
 	}
 </style>

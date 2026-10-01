@@ -15,7 +15,9 @@
 			value: { control: 'text' },
 			min: { control: 'text' },
 			max: { control: 'text' },
-			locale: { control: 'text' }
+			locale: { control: 'text' },
+			firstDayOfWeek: { control: 'inline-radio', options: [0, 1, 6] },
+			labels: { control: 'object' }
 		},
 		args: {
 			mode: 'date',
@@ -46,6 +48,57 @@
 <Story name="Range" parameters={{ controls: { exclude: ['min', 'max'] } }}>
 	{#snippet template(args)}
 		<Calendar {...args} min="2026-09-07" max="2026-09-25" />
+	{/snippet}
+</Story>
+
+<Story
+	name="Locale"
+	parameters={{ controls: { exclude: ['locale', 'labels', 'firstDayOfWeek'] } }}
+	args={{ locale: 'de-DE' }}
+>
+	{#snippet template(args)}
+		<Calendar
+			{...args}
+			labels={{ previousMonth: 'Vorheriger Monat', nextMonth: 'Nächster Monat' }}
+		/>
+	{/snippet}
+</Story>
+
+<Story name="First day of week" parameters={{ controls: { exclude: ['firstDayOfWeek'] } }}>
+	{#snippet template(args)}
+		<Calendar {...args} firstDayOfWeek={0} />
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: locale and labels translate the calendar"
+	tags={['!dev', '!autodocs']}
+	args={{ locale: 'de-DE' }}
+	play={async ({ canvas }) => {
+		await expect(canvas.getByText('September 2026')).toBeVisible();
+		await expect(canvas.getByRole('button', { name: 'Vorheriger Monat' })).toBeVisible();
+		await expect(
+			canvas.getByRole('button', { name: 'Dienstag, 15. September 2026' })
+		).toBeVisible();
+	}}
+>
+	{#snippet template(args)}
+		<Calendar
+			{...args}
+			labels={{ previousMonth: 'Vorheriger Monat', nextMonth: 'Nächster Monat' }}
+		/>
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: first day of week sets the first column"
+	tags={['!dev', '!autodocs']}
+	play={async ({ canvas }) => {
+		await expect(canvas.getAllByRole('columnheader')[0]).toHaveTextContent('Sun');
+	}}
+>
+	{#snippet template(args)}
+		<Calendar {...args} firstDayOfWeek={0} />
 	{/snippet}
 </Story>
 

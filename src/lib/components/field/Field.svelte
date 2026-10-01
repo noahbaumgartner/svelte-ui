@@ -7,72 +7,93 @@
 		orientation?: 'vertical' | 'horizontal' | 'responsive';
 		/** A Label, the control, and optionally FieldDescription and FieldError. Horizontal fields wrap label and description in a FieldContent. */
 		children: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { orientation = 'vertical', class: className, children, ...rest }: Props = $props();
+	let {
+		orientation = 'vertical',
+		class: className,
+		children,
+		ref = $bindable(null),
+		...rest
+	}: Props = $props();
 </script>
 
-<div {...rest} role="group" class={['field', `field--${orientation}`, className]}>
+<div {...rest} bind:this={ref} role="group" class={['field', `field--${orientation}`, className]}>
 	{@render children()}
 </div>
 
 <style>
-	.field {
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-		width: 100%;
-		font-size: 13px;
-		color: var(--color-text);
-	}
+	@layer svelte-ui {
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+			width: 100%;
+			font-size: 13px;
+			color: var(--color-text);
+		}
 
-	.field--horizontal {
-		flex-direction: row;
-		align-items: center;
-	}
-
-	.field--horizontal > :global(.label) {
-		flex: auto;
-	}
-
-	.field--horizontal:has(> :global(.field-content)) {
-		align-items: flex-start;
-	}
-
-	.field--horizontal:has(> :global(.field-content)) > :global(:is(.checkbox, .radio)) {
-		margin-top: 2px;
-	}
-
-	@container field-group (min-width: 448px) {
-		.field--responsive {
+		.field--horizontal {
 			flex-direction: row;
 			align-items: center;
 		}
 
-		.field--responsive > :global(:is(.label, .field-content)) {
+		.field--horizontal > :global(.label) {
 			flex: auto;
 		}
 
-		.field--responsive:has(> :global(.field-content)) {
+		.field--horizontal:has(> :global(.field-content)) {
 			align-items: flex-start;
 		}
-	}
 
-	/* State follows the control, so there is no invalid or disabled prop to keep in sync */
-	.field:has(:global([aria-invalid='true'])) :global(.label) {
-		color: var(--color-destructive);
-	}
+		.field--horizontal:has(> :global(.field-content)) > :global(:is(.checkbox, .radio)) {
+			margin-top: 2px;
+		}
 
-	.field:has(:global(:is(.checkbox, .radio, .switch))) :global(.label) {
-		cursor: pointer;
-	}
+		@container field-group (min-width: 448px) {
+			.field--responsive {
+				flex-direction: row;
+				align-items: center;
+			}
 
-	/* The control dims itself */
-	.field:has(:global(:disabled)) > :global(:is(.label, .field-description, .field-content)) {
-		opacity: 0.5;
-	}
+			.field--responsive > :global(:is(.label, .field-content)) {
+				flex: auto;
+			}
 
-	.field:has(:global(:disabled)) :global(.label) {
-		cursor: not-allowed;
+			.field--responsive:has(> :global(.field-content)) {
+				align-items: flex-start;
+			}
+		}
+
+		/* State follows the control, so there is no invalid or disabled prop to keep in sync */
+		.field:has(:global([aria-invalid='true'])) :global(.label) {
+			color: var(--color-destructive);
+		}
+
+		.field:has(:global(:is(.checkbox, .radio, .switch))) :global(.label) {
+			cursor: pointer;
+		}
+
+		/* The control dims itself */
+		.field:has(:global(:disabled)) > :global(:is(.label, .field-description, .field-content)) {
+			opacity: 0.5;
+		}
+
+		.field:has(:global(:disabled)) :global(.label) {
+			cursor: not-allowed;
+		}
+
+		@media (forced-colors: active) {
+			.field:has(:global(:disabled)) > :global(:is(.label, .field-description, .field-content)) {
+				color: GrayText;
+				opacity: 1;
+			}
+
+			.field:has(:global([aria-invalid='true'])) :global(.label) {
+				color: Mark;
+				text-decoration: underline;
+			}
+		}
 	}
 </style>

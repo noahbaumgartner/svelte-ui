@@ -8,9 +8,16 @@
 		open?: boolean;
 		/** A `Sidebar` and a `SidebarInset`. Size them with the `--sidebar-width`, `--sidebar-width-icon` and `--sidebar-height` custom properties. */
 		children: Snippet;
+		ref?: HTMLDivElement | null;
 	};
 
-	let { open = $bindable(true), class: className, children, ...rest }: Props = $props();
+	let {
+		open = $bindable(true),
+		ref = $bindable(null),
+		class: className,
+		children,
+		...rest
+	}: Props = $props();
 
 	const id = $props.id();
 	let mobile = $state(false);
@@ -46,17 +53,19 @@
 	});
 </script>
 
-<div {...rest} class={['sidebar-provider', className]}>
+<div {...rest} bind:this={ref} class={['sidebar-provider', className]}>
 	{@render children()}
 </div>
 
 <style>
-	.sidebar-provider {
-		--sidebar-width: 256px;
-		--sidebar-width-icon: 48px;
-		--sidebar-height: 100svh;
-		display: flex;
-		width: 100%;
-		min-height: var(--sidebar-height);
+	@layer svelte-ui {
+		.sidebar-provider {
+			--sidebar-width: 256px;
+			--sidebar-width-icon: 48px;
+			--sidebar-height: 100svh;
+			display: flex;
+			width: 100%;
+			min-height: var(--sidebar-height);
+		}
 	}
 </style>
