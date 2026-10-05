@@ -9,11 +9,18 @@
 		pressed?: boolean;
 	};
 
-	let { pressed = $bindable(false), class: className, onclick, ...rest }: Props = $props();
+	let {
+		pressed = $bindable(false),
+		ref = $bindable(null),
+		class: className,
+		onclick,
+		...rest
+	}: Props = $props();
 </script>
 
 <Button
 	{...rest}
+	bind:ref
 	variant="secondary"
 	aria-pressed={pressed}
 	class={['toggle', className]}

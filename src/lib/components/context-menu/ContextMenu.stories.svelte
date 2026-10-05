@@ -3,8 +3,12 @@
 	import { expect, fn, waitFor } from 'storybook/test';
 	import ContextMenu from './ContextMenu.svelte';
 	import ContextMenuItem from './ContextMenuItem.svelte';
+	import ContextMenuSeparator from './ContextMenuSeparator.svelte';
+	import ContextMenuLabel from './ContextMenuLabel.svelte';
+	import ContextMenuInfo from './ContextMenuInfo.svelte';
 	import Button from '../button/Button.svelte';
-	import { ChevronDown, Copy, Monitor, Moon, Ellipsis, Pencil, Sun, Trash2 } from '../../icons.js';
+	import Avatar from '../avatar/Avatar.svelte';
+	import { ChevronDown, Clock, Copy, Monitor, Moon, Ellipsis, Pencil, Sun, Trash2 } from '../../icons.js';
 
 	const aligns = ['start', 'center', 'end'] as const;
 
@@ -56,6 +60,43 @@
 				<ContextMenuItem icon={Sun} selected={false}>Light</ContextMenuItem>
 				<ContextMenuItem icon={Moon} selected={true}>Dark</ContextMenuItem>
 				<ContextMenuItem icon={Monitor} selected={false}>System</ContextMenuItem>
+			</ContextMenu>
+		</div>
+	{/snippet}
+</Story>
+
+<Story name="Structure">
+	{#snippet template({ align, open })}
+		<div style={stage}>
+			<ContextMenu {align} {open}>
+				{#snippet trigger(props)}
+					<Button {...props} variant="secondary" icon={Ellipsis} label="Actions" />
+				{/snippet}
+				<ContextMenuInfo icon={Clock}>Edited 2 hours ago</ContextMenuInfo>
+				<ContextMenuSeparator />
+				<ContextMenuItem icon={Pencil}>Edit</ContextMenuItem>
+				<ContextMenuItem icon={Copy}>Duplicate</ContextMenuItem>
+				<ContextMenuSeparator />
+				<ContextMenuLabel>Danger zone</ContextMenuLabel>
+				<ContextMenuItem icon={Trash2}>Delete</ContextMenuItem>
+			</ContextMenu>
+		</div>
+	{/snippet}
+</Story>
+
+<Story name="Profile">
+	{#snippet template({ align, open })}
+		<div style={stage}>
+			<ContextMenu {align} {open}>
+				{#snippet trigger(props)}
+					<Button {...props} variant="secondary" icon={ChevronDown}>Account</Button>
+				{/snippet}
+				<ContextMenuInfo description="noah@example.com">
+					{#snippet leading()}<Avatar alt="Noah Baumgartner" fallback="NB" />{/snippet}
+					Noah Baumgartner
+				</ContextMenuInfo>
+				<ContextMenuSeparator />
+				<ContextMenuItem icon={Pencil}>Edit profile</ContextMenuItem>
 			</ContextMenu>
 		</div>
 	{/snippet}
@@ -213,6 +254,34 @@
 			{/snippet}
 			<ContextMenuItem selected={false}>Light</ContextMenuItem>
 			<ContextMenuItem selected={true}>Dark</ContextMenuItem>
+		</ContextMenu>
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: separator, label and info are skipped by keyboard"
+	tags={['!dev', '!autodocs']}
+	args={{ open: false }}
+	play={async ({ canvas, userEvent }) => {
+		await userEvent.click(canvas.getByRole('button', { name: 'Actions' }));
+		await expect(canvas.getByRole('separator')).toBeInTheDocument();
+		await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Edit' })).toHaveFocus());
+		await userEvent.keyboard('{ArrowDown}');
+		await expect(canvas.getByRole('menuitem', { name: 'Delete' })).toHaveFocus();
+		await userEvent.keyboard('{ArrowDown}');
+		await expect(canvas.getByRole('menuitem', { name: 'Edit' })).toHaveFocus();
+	}}
+>
+	{#snippet template({ align, open })}
+		<ContextMenu {align} {open}>
+			{#snippet trigger(props)}
+				<Button {...props} variant="secondary" icon={Ellipsis} label="Actions" />
+			{/snippet}
+			<ContextMenuInfo>Edited 2 hours ago</ContextMenuInfo>
+			<ContextMenuSeparator />
+			<ContextMenuItem>Edit</ContextMenuItem>
+			<ContextMenuLabel>Danger zone</ContextMenuLabel>
+			<ContextMenuItem>Delete</ContextMenuItem>
 		</ContextMenu>
 	{/snippet}
 </Story>

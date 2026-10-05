@@ -123,7 +123,7 @@
 <Story
 	name="Test: week mode selects the ISO week"
 	tags={['!dev', '!autodocs']}
-	args={{ mode: 'week', value: '' }}
+	args={{ mode: 'week', value: '2026-W37' }}
 	play={async ({ canvas, userEvent }) => {
 		onselect.mockClear();
 		await userEvent.click(canvas.getByRole('button', { name: 'Thursday, September 24, 2026' }));

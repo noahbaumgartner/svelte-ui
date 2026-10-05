@@ -159,6 +159,7 @@
 			display: flex;
 			flex-direction: column;
 			gap: 2px;
+			width: max-content;
 			min-width: 160px;
 			padding: 4px;
 			background-color: var(--color-bg);

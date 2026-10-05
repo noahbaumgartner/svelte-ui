@@ -9,7 +9,13 @@
 		label?: string;
 	};
 
-	let { label = 'Toggle sidebar', icon = PanelLeft, onclick, ...rest }: Props = $props();
+	let {
+		label = 'Toggle sidebar',
+		icon = PanelLeft,
+		ref = $bindable(null),
+		onclick,
+		...rest
+	}: Props = $props();
 
 	const sidebar = getSidebarContext();
 </script>
@@ -20,6 +26,7 @@
 	{icon}
 	{label}
 	{...rest}
+	bind:ref
 	aria-controls={sidebar.id}
 	aria-expanded={sidebar.mobile ? sidebar.openMobile : sidebar.open}
 	onclick={(event) => {
