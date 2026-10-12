@@ -54,8 +54,8 @@
 			box-sizing: border-box;
 			min-height: 256px;
 			padding: 40px;
-			color: #fff;
-			background-color: #000;
+			color: var(--color-base);
+			background-color: var(--color-ink);
 			border-radius: 10px;
 		}
 
