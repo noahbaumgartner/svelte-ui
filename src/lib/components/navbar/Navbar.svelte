@@ -180,7 +180,7 @@
 			align-items: center;
 			justify-content: space-between;
 			gap: 16px;
-			padding: 14px 16px;
+			padding: 14px var(--navbar-gutter, 16px);
 		}
 
 		.navbar-start {
@@ -217,28 +217,19 @@
 		}
 
 		.navbar-panel :global(.navigation-menu) {
-			padding: 40px 16px 32px;
+			padding: 32px var(--navbar-gutter, 16px);
 		}
 
 		.navbar-panel :global(.navigation-menu-list) {
 			gap: 0;
 		}
 
-		/* Rows are padded into the gutter so the focus background has room; the text stays aligned */
 		.navbar-panel :global(.navigation-menu-trigger) {
-			box-sizing: content-box;
 			gap: 8px;
-			margin-inline: -10px;
-			padding: 10px;
-			border-radius: 10px;
+			padding-block: 10px;
 			font-size: 22px;
 			font-weight: 600;
 			line-height: 1.2;
-		}
-
-		.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
-			outline: none;
-			background-color: var(--color-surface);
 		}
 
 		.navbar-panel :global(.navigation-menu-chevron) {
@@ -249,14 +240,21 @@
 
 		.navbar-panel :global(.navigation-menu-sub) {
 			gap: 0;
-			margin: 0 -10px;
+			margin: 0;
 			padding-bottom: 8px;
 		}
 
-		/* Sub-items show only their title */
+		/* Sub-items are plain rows that show only their title */
 		.navbar-panel :global(.navigation-menu-link) {
+			padding: 8px 0;
+			border-radius: 0;
+			background-color: transparent;
 			font-size: 17px;
 			color: var(--color-text-secondary);
+		}
+
+		.navbar-panel :global(.navigation-menu-link:focus-visible) {
+			outline-offset: 2px;
 		}
 
 		.navbar-panel :global(.navigation-menu-link-title) {
@@ -264,7 +262,6 @@
 		}
 
 		.navbar-panel :global(.navigation-menu-link--active) {
-			background-color: transparent;
 			color: var(--color-text);
 		}
 
@@ -291,10 +288,6 @@
 			.navbar {
 				-webkit-backdrop-filter: none;
 				backdrop-filter: none;
-			}
-
-			.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
-				outline: 2px solid Highlight;
 			}
 
 			.navbar-panel :global(.navigation-menu-link--active) {
