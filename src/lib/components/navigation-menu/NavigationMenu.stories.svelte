@@ -4,7 +4,7 @@
 	import NavigationMenu from './NavigationMenu.svelte';
 	import NavigationMenuItem from './NavigationMenuItem.svelte';
 	import NavigationMenuLink from './NavigationMenuLink.svelte';
-	import { BookOpen, Box, Palette, Rocket } from '../../icons.js';
+	import { BookOpen, Box, Palette, Rocket } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/NavigationMenu',

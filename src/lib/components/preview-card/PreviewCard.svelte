@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAnchorAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 
 	type Props = Omit<HTMLAnchorAttributes, 'children' | 'title' | 'href' | 'media'> & {
 		/** Makes the whole card a link. */
@@ -11,8 +11,8 @@
 		description?: string;
 		/** Muted text below, e.g. a date. */
 		meta?: string;
-		/** Any Lucide icon (import from `svelte-ui/icons`), shown in the top-left corner of the media. */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`, shown in the top-left corner of the media. */
+		icon?: IconComponent;
 		orientation?: 'vertical' | 'horizontal';
 		/** Square media that fills the frame, e.g. a MeshGradient or an `<img>`. */
 		media: Snippet;
@@ -67,7 +67,7 @@
 			gap: 20px;
 			color: var(--color-text);
 			text-decoration: none;
-			border-radius: 14px;
+			border-radius: 10px;
 			outline: none;
 		}
 
@@ -89,7 +89,7 @@
 			flex-shrink: 0;
 			aspect-ratio: 1;
 			overflow: hidden;
-			border-radius: 14px;
+			border-radius: 10px;
 		}
 
 		.preview-card--horizontal .preview-card-media {
@@ -122,7 +122,7 @@
 			height: 40px;
 			color: var(--color-base);
 			background-color: var(--color-ink);
-			border-radius: 14px 0 0 0;
+			border-radius: 10px 0 0 0;
 		}
 
 		.preview-card-icon :global(svg) {

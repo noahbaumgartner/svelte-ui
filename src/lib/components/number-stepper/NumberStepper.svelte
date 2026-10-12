@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { Minus, Plus } from '@lucide/svelte';
+	import Minus from '../../internal/icons/Minus.svelte';
+	import Plus from '../../internal/icons/Plus.svelte';
 	import Button from '../button/Button.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'onchange'> & {
@@ -51,7 +52,7 @@
 	class={['number-stepper', `number-stepper--${size}`, className]}
 >
 	<Button
-		variant="outline"
+		variant="secondary"
 		{size}
 		icon={Minus}
 		label="{decreaseLabel} {label}"
@@ -60,7 +61,7 @@
 	/>
 	<output class="number-stepper-value" aria-live="polite">{value}</output>
 	<Button
-		variant="outline"
+		variant="secondary"
 		{size}
 		icon={Plus}
 		label="{increaseLabel} {label}"

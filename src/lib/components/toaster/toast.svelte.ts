@@ -1,4 +1,4 @@
-import type { LucideIcon } from '@lucide/svelte';
+import type { IconComponent } from '../../icon.js';
 
 export type ToastAction = {
 	label: string;
@@ -8,8 +8,8 @@ export type ToastAction = {
 export type ToastOptions = {
 	/** Updates the toast with this id instead of adding a new one. */
 	id?: number;
-	/** Any Lucide icon (import from `svelte-ui/icons`), shown on the left. */
-	icon?: LucideIcon;
+	/** Any icon component, e.g. from `@lucide/svelte`, shown on the left. */
+	icon?: IconComponent;
 	/** Shows a Spinner instead of the icon and keeps the toast open until it is updated. */
 	loading?: boolean;
 	/** Button on the right; clicking it runs `onclick` and dismisses the toast. */

@@ -8,7 +8,7 @@
 	import FieldGroup from '../field/FieldGroup.svelte';
 	import Label from '../label/Label.svelte';
 	import Input from '../input/Input.svelte';
-	import { Pencil } from '../../icons.js';
+	import { Pencil } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Dialog',

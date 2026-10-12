@@ -6,19 +6,10 @@
 		colors: string[];
 		/** Same seed gives the same layout; defaults to the joined colours. */
 		seed?: string;
-		/** Film grain overlay. */
-		grain?: boolean;
 		ref?: HTMLDivElement | null;
 	};
 
-	let {
-		colors,
-		seed = '',
-		grain = true,
-		class: className,
-		ref = $bindable(null),
-		...rest
-	}: Props = $props();
+	let { colors, seed = '', class: className, ref = $bindable(null), ...rest }: Props = $props();
 
 	function hashSeed(str: string) {
 		let h = 0;
@@ -53,7 +44,7 @@
 <div
 	{...rest}
 	bind:this={ref}
-	class={['mesh-gradient', grain && 'mesh-gradient--grain', className]}
+	class={['mesh-gradient', className]}
 	style:background-color={colors[0]}
 	aria-hidden="true"
 >
@@ -72,8 +63,11 @@
 
 <style>
 	@layer svelte-ui {
+		/* Fills whatever it is placed in; size, shape and radius come from the container. */
 		.mesh-gradient {
 			position: relative;
+			width: 100%;
+			height: 100%;
 			overflow: hidden;
 		}
 
@@ -83,7 +77,7 @@
 			transform: translate(-50%, -50%);
 		}
 
-		.mesh-gradient--grain::after {
+		.mesh-gradient::after {
 			content: '';
 			position: absolute;
 			inset: 0;

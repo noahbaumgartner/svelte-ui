@@ -10,7 +10,7 @@
 	import CardTitle from './CardTitle.svelte';
 	import Badge from '../badge/Badge.svelte';
 	import Button from '../button/Button.svelte';
-	import { ChevronRight } from '../../icons.js';
+	import { ChevronRight } from '@lucide/svelte';
 
 	const variants = ['outline', 'secondary'] as const;
 

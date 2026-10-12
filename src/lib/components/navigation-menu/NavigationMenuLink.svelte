@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 	import { getNavigationMenuContext } from './context.js';
 
 	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {
 		href: string;
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		/** Short text below the title, clamped to two lines. */
 		description?: string;
 		/** Marks the link as the current page. */

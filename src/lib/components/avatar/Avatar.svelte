@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { User } from '@lucide/svelte';
+	import User from '../../internal/icons/User.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & {
 		/** The root element. Bindable. */

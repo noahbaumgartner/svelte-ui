@@ -1,11 +1,11 @@
 <script lang="ts" module>
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 
 	export type TabsOption<T extends string = string> = {
 		value: T;
 		label: string;
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		/** Turns the tabs into navigation links; give it to every option. */
 		href?: string;
 		disabled?: boolean;

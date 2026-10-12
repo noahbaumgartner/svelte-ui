@@ -5,7 +5,7 @@
 	import InputGroupAddon from './InputGroupAddon.svelte';
 	import Button from '../button/Button.svelte';
 	import Input from '../input/Input.svelte';
-	import { Copy, Info, Mail, Search } from '../../icons.js';
+	import { Copy, Info, Mail, Search } from '@lucide/svelte';
 
 	const aligns = ['inline-start', 'inline-end', 'block-start', 'block-end'] as const;
 	const oncopy = fn();

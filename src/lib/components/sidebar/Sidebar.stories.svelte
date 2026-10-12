@@ -32,7 +32,7 @@
 		Share,
 		Trash,
 		Users
-	} from '../../icons.js';
+	} from '@lucide/svelte';
 
 	const sides = ['left', 'right'] as const;
 	const variants = ['sidebar', 'floating'] as const;

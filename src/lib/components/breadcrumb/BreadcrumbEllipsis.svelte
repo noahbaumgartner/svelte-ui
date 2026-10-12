@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLLiAttributes } from 'svelte/elements';
-	import Ellipsis from '@lucide/svelte/icons/ellipsis';
+	import Ellipsis from '../../internal/icons/Ellipsis.svelte';
 	import Button from '../button/Button.svelte';
 	import ContextMenu from '../context-menu/ContextMenu.svelte';
 	import BreadcrumbSeparator from './BreadcrumbSeparator.svelte';

@@ -4,7 +4,7 @@
 	import Kbd from './Kbd.svelte';
 	import KbdGroup from './KbdGroup.svelte';
 	import Button from '../button/Button.svelte';
-	import { ArrowDown, ArrowUp, CornerDownLeft } from '../../icons.js';
+	import { ArrowDown, ArrowUp, CornerDownLeft } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Kbd',
@@ -64,7 +64,7 @@
 		<div style={row}>
 			<Button>Save <Kbd>⌘S</Kbd></Button>
 			<Button variant="secondary">Accept <Kbd><CornerDownLeft aria-hidden="true" /></Kbd></Button>
-			<Button variant="outline">Cancel <Kbd>Esc</Kbd></Button>
+			<Button variant="secondary">Cancel <Kbd>Esc</Kbd></Button>
 		</div>
 	{/snippet}
 </Story>

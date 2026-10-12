@@ -8,13 +8,11 @@
 		component: MeshGradient,
 		tags: ['autodocs'],
 		argTypes: {
-			seed: { control: 'text' },
-			grain: { control: 'boolean' }
+			seed: { control: 'text' }
 		},
 		args: {
 			colors: ['#d4d4d4', '#1a1a1a', '#bdbdbd'],
-			seed: 'Portfolio',
-			grain: true
+			seed: 'Portfolio'
 		}
 	});
 
@@ -24,12 +22,13 @@
 		['#bae6fd', '#0ea5e9', '#1e3a8a', '#e0f2fe']
 	];
 	const row = 'display: flex; flex-wrap: wrap; gap: 16px;';
-	const tile = 'width: 200px; height: 200px; border-radius: 14px;';
+	/* MeshGradient fills its container and has no radius of its own. */
+	const frame = 'width: 200px; height: 200px;';
 </script>
 
 <Story name="Default" tags={['!dev']}>
 	{#snippet template(args)}
-		<MeshGradient {...args} style={tile} />
+		<div style={frame}><MeshGradient {...args} /></div>
 	{/snippet}
 </Story>
 
@@ -37,7 +36,7 @@
 	{#snippet template(args)}
 		<div style={row}>
 			{#each palettes as colors (colors.join())}
-				<MeshGradient {...args} {colors} style={tile} />
+				<div style={frame}><MeshGradient {...args} {colors} /></div>
 			{/each}
 		</div>
 	{/snippet}
@@ -47,17 +46,8 @@
 	{#snippet template(args)}
 		<div style={row}>
 			{#each ['Portfolio', 'Blog', 'Photos'] as seed (seed)}
-				<MeshGradient {...args} {seed} style={tile} />
+				<div style={frame}><MeshGradient {...args} {seed} /></div>
 			{/each}
-		</div>
-	{/snippet}
-</Story>
-
-<Story name="Grain" parameters={{ controls: { exclude: ['grain'] } }}>
-	{#snippet template(args)}
-		<div style={row}>
-			<MeshGradient {...args} style={tile} />
-			<MeshGradient {...args} grain={false} style={tile} />
 		</div>
 	{/snippet}
 </Story>
@@ -70,6 +60,6 @@
 	}}
 >
 	{#snippet template(args)}
-		<MeshGradient {...args} style={tile} />
+		<div style={frame}><MeshGradient {...args} /></div>
 	{/snippet}
 </Story>

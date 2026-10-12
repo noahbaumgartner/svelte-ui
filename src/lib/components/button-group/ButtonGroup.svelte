@@ -58,21 +58,6 @@
 			width: 100%;
 		}
 
-		/* Outline buttons share their borders instead of sitting 1px apart */
-		.button-group:has(> :global(.button--outline), > :global(* > .button--outline)) {
-			gap: 0;
-		}
-
-		.button-group--horizontal > :global(.button--outline:not(:first-child)),
-		.button-group--horizontal > :global(:not(:first-child):has(> .button--outline)) {
-			margin-inline-start: -1px;
-		}
-
-		.button-group--vertical > :global(.button--outline:not(:first-child)),
-		.button-group--vertical > :global(:not(:first-child):has(> .button--outline)) {
-			margin-block-start: -1px;
-		}
-
 		/* Square the inner corners; `* > .button` reaches a ContextMenu's trigger */
 		.button-group--horizontal > :global(:not(:first-child)),
 		.button-group--horizontal > :global(:not(:first-child) > .button) {

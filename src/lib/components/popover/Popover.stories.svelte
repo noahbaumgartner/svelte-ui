@@ -9,7 +9,7 @@
 	import Input from '../input/Input.svelte';
 	import Label from '../label/Label.svelte';
 	import Link from '../link/Link.svelte';
-	import { Settings2 } from '../../icons.js';
+	import { Settings2 } from '@lucide/svelte';
 
 	const sides = ['top', 'right', 'bottom', 'left'] as const;
 	const aligns = ['start', 'center', 'end'] as const;
@@ -108,7 +108,7 @@
 			{#each sides as side (side)}
 				<Popover {...args} {side} title="On {side}" description={undefined}>
 					{#snippet trigger(props)}
-						<Button {...props} variant="outline">{side}</Button>
+						<Button {...props} variant="secondary">{side}</Button>
 					{/snippet}
 				</Popover>
 			{/each}
@@ -122,7 +122,7 @@
 			{#each aligns as align (align)}
 				<Popover {...args} {align} title="Aligned {align}" description={undefined}>
 					{#snippet trigger(props)}
-						<Button {...props} variant="outline">{align}</Button>
+						<Button {...props} variant="secondary">{align}</Button>
 					{/snippet}
 				</Popover>
 			{/each}

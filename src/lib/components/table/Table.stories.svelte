@@ -4,7 +4,7 @@
 	import Table, { type TableColumn } from './Table.svelte';
 	import Badge from '../badge/Badge.svelte';
 	import Button from '../button/Button.svelte';
-	import { Ellipsis } from '../../icons.js';
+	import { Ellipsis } from '@lucide/svelte';
 
 	type Invoice = {
 		id: string;

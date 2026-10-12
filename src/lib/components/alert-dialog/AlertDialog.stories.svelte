@@ -3,7 +3,7 @@
 	import { expect, fn, waitFor } from 'storybook/test';
 	import AlertDialog from './AlertDialog.svelte';
 	import Button from '../button/Button.svelte';
-	import { Trash } from '../../icons.js';
+	import { Trash } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/AlertDialog',

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import { Check, Minus } from '@lucide/svelte';
+	import Check from '../../internal/icons/Check.svelte';
+	import Minus from '../../internal/icons/Minus.svelte';
 
 	type Props = Omit<HTMLInputAttributes, 'type'> & {
 		/** The input element. Bindable. */

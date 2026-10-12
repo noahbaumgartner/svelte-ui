@@ -51,7 +51,7 @@
 			padding: 24px;
 			color: var(--color-text);
 			border: 1px solid var(--color-border-strong);
-			border-radius: 14px;
+			border-radius: 10px;
 		}
 
 		.entry-heading {

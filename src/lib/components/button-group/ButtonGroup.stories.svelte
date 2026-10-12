@@ -15,10 +15,10 @@
 		Copy,
 		Pencil,
 		Trash
-	} from '../../icons.js';
+	} from '@lucide/svelte';
 
 	const orientations = ['horizontal', 'vertical'] as const;
-	const variants = ['secondary', 'outline', 'primary'] as const;
+	const variants = ['secondary', 'primary'] as const;
 
 	const { Story } = defineMeta({
 		title: 'Components/ButtonGroup',

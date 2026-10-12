@@ -2,7 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import { expect, fn } from 'storybook/test';
 	import Toggle from './Toggle.svelte';
-	import { Bold, Italic, Underline } from '../../icons.js';
+	import { Bold, Italic, Underline } from '@lucide/svelte';
 
 	const sizes = ['sm', 'md', 'lg'] as const;
 

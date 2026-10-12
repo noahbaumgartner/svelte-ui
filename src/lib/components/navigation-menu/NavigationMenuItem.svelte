@@ -4,7 +4,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import { scale, slide } from 'svelte/transition';
-	import ChevronDown from '@lucide/svelte/icons/chevron-down';
+	import ChevronDown from '../../internal/icons/ChevronDown.svelte';
 	import { getNavigationMenuContext } from './context.js';
 
 	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children'> & {

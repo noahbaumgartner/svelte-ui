@@ -35,7 +35,9 @@
 
 <script lang="ts" generics="T">
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { ArrowDown, ArrowUp, ChevronsUpDown } from '@lucide/svelte';
+	import ArrowDown from '../../internal/icons/ArrowDown.svelte';
+	import ArrowUp from '../../internal/icons/ArrowUp.svelte';
+	import ChevronsUpDown from '../../internal/icons/ChevronsUpDown.svelte';
 	import Checkbox from '../checkbox/Checkbox.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLTableElement>, 'children'> & {

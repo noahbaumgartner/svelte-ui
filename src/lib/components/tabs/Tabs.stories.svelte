@@ -2,7 +2,7 @@
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import { expect, fn } from 'storybook/test';
 	import Tabs from './Tabs.svelte';
-	import { Bell, Settings, User } from '../../icons.js';
+	import { Bell, Settings, User } from '@lucide/svelte';
 
 	const sizes = ['sm', 'md'] as const;
 

@@ -6,7 +6,7 @@
 	import Field from '../field/Field.svelte';
 	import Label from '../label/Label.svelte';
 	import Input from '../input/Input.svelte';
-	import { Send, UserPlus } from '../../icons.js';
+	import { Send, UserPlus } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Drawer',
@@ -51,7 +51,7 @@
 				</div>
 			{/each}
 			{#snippet actions(close)}
-				<Button variant="outline" onclick={close}>Cancel</Button>
+				<Button variant="secondary" onclick={close}>Cancel</Button>
 				<Button icon={Send} onclick={close}>Send invite</Button>
 			{/snippet}
 		</Drawer>
@@ -116,7 +116,7 @@
 					<Button {...props} variant="secondary">Two actions</Button>
 				{/snippet}
 				{#snippet actions(close)}
-					<Button variant="outline" onclick={close}>Cancel</Button>
+					<Button variant="secondary" onclick={close}>Cancel</Button>
 					<Button icon={Send} onclick={close}>Send invite</Button>
 				{/snippet}
 			</Drawer>

@@ -39,11 +39,6 @@
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
 		},
-		"./icons": {
-			"types": "./dist/icons.d.ts",
-			"svelte": "./dist/icons.js",
-			"default": "./dist/icons.js"
-		},
 		"./tokens.css": "./dist/styles/tokens.css"
 	},
 	"peerDependencies": {
@@ -51,6 +46,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@lucide/svelte": "^1.47.0",
 		"@storybook/addon-a11y": "^10.6.0",
 		"@storybook/addon-docs": "^10.6.0",
 		"@storybook/addon-svelte-csf": "latest",
@@ -83,8 +79,5 @@
 	},
 	"keywords": [
 		"svelte"
-	],
-	"dependencies": {
-		"@lucide/svelte": "^1.47.0"
-	}
+	]
 }

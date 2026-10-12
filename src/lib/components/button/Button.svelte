@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 	import Spinner from '../spinner/Spinner.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
@@ -16,10 +16,10 @@
 		/** Replaces the icon with a Spinner and blocks clicks. */
 		loading?: boolean;
 		/** `overlay` is a translucent, blurred, fully rounded button for use on top of images or media. */
-		variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'overlay';
+		variant?: 'primary' | 'secondary' | 'ghost' | 'overlay';
 		size?: 'sm' | 'md' | 'lg';
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		/** Accessible name. Required when the button has no label (icon-only). */
 		label?: string;
 		/** Replaces the icon, e.g. for a custom SVG or an Avatar. */
@@ -222,16 +222,6 @@
 
 		.button--secondary:hover:not(:disabled) {
 			background-color: var(--color-surface-hover);
-		}
-
-		.button--outline {
-			border: 1px solid var(--color-border-strong);
-			background-color: transparent;
-			color: var(--color-text);
-		}
-
-		.button--outline:hover:not(:disabled) {
-			background-color: var(--color-surface);
 		}
 
 		.button--ghost {

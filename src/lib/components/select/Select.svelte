@@ -11,7 +11,8 @@
 	import { scale } from 'svelte/transition';
 	import type { Attachment } from 'svelte/attachments';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
-	import { Check, ChevronsUpDown } from '@lucide/svelte';
+	import Check from '../../internal/icons/Check.svelte';
+	import ChevronsUpDown from '../../internal/icons/ChevronsUpDown.svelte';
 
 	type Props = Omit<
 		HTMLButtonAttributes,

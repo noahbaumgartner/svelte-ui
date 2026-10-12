@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLLiAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 	import BreadcrumbSeparator from './BreadcrumbSeparator.svelte';
 
 	type Props = Omit<HTMLLiAttributes, 'children'> & {
@@ -9,8 +9,8 @@
 		ref?: HTMLLIElement | null;
 		/** Links the item. Without it, the item is the current page. */
 		href?: string;
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		children: Snippet;
 	};
 

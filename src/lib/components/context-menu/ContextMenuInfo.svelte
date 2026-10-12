@@ -1,13 +1,13 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 
 	type Props = Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'role'> & {
 		/** The info row element. Bindable. */
 		ref?: HTMLDivElement | null;
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		/** Second, smaller line below the main text, e.g. an email address. */
 		description?: string;
 		/** Replaces the icon with custom content, e.g. an `Avatar`. */

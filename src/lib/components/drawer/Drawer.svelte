@@ -8,7 +8,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLDialogAttributes } from 'svelte/elements';
-	import { X } from '@lucide/svelte';
+	import X from '../../internal/icons/X.svelte';
 
 	type Props = Omit<
 		HTMLDialogAttributes,

@@ -6,7 +6,7 @@
 	import ButtonGroup from '../button-group/ButtonGroup.svelte';
 	import Kbd from '../kbd/Kbd.svelte';
 	import KbdGroup from '../kbd/KbdGroup.svelte';
-	import { Bold, Italic, Plus, Save, Underline } from '../../icons.js';
+	import { Bold, Italic, Plus, Save, Underline } from '@lucide/svelte';
 
 	const sides = ['top', 'right', 'bottom', 'left'] as const;
 
@@ -40,7 +40,7 @@
 		<div style={stage}>
 			<Tooltip {side} {open} {delay}>
 				{#snippet trigger(props)}
-					<Button {...props} variant="outline">Hover</Button>
+					<Button {...props} variant="secondary">Hover</Button>
 				{/snippet}
 				Add to library
 			</Tooltip>
@@ -71,7 +71,7 @@
 			{#each sides as side (side)}
 				<Tooltip {side} {open} {delay}>
 					{#snippet trigger(props)}
-						<Button {...props} variant="outline">{side}</Button>
+						<Button {...props} variant="secondary">{side}</Button>
 					{/snippet}
 					Tooltip on {side}
 				</Tooltip>
@@ -86,7 +86,7 @@
 			{#each [0, 300, 700] as delay (delay)}
 				<Tooltip {side} {open} {delay}>
 					{#snippet trigger(props)}
-						<Button {...props} variant="outline">{delay} ms</Button>
+						<Button {...props} variant="secondary">{delay} ms</Button>
 					{/snippet}
 					Shown after {delay} ms
 				</Tooltip>

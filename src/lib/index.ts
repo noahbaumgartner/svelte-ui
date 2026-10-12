@@ -1,3 +1,4 @@
+export type { IconComponent } from './icon.js';
 export { default as Accordion } from './components/accordion/Accordion.svelte';
 export { default as AccordionItem } from './components/accordion/AccordionItem.svelte';
 export { default as AlertDialog } from './components/alert-dialog/AlertDialog.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ComponentProps } from 'svelte';
-	import PanelLeft from '@lucide/svelte/icons/panel-left';
+	import PanelLeft from '../../internal/icons/PanelLeft.svelte';
 	import Button from '../button/Button.svelte';
 	import { getSidebarContext } from './context.js';
 

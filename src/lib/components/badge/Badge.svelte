@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
+	import type { IconComponent } from '../../icon.js';
 
 	type Props = Omit<HTMLAttributes<HTMLSpanElement>, 'children'> & {
 		/** The root element. Bindable. */
 		ref?: HTMLSpanElement | null;
 		variant?: 'primary' | 'secondary';
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		children: Snippet;
 	};
 

@@ -25,7 +25,7 @@ Then use the components:
 ```svelte
 <script lang="ts">
 	import { Button, Card, CardHeader, CardTitle, CardContent } from '@noahbaumgartner/svelte-ui';
-	import { Plus } from '@noahbaumgartner/svelte-ui/icons';
+	import { Plus } from '@lucide/svelte';
 </script>
 
 <Card>
@@ -40,7 +40,18 @@ Then use the components:
 
 ### Icons
 
-[Lucide](https://lucide.dev) icons are re-exported from `@noahbaumgartner/svelte-ui/icons`, so you don't need a separate `@lucide/svelte` install. They live on their own entry point because some icon names (`Link`, `Image`, …) collide with component names.
+The library ships no icons and works with any icon library. Every `icon` prop takes a Svelte component, so use [Lucide](https://lucide.dev), [Phosphor](https://phosphoricons.com), your own SVG components or anything else:
+
+```svelte
+<script>
+	import { Button } from '@noahbaumgartner/svelte-ui';
+	import Plus from '@lucide/svelte/icons/plus';
+</script>
+
+<Button icon={Plus}>New project</Button>
+```
+
+An icon component receives `class` and `aria-hidden` and is sized with CSS, so it should render a single `<svg>` that fills its box. The `IconComponent` type describes what the props accept.
 
 ### Theming
 

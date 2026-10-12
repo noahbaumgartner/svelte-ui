@@ -2,17 +2,17 @@
 	import type { Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { slide } from 'svelte/transition';
-	import type { LucideIcon } from '@lucide/svelte';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import Ellipsis from '@lucide/svelte/icons/ellipsis';
+	import type { IconComponent } from '../../icon.js';
+	import ChevronRight from '../../internal/icons/ChevronRight.svelte';
+	import Ellipsis from '../../internal/icons/Ellipsis.svelte';
 	import Button from '../button/Button.svelte';
 	import ContextMenu from '../context-menu/ContextMenu.svelte';
 
 	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children' | 'onclick'> & {
 		/** Links the item. Ignored when the item has `items`. */
 		href?: string;
-		/** Any Lucide icon (import from `svelte-ui/icons`). Stays visible when the sidebar is collapsed to icons. */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. Stays visible when the sidebar is collapsed to icons. */
+		icon?: IconComponent;
 		/** Marks the item as the current page. */
 		active?: boolean;
 		/** Short count or status at the end of the item, e.g. unread messages. */

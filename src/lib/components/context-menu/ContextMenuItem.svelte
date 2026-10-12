@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes } from 'svelte/elements';
-	import type { LucideIcon } from '@lucide/svelte';
-	import Check from '@lucide/svelte/icons/check';
+	import type { IconComponent } from '../../icon.js';
+	import Check from '../../internal/icons/Check.svelte';
 	import { getMenuContext } from './context.js';
 
 	type Props = Omit<HTMLButtonAttributes, 'children' | 'onclick' | 'role' | 'type'> & {
 		/** The button element. Bindable. */
 		ref?: HTMLButtonElement | null;
-		/** Any Lucide icon (import from `svelte-ui/icons`). */
-		icon?: LucideIcon;
+		/** Any icon component, e.g. from `@lucide/svelte`. */
+		icon?: IconComponent;
 		/** Makes the item a radio option; `true` marks it as the current choice. */
 		selected?: boolean;
 		disabled?: boolean;

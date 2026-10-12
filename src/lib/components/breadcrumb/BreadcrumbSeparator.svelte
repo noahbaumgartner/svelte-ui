@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLLiAttributes } from 'svelte/elements';
-	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+	import ChevronRight from '../../internal/icons/ChevronRight.svelte';
 
 	type Props = Omit<HTMLLiAttributes, 'children'> & {
 		/** The li element. Bindable. */

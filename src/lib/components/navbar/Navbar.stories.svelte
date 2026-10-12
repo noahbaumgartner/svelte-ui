@@ -5,7 +5,7 @@
 	import Button from '../button/Button.svelte';
 	import NavigationMenuItem from '../navigation-menu/NavigationMenuItem.svelte';
 	import NavigationMenuLink from '../navigation-menu/NavigationMenuLink.svelte';
-	import { BookOpen, Menu, Palette, Rocket, Sun, X } from '../../icons.js';
+	import { BookOpen, Menu, Palette, Rocket, Sun, X } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Navbar',

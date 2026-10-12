@@ -5,7 +5,7 @@
 	import BreadcrumbItem from './BreadcrumbItem.svelte';
 	import BreadcrumbEllipsis from './BreadcrumbEllipsis.svelte';
 	import ContextMenuItem from '../context-menu/ContextMenuItem.svelte';
-	import { House } from '../../icons.js';
+	import { House } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Breadcrumb',

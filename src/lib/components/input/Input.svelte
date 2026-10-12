@@ -30,7 +30,10 @@
 	import { scale } from 'svelte/transition';
 	import { prefersReducedMotion } from 'svelte/motion';
 	import type { HTMLInputAttributes } from 'svelte/elements';
-	import { Calendar as CalendarIcon, ChevronDown, ChevronUp, Clock } from '@lucide/svelte';
+	import CalendarIcon from '../../internal/icons/Calendar.svelte';
+	import ChevronDown from '../../internal/icons/ChevronDown.svelte';
+	import ChevronUp from '../../internal/icons/ChevronUp.svelte';
+	import Clock from '../../internal/icons/Clock.svelte';
 	import Calendar from '../calendar/Calendar.svelte';
 	import ColorPicker from '../color-picker/ColorPicker.svelte';
 	import TimePicker from '../time-picker/TimePicker.svelte';

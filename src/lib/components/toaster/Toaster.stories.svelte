@@ -4,7 +4,7 @@
 	import Toaster from './Toaster.svelte';
 	import Button from '../button/Button.svelte';
 	import { toast } from './toast.svelte.js';
-	import { Check, CircleAlert, Trash } from '../../icons.js';
+	import { Check, CircleAlert, Trash } from '@lucide/svelte';
 
 	const { Story } = defineMeta({
 		title: 'Components/Toaster',

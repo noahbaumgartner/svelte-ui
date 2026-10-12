@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { tick, type Snippet } from 'svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { ChevronLeft, ChevronRight } from '@lucide/svelte';
+	import ChevronLeft from '../../internal/icons/ChevronLeft.svelte';
+	import ChevronRight from '../../internal/icons/ChevronRight.svelte';
 	import Button from '../button/Button.svelte';
 	import {
 		addDays,

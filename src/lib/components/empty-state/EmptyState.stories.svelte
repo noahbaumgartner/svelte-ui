@@ -3,7 +3,7 @@
 	import { expect } from 'storybook/test';
 	import EmptyState from './EmptyState.svelte';
 	import Button from '../button/Button.svelte';
-	import { FolderOpen, Plus } from '../../icons.js';
+	import { FolderOpen, Plus } from '@lucide/svelte';
 
 	const variants = ['secondary', 'outline'] as const;
 
@@ -56,7 +56,7 @@
 			<EmptyState {...args} description={undefined} />
 			<EmptyState {...args} />
 			<EmptyState {...args}>
-				<Button variant="outline">Import</Button>
+				<Button variant="secondary">Import</Button>
 				<Button icon={Plus}>New project</Button>
 			</EmptyState>
 		</div>

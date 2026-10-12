@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { HTMLDetailsAttributes } from 'svelte/elements';
-	import { ChevronDown } from '@lucide/svelte';
+	import ChevronDown from '../../internal/icons/ChevronDown.svelte';
 	import { getAccordionContext } from './context.js';
 
 	type Props = Omit<HTMLDetailsAttributes, 'children' | 'title' | 'name'> & {

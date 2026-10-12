@@ -1,7 +1,7 @@
 <script module lang="ts">
 	import { defineMeta } from '@storybook/addon-svelte-csf';
 	import Badge from './Badge.svelte';
-	import { Tag } from '../../icons.js';
+	import { Tag } from '@lucide/svelte';
 
 	const variants = ['primary', 'secondary'] as const;
 
