@@ -116,7 +116,7 @@
 	});
 </script>
 
-<header {...rest} bind:this={ref} class={['navbar', className]} bind:offsetHeight={height}>
+<header {...rest} bind:this={ref} class={['navbar', open && 'navbar--open', className]} bind:offsetHeight={height}>
 	<div class="navbar-bar">
 		<div class="navbar-start">
 			{#if logo}{@render logo()}{/if}
@@ -158,6 +158,13 @@
 			-webkit-backdrop-filter: blur(12px);
 			backdrop-filter: blur(12px);
 			user-select: none;
+		}
+
+		/* An open menu is opaque, so no page content shows through the bar */
+		.navbar--open {
+			background-color: var(--color-bg);
+			-webkit-backdrop-filter: none;
+			backdrop-filter: none;
 		}
 
 		/* Without a blurred backdrop, translucent text-on-content would be hard to read */
@@ -217,7 +224,7 @@
 		}
 
 		.navbar-panel :global(.navigation-menu) {
-			padding: 32px var(--navbar-gutter, 16px);
+			padding: 72px var(--navbar-gutter, 16px) 32px;
 		}
 
 		.navbar-panel :global(.navigation-menu-list) {
