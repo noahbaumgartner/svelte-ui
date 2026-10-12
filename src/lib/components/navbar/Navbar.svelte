@@ -116,7 +116,12 @@
 	});
 </script>
 
-<header {...rest} bind:this={ref} class={['navbar', open && 'navbar--open', className]} bind:offsetHeight={height}>
+<header
+	{...rest}
+	bind:this={ref}
+	class={['navbar', open && 'navbar--open', className]}
+	bind:offsetHeight={height}
+>
 	<div class="navbar-bar">
 		<div class="navbar-start">
 			{#if logo}{@render logo()}{/if}
