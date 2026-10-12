@@ -78,6 +78,7 @@
 
 		.preview-card--vertical {
 			flex-direction: column;
+			max-width: 380px;
 		}
 
 		.preview-card--horizontal {

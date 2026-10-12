@@ -39,6 +39,7 @@ export { default as FieldSeparator } from './components/field/FieldSeparator.sve
 export { default as FieldSet } from './components/field/FieldSet.svelte';
 export { default as Footer } from './components/footer/Footer.svelte';
 export { default as FooterColumn } from './components/footer/FooterColumn.svelte';
+export { default as Image } from './components/image/Image.svelte';
 export { default as Input } from './components/input/Input.svelte';
 export { default as Kbd } from './components/kbd/Kbd.svelte';
 export { default as KbdGroup } from './components/kbd/KbdGroup.svelte';
@@ -57,6 +58,7 @@ export { default as PreviewCard } from './components/preview-card/PreviewCard.sv
 export { default as Progress } from './components/progress/Progress.svelte';
 export { default as RadioGroup } from './components/radio-group/RadioGroup.svelte';
 export { default as RadioGroupItem } from './components/radio-group/RadioGroupItem.svelte';
+export { default as Section } from './components/section/Section.svelte';
 export { default as Select, type SelectOption } from './components/select/Select.svelte';
 export { default as Separator } from './components/separator/Separator.svelte';
 export { default as Sidebar } from './components/sidebar/Sidebar.svelte';

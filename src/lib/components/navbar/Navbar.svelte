@@ -154,8 +154,25 @@
 			position: sticky;
 			top: 0;
 			z-index: 50;
-			background-color: var(--color-bg);
+			background-color: color-mix(in srgb, var(--color-bg) 80%, transparent);
+			-webkit-backdrop-filter: blur(12px);
+			backdrop-filter: blur(12px);
 			user-select: none;
+		}
+
+		/* Without a blurred backdrop, translucent text-on-content would be hard to read */
+		@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+			.navbar {
+				background-color: var(--color-bg);
+			}
+		}
+
+		@media (prefers-reduced-transparency: reduce) {
+			.navbar {
+				background-color: var(--color-bg);
+				-webkit-backdrop-filter: none;
+				backdrop-filter: none;
+			}
 		}
 
 		.navbar-bar {
@@ -271,6 +288,11 @@
 		}
 
 		@media (forced-colors: active) {
+			.navbar {
+				-webkit-backdrop-filter: none;
+				backdrop-filter: none;
+			}
+
 			.navbar-panel :global(:is(.navigation-menu-trigger, .navigation-menu-link):focus-visible) {
 				outline: 2px solid Highlight;
 			}
