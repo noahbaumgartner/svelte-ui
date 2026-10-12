@@ -9,12 +9,7 @@
 	let { ref = $bindable(null), class: className, ...rest }: Props = $props();
 </script>
 
-<div
-	{...rest}
-	bind:this={ref}
-	role="separator"
-	class={['context-menu-separator', className]}
-></div>
+<div {...rest} bind:this={ref} role="separator" class={['context-menu-separator', className]}></div>
 
 <style>
 	@layer svelte-ui {

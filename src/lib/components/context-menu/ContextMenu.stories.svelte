@@ -8,7 +8,17 @@
 	import ContextMenuInfo from './ContextMenuInfo.svelte';
 	import Button from '../button/Button.svelte';
 	import Avatar from '../avatar/Avatar.svelte';
-	import { ChevronDown, Clock, Copy, Monitor, Moon, Ellipsis, Pencil, Sun, Trash2 } from '@lucide/svelte';
+	import {
+		ChevronDown,
+		Clock,
+		Copy,
+		Monitor,
+		Moon,
+		Ellipsis,
+		Pencil,
+		Sun,
+		Trash2
+	} from '@lucide/svelte';
 
 	const aligns = ['start', 'center', 'end'] as const;
 
