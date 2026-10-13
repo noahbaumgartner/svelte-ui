@@ -246,16 +246,6 @@
 			background-color: color-mix(in srgb, var(--color-surface) 75%, transparent);
 		}
 
-		@media (pointer: coarse) {
-			.button {
-				min-height: 44px;
-			}
-
-			.button--icon-only {
-				min-width: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.button {
 				border: 1px solid ButtonText;
