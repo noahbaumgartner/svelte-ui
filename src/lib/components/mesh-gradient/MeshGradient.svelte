@@ -45,7 +45,7 @@
 	{...rest}
 	bind:this={ref}
 	class={['mesh-gradient', className]}
-	style:background-color={colors[0]}
+	style:--mesh-color={colors[0]}
 	aria-hidden="true"
 >
 	{#each blobs as blob, i (i)}
@@ -55,7 +55,7 @@
 			style:top="{blob.y}%"
 			style:width="{blob.size}%"
 			style:height="{blob.size}%"
-			style:background-color={blob.color}
+			style:--mesh-color={blob.color}
 			style:filter="blur({blob.blur}px)"
 		></div>
 	{/each}
@@ -69,12 +69,29 @@
 			width: 100%;
 			height: 100%;
 			overflow: hidden;
+			/* Keeps the overlay noise from blending with the page behind, which lights up the edge in dark mode. */
+			isolation: isolate;
+			background-color: var(--mesh-color);
 		}
 
 		.mesh-gradient-blob {
 			position: absolute;
 			border-radius: 50%;
 			transform: translate(-50%, -50%);
+			background-color: var(--mesh-color);
+		}
+
+		/* Pale colours would glare against a dark page, so they are mixed towards the page colour. */
+		@media (prefers-color-scheme: dark) {
+			:root:not([data-theme='light']) .mesh-gradient,
+			:root:not([data-theme='light']) .mesh-gradient-blob {
+				background-color: color-mix(in srgb, var(--mesh-color) 45%, var(--color-base));
+			}
+		}
+
+		:root[data-theme='dark'] .mesh-gradient,
+		:root[data-theme='dark'] .mesh-gradient-blob {
+			background-color: color-mix(in srgb, var(--mesh-color) 45%, var(--color-base));
 		}
 
 		.mesh-gradient::after {
