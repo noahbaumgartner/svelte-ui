@@ -45,4 +45,11 @@
 		color-scheme: dark;
 		--color-destructive: #f87171;
 	}
+
+	/* Page-coloured track, light handle. Standard properties let macOS draw its
+	   rounded overlay scrollbar, which only shows while scrolling. */
+	:root {
+		scrollbar-width: auto;
+		scrollbar-color: color-mix(in srgb, var(--ui-base), var(--ui-ink) 40%) var(--color-bg);
+	}
 }

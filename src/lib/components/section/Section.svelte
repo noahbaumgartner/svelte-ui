@@ -6,8 +6,8 @@
 		/** The root element. Bindable. */
 		ref?: HTMLElement | null;
 		/**
-		 * `contained` is an inset, rounded grey box; `full` is a grey band that runs edge to edge
-		 * and keeps its content at `--section-max-width`.
+		 * `contained` is an inset, rounded grey box with the page background to its left and right;
+		 * `full` is a band that runs edge to edge and keeps its content at `--section-max-width`.
 		 */
 		width?: 'contained' | 'full';
 		/**
@@ -15,7 +15,10 @@
 		 * `contained` (give the box your own padding via `class`).
 		 */
 		padded?: boolean;
-		/** Fills the section with `--color-surface`. Off, it sits on the page background. */
+		/**
+		 * Fills the section with `--color-surface` (grey). On by default for `contained`, off for
+		 * `full`.
+		 */
 		surface?: boolean;
 		children?: Snippet;
 	};
@@ -24,13 +27,14 @@
 		ref = $bindable(null),
 		width = 'contained',
 		padded,
-		surface = true,
+		surface,
 		class: className,
 		children,
 		...rest
 	}: Props = $props();
 
 	let hasPadding = $derived(padded ?? width === 'full');
+	let hasSurface = $derived(surface ?? width === 'contained');
 </script>
 
 <section
@@ -39,7 +43,7 @@
 	class={[
 		'section',
 		`section--${width}`,
-		{ 'section--padded': hasPadding, 'section--surface': surface },
+		{ 'section--padded': hasPadding, 'section--surface': hasSurface },
 		className
 	]}
 >

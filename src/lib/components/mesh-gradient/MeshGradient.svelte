@@ -85,13 +85,13 @@
 		@media (prefers-color-scheme: dark) {
 			:root:not([data-theme='light']) .mesh-gradient,
 			:root:not([data-theme='light']) .mesh-gradient-blob {
-				background-color: color-mix(in srgb, var(--mesh-color) 45%, var(--color-base));
+				background-color: color-mix(in srgb, var(--mesh-color) 70%, var(--color-base));
 			}
 		}
 
 		:root[data-theme='dark'] .mesh-gradient,
 		:root[data-theme='dark'] .mesh-gradient-blob {
-			background-color: color-mix(in srgb, var(--mesh-color) 45%, var(--color-base));
+			background-color: color-mix(in srgb, var(--mesh-color) 70%, var(--color-base));
 		}
 
 		.mesh-gradient::after {

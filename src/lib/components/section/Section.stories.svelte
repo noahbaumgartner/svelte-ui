@@ -13,7 +13,8 @@
 			surface: { control: 'boolean' }
 		},
 		args: {
-			width: 'contained'
+			width: 'contained',
+			surface: true
 		}
 	});
 

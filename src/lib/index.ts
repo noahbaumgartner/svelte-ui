@@ -1,4 +1,5 @@
-export type { IconComponent } from './icon.js';
+export type { IconComponent, IconProps } from './icon.js';
+export { default as GithubIcon } from './icons/GithubIcon.svelte';
 export { default as Accordion } from './components/accordion/Accordion.svelte';
 export { default as AccordionItem } from './components/accordion/AccordionItem.svelte';
 export { default as AlertDialog } from './components/alert-dialog/AlertDialog.svelte';
@@ -28,7 +29,6 @@ export { default as ContextMenuInfo } from './components/context-menu/ContextMen
 export { default as Dialog } from './components/dialog/Dialog.svelte';
 export { default as Drawer } from './components/drawer/Drawer.svelte';
 export { default as EmptyState } from './components/empty-state/EmptyState.svelte';
-export { default as Entry } from './components/entry/Entry.svelte';
 export { default as Field } from './components/field/Field.svelte';
 export { default as FieldContent } from './components/field/FieldContent.svelte';
 export { default as FieldDescription } from './components/field/FieldDescription.svelte';
@@ -41,18 +41,21 @@ export { default as Footer } from './components/footer/Footer.svelte';
 export { default as FooterColumn } from './components/footer/FooterColumn.svelte';
 export { default as Image } from './components/image/Image.svelte';
 export { default as Input } from './components/input/Input.svelte';
+export { default as Lightbox } from './components/lightbox/Lightbox.svelte';
 export { default as Kbd } from './components/kbd/Kbd.svelte';
 export { default as KbdGroup } from './components/kbd/KbdGroup.svelte';
 export { default as InputGroup } from './components/input-group/InputGroup.svelte';
 export { default as InputGroupAddon } from './components/input-group/InputGroupAddon.svelte';
 export { default as Label } from './components/label/Label.svelte';
 export { default as Link } from './components/link/Link.svelte';
+export { default as MediaPreview } from './components/media-preview/MediaPreview.svelte';
 export { default as MeshGradient } from './components/mesh-gradient/MeshGradient.svelte';
 export { default as Navbar } from './components/navbar/Navbar.svelte';
 export { default as NavigationMenu } from './components/navigation-menu/NavigationMenu.svelte';
 export { default as NavigationMenuItem } from './components/navigation-menu/NavigationMenuItem.svelte';
 export { default as NavigationMenuLink } from './components/navigation-menu/NavigationMenuLink.svelte';
 export { default as NumberStepper } from './components/number-stepper/NumberStepper.svelte';
+export { default as PageHeader } from './components/page-header/PageHeader.svelte';
 export { default as Popover } from './components/popover/Popover.svelte';
 export { default as PreviewCard } from './components/preview-card/PreviewCard.svelte';
 export { default as Progress } from './components/progress/Progress.svelte';
@@ -82,10 +85,13 @@ export {
 	type TableSort,
 	type TableSortValue
 } from './components/table/Table.svelte';
+export { default as TableOfContents } from './components/table-of-contents/TableOfContents.svelte';
 export { default as Tabs, type TabsOption } from './components/tabs/Tabs.svelte';
 export { default as Textarea } from './components/textarea/Textarea.svelte';
 export { default as Toaster } from './components/toaster/Toaster.svelte';
 export { toast, type ToastOptions, type ToastAction } from './components/toaster/toast.svelte.js';
+export { default as ThemeToggle } from './components/theme-toggle/ThemeToggle.svelte';
+export { default as Timeline, type TimelineItem } from './components/timeline/Timeline.svelte';
 export { default as Toggle } from './components/toggle/Toggle.svelte';
 export { default as Tooltip } from './components/tooltip/Tooltip.svelte';
 export { default as TimePicker } from './components/time-picker/TimePicker.svelte';
