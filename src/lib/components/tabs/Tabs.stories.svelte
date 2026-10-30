@@ -4,7 +4,8 @@
 	import Tabs from './Tabs.svelte';
 	import { Bell, Settings, User } from '@lucide/svelte';
 
-	const sizes = ['sm', 'md'] as const;
+	const sizes = ['sm', 'md', 'lg'] as const;
+	const variants = ['segmented', 'text'] as const;
 
 	const sections = [
 		{ value: 'account', label: 'Account' },
@@ -21,13 +22,15 @@
 			options: { control: 'object' },
 			label: { control: 'text' },
 			size: { control: 'inline-radio', options: sizes },
+			variant: { control: 'inline-radio', options: variants },
 			children: { control: false }
 		},
 		args: {
 			value: 'account',
 			options: sections,
 			label: 'Settings',
-			size: 'md'
+			size: 'md',
+			variant: 'segmented'
 		}
 	});
 
@@ -55,6 +58,18 @@
 		<div style={column}>
 			{#each sizes as size (size)}
 				<Tabs {...args} {size} label="Settings {size}" />
+			{/each}
+		</div>
+	{/snippet}
+</Story>
+
+<Story name="Variants" parameters={{ controls: { exclude: ['variant', 'size'] } }}>
+	{#snippet template(args)}
+		<div style={column}>
+			{#each variants as variant (variant)}
+				{#each sizes as size (size)}
+					<Tabs {...args} {variant} {size} label="Settings {variant} {size}" />
+				{/each}
 			{/each}
 		</div>
 	{/snippet}

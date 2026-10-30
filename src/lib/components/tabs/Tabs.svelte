@@ -23,7 +23,9 @@
 		options: TabsOption<T>[];
 		/** Accessible name for the tab list. */
 		label?: string;
-		size?: 'sm' | 'md';
+		size?: 'sm' | 'md' | 'lg';
+		/** `segmented` sits in a pill-shaped track; `text` is plain text where only the selected tab is emphasised. */
+		variant?: 'segmented' | 'text';
 		ref?: HTMLDivElement | null;
 		/** Optional panel below the tabs; receives the selected value. Omit to render the content yourself. */
 		children?: Snippet<[value: T]>;
@@ -37,6 +39,7 @@
 		options,
 		label,
 		size = 'md',
+		variant = 'segmented',
 		ref = $bindable(null),
 		class: className,
 		children,
@@ -100,7 +103,7 @@
 	}
 </script>
 
-<div {...rest} bind:this={ref} class={['tabs', `tabs--${size}`, className]}>
+<div {...rest} bind:this={ref} class={['tabs', `tabs--${size}`, `tabs--${variant}`, className]}>
 	<div
 		class={[
 			'tabs-scroller',
@@ -280,6 +283,63 @@
 			border-radius: 5px;
 		}
 
+		.tabs--lg .tabs-list {
+			border-radius: 12px;
+		}
+
+		.tabs--lg .tabs-tab {
+			height: 32px;
+			padding: 0 14px;
+			font-size: 14px;
+			border-radius: 9px;
+		}
+
+		/* Text: no track and no pill, the selected tab is only darker. Padding stays vertical so the first label lines up with the content below. */
+		.tabs--text .tabs-list {
+			gap: 20px;
+			padding: 0;
+			background-color: transparent;
+			border-radius: 0;
+		}
+
+		.tabs--text .tabs-tab {
+			height: auto;
+			padding: 4px 0;
+			font-size: 16px;
+			border-radius: 0;
+		}
+
+		.tabs--text.tabs--sm .tabs-list {
+			gap: 16px;
+		}
+
+		.tabs--text.tabs--sm .tabs-tab {
+			padding: 2px 0;
+			font-size: 14px;
+		}
+
+		.tabs--text.tabs--lg .tabs-list {
+			gap: 24px;
+		}
+
+		.tabs--text.tabs--lg .tabs-tab {
+			font-size: 18px;
+		}
+
+		.tabs--text .tabs-tab--selected {
+			background-color: transparent;
+			box-shadow: none;
+		}
+
+		/* An outline would be clipped by the scroller, so the focus ring is an underline. */
+		.tabs--text .tabs-tab:focus-visible {
+			outline: none;
+			text-decoration: underline;
+			text-decoration-color: var(--color-accent);
+			text-decoration-thickness: 2px;
+			text-underline-offset: 4px;
+		}
+
 		.tabs-panel {
 			font-size: 13px;
 			color: var(--color-text);
@@ -313,6 +373,16 @@
 				color: HighlightText;
 				background-color: Highlight;
 				box-shadow: none;
+			}
+
+			/* Text has no track and no filled tab, so the selected tab is told apart by weight */
+			.tabs--text .tabs-list {
+				border: none;
+			}
+
+			.tabs--text .tabs-tab--selected {
+				color: ButtonText;
+				font-weight: 700;
 			}
 
 			.tabs-tab:disabled {
