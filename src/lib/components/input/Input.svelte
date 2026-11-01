@@ -530,6 +530,7 @@
 		@media (pointer: coarse) {
 			.input {
 				min-height: 44px;
+				font-size: 16px;
 			}
 
 			.input-controls {

@@ -63,6 +63,7 @@
 		@media (pointer: coarse) {
 			.textarea {
 				min-height: 88px;
+				font-size: 16px;
 			}
 		}
 
