@@ -40,7 +40,7 @@
 <style>
 	.page-header-box {
 		margin-inline: auto;
-		max-width: 1280px;
+		max-width: var(--section-max-width, 1280px);
 		padding: 56px 0 30px;
 		display: flex;
 		flex-direction: column;
