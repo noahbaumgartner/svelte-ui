@@ -5,6 +5,7 @@ export { default as AccordionItem } from './components/accordion/AccordionItem.s
 export { default as AlertDialog } from './components/alert-dialog/AlertDialog.svelte';
 export { default as Avatar } from './components/avatar/Avatar.svelte';
 export { default as AvatarGroup } from './components/avatar-group/AvatarGroup.svelte';
+export { default as BarChart, type BarChartItem } from './components/bar-chart/BarChart.svelte';
 export { default as Badge } from './components/badge/Badge.svelte';
 export { default as Breadcrumb } from './components/breadcrumb/Breadcrumb.svelte';
 export { default as BreadcrumbEllipsis } from './components/breadcrumb/BreadcrumbEllipsis.svelte';
@@ -41,6 +42,7 @@ export { default as Footer } from './components/footer/Footer.svelte';
 export { default as FooterColumn } from './components/footer/FooterColumn.svelte';
 export { default as Image } from './components/image/Image.svelte';
 export { default as Input } from './components/input/Input.svelte';
+export { default as LineChart, type ChartPoint } from './components/line-chart/LineChart.svelte';
 export { default as Lightbox } from './components/lightbox/Lightbox.svelte';
 export { default as Kbd } from './components/kbd/Kbd.svelte';
 export { default as KbdGroup } from './components/kbd/KbdGroup.svelte';
@@ -55,6 +57,7 @@ export { default as NavigationMenu } from './components/navigation-menu/Navigati
 export { default as NavigationMenuItem } from './components/navigation-menu/NavigationMenuItem.svelte';
 export { default as NavigationMenuLink } from './components/navigation-menu/NavigationMenuLink.svelte';
 export { default as NumberStepper } from './components/number-stepper/NumberStepper.svelte';
+export { default as Numpad } from './components/numpad/Numpad.svelte';
 export { default as PageHeader } from './components/page-header/PageHeader.svelte';
 export { default as Popover } from './components/popover/Popover.svelte';
 export { default as PreviewCard } from './components/preview-card/PreviewCard.svelte';
@@ -78,6 +81,8 @@ export { default as SidebarTrigger } from './components/sidebar/SidebarTrigger.s
 export type { AlertDialogTriggerProps } from './components/alert-dialog/AlertDialog.svelte';
 export { default as Skeleton } from './components/skeleton/Skeleton.svelte';
 export { default as Spinner } from './components/spinner/Spinner.svelte';
+export { default as Stat } from './components/stat/Stat.svelte';
+export { default as Steps, type StepsItem } from './components/steps/Steps.svelte';
 export { default as Switch } from './components/switch/Switch.svelte';
 export {
 	default as Table,
