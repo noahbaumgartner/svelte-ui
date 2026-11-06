@@ -24,8 +24,8 @@
 			font-size: 13px;
 			line-height: 1.5;
 			color: var(--color-text);
-			background-color: transparent;
-			border: 1px solid var(--color-border-strong);
+			background-color: var(--color-surface);
+			border: 1px solid transparent;
 			border-radius: 10px;
 			outline: none;
 			resize: vertical;

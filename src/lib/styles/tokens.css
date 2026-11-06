@@ -26,6 +26,9 @@
 		--color-accent-hover: color-mix(in srgb, var(--ui-base), var(--color-accent) 80%);
 		--color-accent-foreground: oklch(from var(--color-accent) clamp(0, (0.65 - l) * 1000, 1) 0 0);
 
+		/* Shadows follow the ink, so they turn light in dark mode */
+		--color-shadow: var(--ui-ink);
+
 		/* Validation errors; the only non-gray color */
 		--color-destructive: #dc2626;
 	}

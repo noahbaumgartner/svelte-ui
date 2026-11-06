@@ -39,8 +39,8 @@
 		}
 
 		.card--outline {
-			background-color: var(--color-bg);
-			border: 1px solid var(--color-border);
+			background-color: color-mix(in srgb, var(--color-surface) 50%, transparent);
+			border: 1px solid transparent;
 		}
 
 		.card--secondary {

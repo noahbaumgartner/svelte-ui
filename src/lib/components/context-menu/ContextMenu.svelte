@@ -165,7 +165,7 @@
 			background-color: var(--color-bg);
 			border: 1px solid var(--color-border);
 			border-radius: 10px;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 			user-select: none;
 		}

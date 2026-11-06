@@ -26,7 +26,6 @@
 			margin-top: auto;
 			padding: var(--card-spacing);
 			background-color: color-mix(in srgb, var(--color-surface) 50%, transparent);
-			border-top: 1px solid var(--color-border);
 		}
 	}
 </style>

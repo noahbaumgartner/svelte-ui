@@ -207,7 +207,6 @@
 
 		.time-picker-column + .time-picker-column {
 			padding-left: 6px;
-			border-left: 1px solid var(--color-border);
 		}
 
 		.time-picker-item {

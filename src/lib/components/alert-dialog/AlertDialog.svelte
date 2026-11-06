@@ -112,7 +112,7 @@
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
 			border-radius: 14px;
-			box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+			box-shadow: 0 16px 48px color-mix(in srgb, var(--color-shadow) 16%, transparent);
 			outline: none;
 			opacity: 0;
 			scale: 0.95;

@@ -281,8 +281,8 @@
 			font-family: inherit;
 			font-size: 13px;
 			color: var(--color-text);
-			background-color: transparent;
-			border: 1px solid var(--color-border-strong);
+			background-color: var(--color-surface);
+			border: 1px solid transparent;
 			border-radius: 10px;
 			outline: none;
 			transition: border-color 200ms ease;
@@ -383,7 +383,7 @@
 			background-color: var(--color-bg);
 			border: 1px solid var(--color-border);
 			border-radius: 14px;
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 		}
 
 		.input-popover--bottom {

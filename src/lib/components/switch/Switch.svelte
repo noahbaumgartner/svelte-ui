@@ -34,8 +34,8 @@
 			width: 100%;
 			height: 100%;
 			margin: 0;
-			background-color: var(--color-surface);
-			border: 1px solid var(--color-border);
+			background-color: var(--color-surface-active);
+			border: 1px solid transparent;
 			border-radius: 9px;
 			outline: none;
 			cursor: pointer;

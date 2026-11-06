@@ -195,7 +195,7 @@
 			border: 1px solid var(--color-border);
 			border-bottom: 0;
 			border-radius: 16px 16px 0 0;
-			box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+			box-shadow: 0 -8px 32px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 			translate: 0 100%;
 			transition:
@@ -369,7 +369,7 @@
 				padding: 0;
 				border: 1px solid var(--color-border);
 				border-radius: 20px;
-				box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+				box-shadow: 0 16px 48px color-mix(in srgb, var(--color-shadow) 16%, transparent);
 				translate: calc(100% + var(--drawer-inset)) 0;
 			}
 

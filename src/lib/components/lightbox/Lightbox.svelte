@@ -114,7 +114,7 @@
 		);
 		border: 1px solid var(--color-border);
 		border-radius: 16px;
-		box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.25);
+		box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--color-shadow) 25%, transparent);
 	}
 
 	:global(.lightbox-close) {

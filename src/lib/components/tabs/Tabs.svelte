@@ -263,7 +263,7 @@
 		.tabs-tab--selected {
 			color: var(--color-text);
 			background-color: var(--color-bg);
-			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+			box-shadow: 0 1px 2px color-mix(in srgb, var(--color-shadow) 8%, transparent);
 		}
 
 		.tabs-tab :global(.tabs-icon) {

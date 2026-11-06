@@ -228,16 +228,11 @@
 		td {
 			padding: 10px 12px;
 			white-space: nowrap;
-			border-bottom: 1px solid var(--color-border);
 		}
 
 		th {
 			font-weight: 500;
 			color: var(--color-text-muted);
-		}
-
-		tbody tr:last-child td {
-			border-bottom: none;
 		}
 
 		tbody tr:hover,

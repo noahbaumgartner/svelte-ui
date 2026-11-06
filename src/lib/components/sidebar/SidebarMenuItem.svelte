@@ -154,7 +154,7 @@
 		}
 
 		.sidebar-menu-button:hover {
-			background-color: var(--color-surface);
+			background-color: var(--color-surface-hover);
 			color: var(--color-text);
 		}
 
@@ -164,7 +164,7 @@
 		}
 
 		.sidebar-menu-button--active {
-			background-color: var(--color-surface);
+			background-color: var(--color-surface-hover);
 			color: var(--color-text);
 			font-weight: 500;
 		}
@@ -232,7 +232,6 @@
 			margin: 2px 0 2px 15px;
 			padding: 0 0 0 8px;
 			list-style: none;
-			border-left: 1px solid var(--color-border);
 		}
 
 		/* Collapsed to icons: a square button with the label clipped (it stays the accessible name) */

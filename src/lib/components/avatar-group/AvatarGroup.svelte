@@ -72,21 +72,21 @@
 		.avatar-group-more--sm {
 			min-width: 24px;
 			height: 24px;
-			border-radius: 8px;
+			border-radius: 999px;
 			font-size: 10px;
 		}
 
 		.avatar-group-more--md {
 			min-width: 32px;
 			height: 32px;
-			border-radius: 10px;
+			border-radius: 999px;
 			font-size: 12px;
 		}
 
 		.avatar-group-more--lg {
 			min-width: 40px;
 			height: 40px;
-			border-radius: 12px;
+			border-radius: 999px;
 			font-size: 14px;
 		}
 

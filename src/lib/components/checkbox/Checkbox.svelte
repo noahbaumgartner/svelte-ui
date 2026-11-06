@@ -42,8 +42,8 @@
 			width: 100%;
 			height: 100%;
 			margin: 0;
-			background-color: transparent;
-			border: 1px solid var(--color-border-strong);
+			background-color: var(--color-surface-hover);
+			border: 1px solid transparent;
 			border-radius: 5px;
 			outline: none;
 			cursor: pointer;
@@ -103,7 +103,8 @@
 				position: absolute;
 				inset: 0;
 				box-sizing: border-box;
-				border: 1px solid var(--color-border-strong);
+				background-color: var(--color-surface-hover);
+				border: 1px solid transparent;
 				border-radius: 5px;
 				transition:
 					background-color 200ms ease,
