@@ -8,7 +8,7 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 	import Check from '../../internal/icons/Check.svelte';
 
-	type Props = Omit<HTMLAttributes<HTMLOListElement>, 'children'> & {
+	type Props = Omit<HTMLAttributes<HTMLOListElement>, 'children' | 'onselect'> & {
 		/** The steps of a multi-step flow, in order. */
 		steps: StepsItem[];
 		/** Zero-based index of the current step. Earlier steps show as done. */
