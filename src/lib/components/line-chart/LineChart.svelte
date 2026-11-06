@@ -36,15 +36,15 @@
 	}: Props = $props();
 
 	const padding = { top: 16, right: 16, bottom: 28, left: 56 };
-	const gridLines = 4;
 
 	let width = $state(0);
 	let active = $state<number | null>(null);
 
 	let plotWidth = $derived(Math.max(0, width - padding.left - padding.right));
 	let plotHeight = $derived(Math.max(0, height - padding.top - padding.bottom));
-	let max = $derived(niceMax(Math.max(0, ...data.map((point) => point.value))));
-	let ticks = $derived(Array.from({ length: gridLines + 1 }, (_, i) => (max / gridLines) * i));
+	let scale = $derived(niceScale(Math.max(0, ...data.map((point) => point.value))));
+	let max = $derived(scale.max);
+	let ticks = $derived(Array.from({ length: scale.lines + 1 }, (_, i) => scale.step * i));
 
 	let points = $derived(
 		data.map((point, index) => ({
@@ -66,11 +66,17 @@
 	/** Only every n-th label fits on the x axis. */
 	let labelEvery = $derived(Math.max(1, Math.ceil(data.length / Math.max(1, plotWidth / 64))));
 
-	function niceMax(value: number) {
-		if (value <= 0) return 0;
-		const magnitude = 10 ** Math.floor(Math.log10(value));
-		const step = [1, 2, 2.5, 5, 10].find((s) => s * magnitude >= value / 1) ?? 10;
-		return step * magnitude;
+	/** Round tick steps (1, 2, 2.5, 5 × 10ⁿ) with 3–5 grid lines and the least empty space on top. */
+	function niceScale(value: number) {
+		if (value <= 0) return { max: 0, step: 0, lines: 4 };
+		let best = { max: Infinity, step: 0, lines: 4 };
+		for (const lines of [3, 4, 5]) {
+			const raw = value / lines;
+			const magnitude = 10 ** Math.floor(Math.log10(raw));
+			const step = ([1, 2, 2.5, 5, 10].find((s) => s * magnitude >= raw) ?? 10) * magnitude;
+			if (step * lines < best.max) best = { max: step * lines, step, lines };
+		}
+		return best;
 	}
 
 	function pick(event: PointerEvent) {
