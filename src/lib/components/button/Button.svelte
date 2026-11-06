@@ -12,6 +12,10 @@
 		target?: string;
 		rel?: string;
 		type?: 'button' | 'submit' | 'reset';
+		/** Id of the form a submit button belongs to, e.g. when it sits in a dialog footer. */
+		form?: string;
+		/** Download the linked file instead of navigating to it, optionally under this name. */
+		download?: boolean | string;
 		disabled?: boolean;
 		/** Replaces the icon with a Spinner and blocks clicks. */
 		loading?: boolean;
@@ -33,6 +37,8 @@
 		target,
 		rel,
 		type = 'button',
+		form,
+		download,
 		disabled = false,
 		loading = false,
 		variant = 'primary',
@@ -74,7 +80,14 @@
 
 {#if href && !disabled && !loading}
 	<!-- href comes from the consumer, who resolves it; this library has no routes -->
-	<a {...rest} {...linkProps} bind:this={ref} aria-label={label} class={classes}>
+	<a
+		{...rest}
+		{...linkProps}
+		download={download === true ? '' : download || undefined}
+		bind:this={ref}
+		aria-label={label}
+		class={classes}
+	>
 		{@render content()}
 	</a>
 {:else}
@@ -82,6 +95,7 @@
 		{...rest}
 		bind:this={ref}
 		{type}
+		{form}
 		disabled={disabled || loading}
 		aria-busy={loading || undefined}
 		aria-label={label}
