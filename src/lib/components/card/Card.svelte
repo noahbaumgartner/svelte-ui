@@ -39,7 +39,7 @@
 		}
 
 		.card--outline {
-			background-color: color-mix(in srgb, var(--color-surface) 50%, transparent);
+			background-color: var(--color-fill);
 			border: 1px solid transparent;
 		}
 

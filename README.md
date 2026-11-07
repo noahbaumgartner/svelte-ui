@@ -69,6 +69,23 @@ Set `--ui-accent` to colour checked controls, primary buttons and focus rings. I
 }
 ```
 
+A few more variables are optional and fall back to the derived values:
+
+| Variable                | Default          | Used for                                             |
+| ----------------------- | ---------------- | ---------------------------------------------------- |
+| `--ui-fill`             | 3% ink on base   | Cards and empty states (e.g. white on a tinted page) |
+| `--ui-destructive`      | `#dc2626`        | Errors and destructive actions in light mode         |
+| `--ui-destructive-dark` | `#f87171`        | The same in dark mode                                |
+| `--ui-font-sans`        | the system font  | All text (`--font-sans`, set on `:root`)             |
+| `--ui-font-display`     | `--ui-font-sans` | Big titles, opt-in via `--font-display`              |
+
+```css
+:root {
+	--ui-font-sans: 'Space Grotesk Variable', system-ui, sans-serif;
+	--ui-font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+}
+```
+
 See [`src/lib/styles/tokens.css`](src/lib/styles/tokens.css) for every token.
 
 ## Components

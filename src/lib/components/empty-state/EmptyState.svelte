@@ -57,7 +57,7 @@
 		}
 
 		.empty-state--secondary {
-			background-color: var(--color-surface);
+			background-color: var(--color-fill);
 			border: 1px solid transparent;
 		}
 

@@ -6,6 +6,8 @@
 
 		--color-bg: var(--ui-base);
 		--color-surface: color-mix(in srgb, var(--ui-base), var(--ui-ink) 6%);
+		/* Resting fill shared by cards and empty states */
+		--color-fill: var(--ui-fill, color-mix(in srgb, var(--ui-base), var(--ui-ink) 3%));
 		--color-border: color-mix(in srgb, var(--ui-base), var(--ui-ink) 10%);
 		--color-border-strong: color-mix(in srgb, var(--ui-base), var(--ui-ink) 17%);
 		--color-text-faint: color-mix(in srgb, var(--ui-base), var(--ui-ink) 36%);
@@ -30,7 +32,12 @@
 		--color-shadow: var(--ui-ink);
 
 		/* Validation errors; the only non-gray color */
-		--color-destructive: #dc2626;
+		--color-destructive: var(--ui-destructive, #dc2626);
+
+		/* Body text, and a display face for big titles that falls back to it */
+		--font-sans: var(--ui-font-sans, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
+		--font-display: var(--ui-font-display, var(--font-sans));
+		font-family: var(--font-sans);
 	}
 
 	@media (prefers-color-scheme: dark) {
@@ -38,7 +45,7 @@
 			--ui-base: #0a0a0a;
 			--ui-ink: #fff;
 			color-scheme: dark;
-			--color-destructive: #f87171;
+			--color-destructive: var(--ui-destructive-dark, #f87171);
 		}
 	}
 
@@ -46,7 +53,7 @@
 		--ui-base: #0a0a0a;
 		--ui-ink: #fff;
 		color-scheme: dark;
-		--color-destructive: #f87171;
+		--color-destructive: var(--ui-destructive-dark, #f87171);
 	}
 
 	/* Page-coloured track, light handle. Standard properties let macOS draw its
