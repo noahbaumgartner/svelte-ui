@@ -11,14 +11,18 @@
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	type Props = Omit<HTMLAttributes<HTMLElement>, 'children'> & {
-		/** Bars from top to bottom, in the given order. */
+		/** Bars from top to bottom (horizontal) or left to right (vertical), in the given order. */
 		items: BarChartItem[];
 		/** Accessible name of the chart. */
 		label: string;
 		/** Formats the value shown next to each bar. */
 		format?: (value: number) => string;
-		/** Value of a full-width bar. Defaults to the largest value. */
+		/** Value of a full-length bar. Defaults to the largest value. */
 		max?: number;
+		/** Horizontal bars in rows, or vertical columns side by side. */
+		orientation?: 'horizontal' | 'vertical';
+		/** Height of the columns in px (vertical only). */
+		height?: number;
 		labels?: { empty?: string };
 		ref?: HTMLElement | null;
 	};
@@ -28,6 +32,8 @@
 		label,
 		format = (value) => String(value),
 		max,
+		orientation = 'horizontal',
+		height = 200,
 		labels,
 		class: className,
 		ref = $bindable(null),
@@ -35,6 +41,8 @@
 	}: Props = $props();
 
 	let scale = $derived(max ?? Math.max(0, ...items.map((item) => item.value)));
+
+	const share = (value: number) => (scale === 0 ? 0 : Math.max(0, (value / scale) * 100));
 </script>
 
 <figure {...rest} bind:this={ref} class={['bar-chart', className]}>
@@ -42,23 +50,35 @@
 	{#if items.length === 0}
 		<div class="bar-chart-empty">{labels?.empty ?? 'No data'}</div>
 	{:else}
-		<ul class="bar-chart-list">
-			{#each items as item, index (index)}
-				<li class="bar-chart-row">
-					<span class="bar-chart-label" title={item.label}>{item.label}</span>
-					<span class="bar-chart-track" aria-hidden="true">
-						<span
-							class="bar-chart-bar"
-							style:width="{scale === 0 ? 0 : Math.max(0, (item.value / scale) * 100)}%"
-						></span>
-					</span>
-					<span class="bar-chart-value">
-						{format(item.value)}
+		{#if orientation === 'vertical'}
+			<ul class="bar-chart-columns">
+				{#each items as item, index (index)}
+					<li class="bar-chart-column">
+						<span class="bar-chart-value">{format(item.value)}</span>
 						{#if item.detail}<span class="bar-chart-detail">{item.detail}</span>{/if}
-					</span>
-				</li>
-			{/each}
-		</ul>
+						<span class="bar-chart-track" aria-hidden="true" style:height="{height}px">
+							<span class="bar-chart-bar" style:height="{share(item.value)}%"></span>
+						</span>
+						<span class="bar-chart-label" title={item.label}>{item.label}</span>
+					</li>
+				{/each}
+			</ul>
+		{:else}
+			<ul class="bar-chart-list">
+				{#each items as item, index (index)}
+					<li class="bar-chart-row">
+						<span class="bar-chart-label" title={item.label}>{item.label}</span>
+						<span class="bar-chart-track" aria-hidden="true">
+							<span class="bar-chart-bar" style:width="{share(item.value)}%"></span>
+						</span>
+						<span class="bar-chart-value">
+							{format(item.value)}
+							{#if item.detail}<span class="bar-chart-detail">{item.detail}</span>{/if}
+						</span>
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	{/if}
 </figure>
 
@@ -119,6 +139,54 @@
 			margin-left: 6px;
 			color: var(--color-text-muted);
 			font-weight: 400;
+		}
+
+		/* Vertical: columns share the width; too many of them scroll sideways. */
+		.bar-chart-columns {
+			display: flex;
+			gap: 8px;
+			margin: 0;
+			padding: 0;
+			overflow-x: auto;
+			list-style: none;
+		}
+
+		.bar-chart-column {
+			display: flex;
+			flex: 1 1 0;
+			flex-direction: column;
+			align-items: center;
+			gap: 4px;
+			min-width: 56px;
+			max-width: 120px;
+		}
+
+		.bar-chart-column .bar-chart-value {
+			text-align: center;
+		}
+
+		.bar-chart-column .bar-chart-detail {
+			margin-left: 0;
+			font-size: 12px;
+			white-space: nowrap;
+		}
+
+		.bar-chart-column .bar-chart-track {
+			display: flex;
+			align-items: flex-end;
+			width: 100%;
+			margin-top: 4px;
+		}
+
+		.bar-chart-column .bar-chart-bar {
+			width: 100%;
+			transition: height 300ms ease;
+		}
+
+		.bar-chart-column .bar-chart-label {
+			max-width: 100%;
+			font-size: 13px;
+			text-align: center;
 		}
 
 		.bar-chart-empty {
