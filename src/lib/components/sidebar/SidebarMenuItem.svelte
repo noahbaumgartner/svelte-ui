@@ -7,6 +7,7 @@
 	import Ellipsis from '../../internal/icons/Ellipsis.svelte';
 	import Button from '../button/Button.svelte';
 	import ContextMenu from '../context-menu/ContextMenu.svelte';
+	import { getSidebarContext } from './context.js';
 
 	type Props = Omit<HTMLAttributes<HTMLLIElement>, 'children' | 'onclick'> & {
 		/** Links the item. Ignored when the item has `items`. */
@@ -47,10 +48,17 @@
 	}: Props = $props();
 
 	const id = $props.id();
+	const sidebar = getSidebarContext();
 	let classes = $derived(['sidebar-menu-button', { 'sidebar-menu-button--active': active }]);
 
 	function reducedMotion() {
 		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	}
+
+	// Following a link closes the drawer on mobile; opening it in a new tab keeps the drawer
+	function navigate(event: MouseEvent) {
+		onclick?.();
+		if (!event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) sidebar.closeMobile();
 	}
 
 	function toggle() {
@@ -84,7 +92,7 @@
 	{:else if href}
 		<!-- href comes from the consumer, who resolves it; this library has no routes -->
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-		<a {href} aria-current={active ? 'page' : undefined} class={classes} {onclick}>
+		<a {href} aria-current={active ? 'page' : undefined} class={classes} onclick={navigate}>
 			{@render content()}
 		</a>
 	{:else}
