@@ -195,6 +195,14 @@
 			transform: none;
 		}
 
+		/* `mobile` is only known after hydration, so server-rendered pages would show the desktop
+		   sidebar on phones first. Below the breakpoint the sidebar is a closed drawer until then. */
+		@media (max-width: 767px) {
+			.sidebar:not(.sidebar--mobile) {
+				display: none;
+			}
+		}
+
 		/* Fallback for sidebars without a `SidebarHeader`, which otherwise holds the close button */
 		.sidebar-close {
 			display: flex;
