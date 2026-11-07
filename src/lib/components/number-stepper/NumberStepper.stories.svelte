@@ -65,6 +65,12 @@
 	{/snippet}
 </Story>
 
+<Story name="Format" parameters={{ controls: { exclude: ['format'] } }}>
+	{#snippet template(args)}
+		<NumberStepper {...args} format={(value) => `${value} / ${args.max}`} label="Paid portions" />
+	{/snippet}
+</Story>
+
 <Story
 	name="Test: counts up and down within its limits"
 	tags={['!dev', '!autodocs']}

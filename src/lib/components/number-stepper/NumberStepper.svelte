@@ -18,6 +18,8 @@
 		decreaseLabel?: string;
 		/** Prefix of the increase button's name, followed by `label`. */
 		increaseLabel?: string;
+		/** Formats the shown count, e.g. `(v) => `${v} / 4``. */
+		format?: (value: number) => string;
 		ref?: HTMLDivElement | null;
 		onchange?: (value: number) => void;
 	};
@@ -32,6 +34,7 @@
 		label,
 		decreaseLabel = 'Decrease',
 		increaseLabel = 'Increase',
+		format = String,
 		ref = $bindable(null),
 		class: className,
 		onchange,
@@ -59,7 +62,7 @@
 		disabled={disabled || value <= min}
 		onclick={() => set(value - step)}
 	/>
-	<output class="number-stepper-value" aria-live="polite">{value}</output>
+	<output class="number-stepper-value" aria-live="polite">{format(value)}</output>
 	<Button
 		variant="secondary"
 		{size}
@@ -89,6 +92,7 @@
 			font-weight: 600;
 			font-variant-numeric: tabular-nums;
 			text-align: center;
+			white-space: nowrap;
 		}
 
 		@media (pointer: coarse) {
