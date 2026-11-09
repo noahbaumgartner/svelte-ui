@@ -80,6 +80,7 @@ export { default as SidebarSeparator } from './components/sidebar/SidebarSeparat
 export { default as SidebarTrigger } from './components/sidebar/SidebarTrigger.svelte';
 export type { AlertDialogTriggerProps } from './components/alert-dialog/AlertDialog.svelte';
 export { default as Skeleton } from './components/skeleton/Skeleton.svelte';
+export { default as SortableList } from './components/sortable-list/SortableList.svelte';
 export { default as Spinner } from './components/spinner/Spinner.svelte';
 export { default as Stat } from './components/stat/Stat.svelte';
 export { default as Steps, type StepsItem } from './components/steps/Steps.svelte';
