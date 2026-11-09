@@ -245,16 +245,6 @@
 			outline-color: var(--color-accent-foreground);
 		}
 
-		@media (pointer: coarse) {
-			.time-picker-column {
-				width: 56px;
-			}
-
-			.time-picker-item {
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.time-picker-item {
 				color: ButtonText;

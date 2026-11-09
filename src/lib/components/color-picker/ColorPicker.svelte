@@ -239,12 +239,6 @@
 			outline-offset: 2px;
 		}
 
-		@media (pointer: coarse) {
-			.color-picker-hue::before {
-				inset: -16px -6px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.color-picker-area,
 			.color-picker-hue {

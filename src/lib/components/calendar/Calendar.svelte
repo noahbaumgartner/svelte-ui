@@ -426,29 +426,6 @@
 			border-end-start-radius: 8px;
 		}
 
-		@media (pointer: coarse) {
-			.calendar-grid td {
-				width: 44px;
-			}
-
-			.calendar-cell {
-				min-width: 44px;
-				min-height: 44px;
-			}
-
-			.calendar-months {
-				width: 252px;
-			}
-
-			.calendar-months .calendar-cell {
-				min-height: 44px;
-			}
-
-			.calendar--week .calendar-cell {
-				min-width: 0;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.calendar-cell:disabled {
 				color: GrayText;

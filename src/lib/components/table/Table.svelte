@@ -299,13 +299,6 @@
 			color: var(--color-text-muted);
 		}
 
-		@media (pointer: coarse) {
-			.table-sort {
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			tbody tr[data-selected] {
 				outline: 2px solid Highlight;

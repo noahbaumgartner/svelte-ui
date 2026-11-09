@@ -191,18 +191,6 @@
 			margin-left: 6px;
 		}
 
-		@media (pointer: coarse) {
-			.toast {
-				height: auto;
-				min-height: 56px;
-			}
-
-			.toast :global(.toast-action) {
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.toast {
 				border-color: CanvasText;

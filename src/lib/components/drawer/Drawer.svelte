@@ -260,17 +260,6 @@
 			}
 		}
 
-		@media (pointer: coarse) {
-			.drawer-handle {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				box-sizing: border-box;
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
-
 		.drawer-header {
 			flex-shrink: 0;
 			/* Room for the handle */
