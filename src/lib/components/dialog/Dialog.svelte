@@ -6,6 +6,7 @@
 </script>
 
 <script lang="ts">
+	import { measurePageScrollbar } from '../../internal/scroll-lock.js';
 	import type { Snippet } from 'svelte';
 	import type { HTMLDialogAttributes } from 'svelte/elements';
 	import X from '../../internal/icons/X.svelte';
@@ -62,6 +63,7 @@
 	$effect(() => {
 		if (!ref) return;
 		if (open && !ref.open) {
+			measurePageScrollbar();
 			ref.showModal();
 		} else if (!open && ref.open) {
 			ref.close();
@@ -130,10 +132,10 @@
 
 <style>
 	@layer svelte-ui {
-		/* Locks page scrolling while open; the gutter keeps the layout from shifting */
+		/* Locks page scrolling while open; the padding takes the place of the hidden scrollbar */
 		:global(html:has(.dialog[open])) {
 			overflow: hidden;
-			scrollbar-gutter: stable;
+			padding-right: var(--svelte-ui-scrollbar-width, 0px);
 		}
 
 		.dialog {
