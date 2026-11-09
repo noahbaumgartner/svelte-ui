@@ -94,12 +94,5 @@
 			text-align: center;
 			white-space: nowrap;
 		}
-
-		@media (pointer: coarse) {
-			.number-stepper :global(.button) {
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
 	}
 </style>

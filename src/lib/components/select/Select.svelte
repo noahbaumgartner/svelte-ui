@@ -423,16 +423,6 @@
 			color: var(--color-text-muted);
 		}
 
-		@media (pointer: coarse) {
-			.select-trigger {
-				min-height: 44px;
-			}
-
-			.select-option {
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.select-trigger {
 				border-color: ButtonText;

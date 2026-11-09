@@ -114,16 +114,5 @@
 				opacity: 1;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.input-group {
-				min-height: 44px;
-			}
-
-			.input-group > :global(.input),
-			.input-group > :global(.input-wrapper > .input) {
-				height: 42px;
-			}
-		}
 	}
 </style>

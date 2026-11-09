@@ -87,22 +87,6 @@
 			opacity: 0.5;
 		}
 
-		@media (pointer: coarse) {
-			input {
-				position: relative;
-			}
-
-			input::after {
-				content: '';
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				width: max(100%, 44px);
-				height: max(100%, 44px);
-				transform: translate(-50%, -50%);
-			}
-		}
-
 		@media (forced-colors: active) {
 			input {
 				border-color: ButtonText;

@@ -97,48 +97,6 @@
 			opacity: 0.5;
 		}
 
-		@media (pointer: coarse) {
-			.checkbox::before {
-				content: '';
-				position: absolute;
-				inset: 0;
-				box-sizing: border-box;
-				background-color: var(--color-surface-hover);
-				border: 1px solid transparent;
-				border-radius: 5px;
-				transition:
-					background-color 200ms ease,
-					border-color 200ms ease;
-			}
-
-			.checkbox:has(input:checked)::before,
-			.checkbox:has(input:indeterminate)::before {
-				background-color: var(--color-accent);
-				border-color: var(--color-accent);
-			}
-
-			.checkbox:has(input[aria-invalid='true'])::before {
-				border-color: var(--color-destructive);
-			}
-
-			.checkbox:has(input:focus-visible)::before {
-				outline: 2px solid var(--color-accent);
-				outline-offset: 2px;
-			}
-
-			.checkbox:has(input:disabled)::before {
-				opacity: 0.5;
-			}
-
-			input {
-				position: absolute;
-				inset: -14px;
-				width: 44px;
-				height: 44px;
-				opacity: 0;
-			}
-		}
-
 		@media (forced-colors: active) {
 			input:checked,
 			input:indeterminate {

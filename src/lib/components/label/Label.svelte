@@ -56,12 +56,5 @@
 				opacity: 1;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.label:has(:global(:is(.checkbox, .switch, .radio))),
-			:global(:is(.checkbox, .switch, .radio)) + .label {
-				min-height: 44px;
-			}
-		}
 	}
 </style>

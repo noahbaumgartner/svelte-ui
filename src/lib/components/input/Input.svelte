@@ -526,34 +526,5 @@
 				outline: 2px solid Highlight;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.input {
-				min-height: 44px;
-				font-size: 16px;
-			}
-
-			.input-controls {
-				top: 0;
-				right: 0;
-				bottom: 0;
-			}
-
-			.input-controls button {
-				min-width: 44px;
-			}
-
-			.input-controls:has(button:not(:only-child)) {
-				flex-direction: row;
-			}
-
-			.input--with-controls {
-				padding-right: 48px;
-			}
-
-			.input[type='number'].input--with-controls {
-				padding-right: 92px;
-			}
-		}
 	}
 </style>

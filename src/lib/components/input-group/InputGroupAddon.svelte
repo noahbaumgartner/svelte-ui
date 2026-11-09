@@ -86,12 +86,5 @@
 		.input-group-addon--inline-end:has(> :global(.button:last-child)) {
 			padding-right: 4px;
 		}
-
-		@media (pointer: coarse) {
-			.input-group-addon > :global(.button) {
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
 	}
 </style>

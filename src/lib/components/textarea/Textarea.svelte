@@ -60,13 +60,6 @@
 			opacity: 0.5;
 		}
 
-		@media (pointer: coarse) {
-			.textarea {
-				min-height: 88px;
-				font-size: 16px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.textarea {
 				border-color: ButtonText;
