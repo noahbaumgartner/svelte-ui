@@ -9,7 +9,7 @@ const config: StorybookConfig = {
 		'@storybook/addon-docs'
 	],
 	framework: '@storybook/sveltekit',
-	staticDirs: ['./public'],
+	staticDirs: ['./public', { from: '../assets', to: '/assets' }],
 	features: { interactions: false }
 };
 export default config;

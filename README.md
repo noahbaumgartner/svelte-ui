@@ -1,3 +1,5 @@
+<img src="assets/header.png" alt="svelte-ui" width="100%">
+
 # svelte-ui
 
 A minimal, monochrome component library for Svelte 5, built with runes, TypeScript and plain CSS custom properties.
