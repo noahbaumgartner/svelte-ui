@@ -54,24 +54,25 @@
 			user-select: none;
 		}
 
+		/* Same corners as Button of the same size */
 		.avatar--sm {
 			width: 24px;
 			height: 24px;
-			border-radius: 999px;
+			border-radius: 8px;
 			font-size: 10px;
 		}
 
 		.avatar--md {
 			width: 32px;
 			height: 32px;
-			border-radius: 999px;
+			border-radius: 10px;
 			font-size: 12px;
 		}
 
 		.avatar--lg {
 			width: 40px;
 			height: 40px;
-			border-radius: 999px;
+			border-radius: 10px;
 			font-size: 14px;
 		}
 
