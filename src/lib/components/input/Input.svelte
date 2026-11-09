@@ -493,6 +493,14 @@
 			opacity: 0.5;
 		}
 
+		/* iOS Safari zooms into focused fields with text below 16px. Only iOS matches this query,
+		   so other platforms keep the compact size. */
+		@supports (-webkit-touch-callout: none) {
+			.input {
+				font-size: 16px;
+			}
+		}
+
 		@media (prefers-reduced-motion: reduce) {
 			.input,
 			.input-controls button {
