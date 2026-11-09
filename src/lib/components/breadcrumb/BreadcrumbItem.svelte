@@ -74,13 +74,6 @@
 			color: var(--color-text);
 		}
 
-		@media (pointer: coarse) {
-			.breadcrumb-link {
-				min-height: 44px;
-				min-width: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.breadcrumb-link {
 				color: LinkText;

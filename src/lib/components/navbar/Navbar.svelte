@@ -306,11 +306,5 @@
 				text-decoration: underline;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.navbar-panel :global(.navigation-menu-trigger) {
-				min-height: 0;
-			}
-		}
 	}
 </style>

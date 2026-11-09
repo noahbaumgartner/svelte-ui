@@ -122,12 +122,6 @@
 			height: 14px;
 		}
 
-		@media (pointer: coarse) {
-			.context-menu-item {
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.context-menu-item:hover:not(:disabled),
 			.context-menu-item:focus-visible {

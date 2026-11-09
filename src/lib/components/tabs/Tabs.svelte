@@ -352,14 +352,6 @@
 			outline-offset: 2px;
 		}
 
-		@media (pointer: coarse) {
-			.tabs-tab,
-			.tabs--sm .tabs-tab {
-				min-width: 44px;
-				min-height: 44px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.tabs-list {
 				border: 1px solid CanvasText;

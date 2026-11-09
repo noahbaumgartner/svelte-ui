@@ -119,12 +119,5 @@
 				outline-offset: -2px;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.navigation-menu-link {
-				min-height: 44px;
-				box-sizing: border-box;
-			}
-		}
 	}
 </style>

@@ -78,17 +78,5 @@
 				outline-offset: 2px;
 			}
 		}
-
-		@media (pointer: coarse) {
-			.link {
-				position: relative;
-			}
-
-			.link::after {
-				content: '';
-				position: absolute;
-				inset: -12px -4px;
-			}
-		}
 	}
 </style>

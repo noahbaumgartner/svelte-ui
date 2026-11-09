@@ -248,26 +248,6 @@
 			padding: 0 8px;
 		}
 
-		@media (pointer: coarse) {
-			.sidebar-menu-button {
-				min-height: 44px;
-			}
-
-			.sidebar-menu-item-menu {
-				top: 0;
-				right: 0;
-			}
-
-			.sidebar-menu-item-menu :global(.button) {
-				min-width: 44px;
-				min-height: 44px;
-			}
-
-			.sidebar-menu-item--has-menu > .sidebar-menu-button {
-				padding-right: 48px;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.sidebar-menu-button {
 				color: ButtonText;

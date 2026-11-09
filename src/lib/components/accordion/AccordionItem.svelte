@@ -118,13 +118,6 @@
 			color: var(--color-text-secondary);
 		}
 
-		@media (pointer: coarse) {
-			.accordion-trigger {
-				min-height: 44px;
-				box-sizing: border-box;
-			}
-		}
-
 		@media (forced-colors: active) {
 			.accordion-trigger:focus-visible {
 				outline-color: Highlight;
