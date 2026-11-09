@@ -60,12 +60,11 @@
 	const frame =
 		'--sidebar-height: 440px; border: 1px solid var(--color-border); border-radius: 12px; overflow: hidden;';
 	const stack = 'display: flex; flex-direction: column; gap: 16px;';
-	const topbar =
-		'display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 12px; border-bottom: 1px solid var(--color-border);';
+	const topbar = 'display: flex; align-items: center; gap: 8px; height: 48px; padding: 0 12px;';
 	const brand =
 		'display: flex; align-items: center; gap: 8px; height: 32px; padding: 0 8px; overflow: hidden; font-size: 13px; font-weight: 600; white-space: nowrap;';
 	const placeholder =
-		'flex: 1; margin: 16px; border-radius: 10px; background-color: var(--color-surface);';
+		'flex: 1; margin: 0 16px 16px; border-radius: 10px; background-color: var(--color-surface);';
 </script>
 
 {#snippet page()}
