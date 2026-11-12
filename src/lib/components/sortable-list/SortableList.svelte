@@ -2,7 +2,7 @@
 	import { tick, type Snippet } from 'svelte';
 	import { flip } from 'svelte/animate';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import GripVertical from '../../internal/icons/GripVertical.svelte';
+	import GripVertical from '@lucide/svelte/icons/grip-vertical';
 
 	type Key = string | number;
 
