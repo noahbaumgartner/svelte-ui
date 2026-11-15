@@ -120,7 +120,7 @@ It lives in a sub-layer of `svelte-ui`, so components win over the reset and any
 | Category   | Components                                                                                                                                 |
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | Actions    | `Button`, `ButtonGroup`, `Toggle`, `Link`                                                                                                  |
-| Forms      | `Input`, `InputGroup`, `Textarea`, `Select`, `NumberStepper`, `Checkbox`, `RadioGroup`, `Switch`, `Label`, `Field` family                  |
+| Forms      | `Input`, `InputGroup`, `FileInput`, `Textarea`, `Select`, `NumberStepper`, `Checkbox`, `RadioGroup`, `Switch`, `Label`, `Field` family     |
 | Pickers    | `Calendar`, `TimePicker`, `ColorPicker`                                                                                                    |
 | Overlays   | `Dialog`, `AlertDialog`, `Drawer`, `Popover`, `Tooltip`, `ContextMenu`, `Toaster` + `toast()`                                              |
 | Navigation | `Navbar`, `NavigationMenu`, `Sidebar` family, `Breadcrumb`, `Tabs`                                                                         |

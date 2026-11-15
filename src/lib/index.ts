@@ -39,6 +39,10 @@ export { default as FieldGroup } from './components/field/FieldGroup.svelte';
 export { default as FieldLegend } from './components/field/FieldLegend.svelte';
 export { default as FieldSeparator } from './components/field/FieldSeparator.svelte';
 export { default as FieldSet } from './components/field/FieldSet.svelte';
+export {
+	default as FileInput,
+	type FileInputLabels
+} from './components/file-input/FileInput.svelte';
 export { default as Footer } from './components/footer/Footer.svelte';
 export { default as FooterColumn } from './components/footer/FooterColumn.svelte';
 export { default as Image } from './components/image/Image.svelte';
