@@ -39,7 +39,8 @@
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
 		},
-		"./tokens.css": "./dist/styles/tokens.css"
+		"./tokens.css": "./dist/styles/tokens.css",
+		"./base.css": "./dist/styles/base.css"
 	},
 	"dependencies": {
 		"@lucide/svelte": "^1.47.0"

@@ -90,6 +90,25 @@ A few more variables are optional and fall back to the derived values:
 
 See [`src/lib/styles/tokens.css`](src/lib/styles/tokens.css) for every token.
 
+### Page defaults
+
+`base.css` is optional. It adds a small reset, the page colours and the layout tokens that `Section`, `PageHeader` and `ActionBar` read. Import it after the tokens:
+
+```svelte
+<script lang="ts">
+	import '@noahbaumgartner/svelte-ui/tokens.css';
+	import '@noahbaumgartner/svelte-ui/base.css';
+</script>
+```
+
+| Variable              | Default                 | Used for                                            |
+| --------------------- | ----------------------- | --------------------------------------------------- |
+| `--content-max-width` | `1376px`                | Width of the page content, between the gutters      |
+| `--section-max-width` | `--content-max-width`   | What `Section`, `PageHeader` and `ActionBar` follow |
+| `--gutter`            | `16px`, `24px` from 640 | Side padding of `ActionBar`                         |
+
+It lives in a sub-layer of `svelte-ui`, so components win over the reset and any unlayered rule of your app wins over both. It also adds a `.visually-hidden` class.
+
 ## Components
 
 | Category   | Components                                                                                                                                 |

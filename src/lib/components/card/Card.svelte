@@ -52,7 +52,8 @@
 			padding-top: 0;
 		}
 
-		.card:has(> :global(.card-footer)) {
+		.card:has(> :global(.card-footer)),
+		.card:has(> :global(.table-container:last-child)) {
 			padding-bottom: 0;
 		}
 

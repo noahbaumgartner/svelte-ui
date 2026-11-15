@@ -1,5 +1,6 @@
 import type { Preview } from '@storybook/sveltekit';
 import '../src/lib/styles/tokens.css';
+import '../src/lib/styles/base.css';
 import './preview.css';
 
 const preview: Preview = {

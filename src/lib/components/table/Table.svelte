@@ -55,6 +55,16 @@
 		labels?: { selectAll?: string; selectRow?: string };
 		/** Rendered in a full-width row while `data` is empty. */
 		empty?: Snippet;
+		/**
+		 * `filled` draws the table on a rounded card fill, for tables outside a `Card`. Inside a
+		 * `Card` (as its last child) keep `plain`: the card already provides the fill and the table
+		 * runs down to its edge.
+		 */
+		variant?: 'plain' | 'filled';
+		/** Draws a divider between the rows, inset from the edges like the rows of a list. */
+		dividers?: boolean;
+		/** Any CSS length. Taller than this, the rows scroll and the header sticks to the top. */
+		maxHeight?: string;
 		ref?: HTMLTableElement | null;
 	};
 
@@ -68,6 +78,9 @@
 		locale,
 		labels,
 		empty,
+		variant = 'plain',
+		dividers = false,
+		maxHeight,
 		ref = $bindable(null),
 		class: className,
 		...rest
@@ -129,7 +142,14 @@
 	}
 </script>
 
-<div class="table-container">
+<div
+	class={[
+		'table-container',
+		`table-container--${variant}`,
+		{ 'table-container--dividers': dividers, 'table-container--scroll': maxHeight }
+	]}
+	style:max-height={maxHeight}
+>
 	<table {...rest} bind:this={ref} class={['table', className]}>
 		<thead>
 			<tr>
@@ -212,9 +232,55 @@
 
 <style>
 	@layer svelte-ui {
+		/*
+		 * --table-bg               background behind the sticky header, the card fill by default
+		 * --table-divider-inset    space between the dividers and the table's edges, 14px
+		 */
 		.table-container {
+			--table-bg: var(--color-fill);
 			width: 100%;
 			overflow-x: auto;
+		}
+
+		.table-container--filled {
+			border-radius: 14px;
+			background-color: var(--table-bg);
+		}
+
+		.table-container--scroll {
+			overflow-y: auto;
+		}
+
+		.table-container--scroll th {
+			position: sticky;
+			top: 0;
+			z-index: 1;
+			background-color: var(--table-bg);
+		}
+
+		/*
+		 * Drawn on the cells: a pseudo-element on the row would become an extra table cell and
+		 * shift the columns. The first row's line also separates the header from the body.
+		 */
+		.table-container--dividers tbody td {
+			--table-inset: var(--table-divider-inset, 14px);
+			background-image: linear-gradient(var(--color-border), var(--color-border));
+			background-position: left top;
+			background-size: 100% 1px;
+			background-repeat: no-repeat;
+		}
+
+		.table-container--dividers tbody td:first-child {
+			background-position: var(--table-inset) top;
+			background-size: calc(100% - var(--table-inset)) 1px;
+		}
+
+		.table-container--dividers tbody td:last-child {
+			background-size: calc(100% - var(--table-inset)) 1px;
+		}
+
+		.table-container--dividers tbody td:first-child:last-child {
+			background-size: calc(100% - 2 * var(--table-inset)) 1px;
 		}
 
 		.table {

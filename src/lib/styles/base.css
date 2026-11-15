@@ -1,0 +1,84 @@
+/*
+ * Optional page defaults: a small reset, the page colours and the layout tokens that Section,
+ * PageHeader and ActionBar read. Import it next to tokens.css, once, in the root layout.
+ *
+ * Everything sits in a sub-layer of `svelte-ui`, so the components win over the reset (an
+ * unlayered `a { text-decoration: inherit }` would remove the Link underline) and any unlayered
+ * rule of the app wins over both.
+ */
+@layer svelte-ui.base {
+	:root {
+		/* Width of the page content between the gutters. Section, PageHeader and ActionBar follow
+		   --section-max-width; set --content-max-width to change all of them at once. */
+		--content-max-width: 1376px;
+		--section-max-width: var(--content-max-width);
+
+		/* Side padding of the page. */
+		--gutter: 16px;
+
+		-webkit-text-size-adjust: 100%;
+	}
+
+	@media (min-width: 640px) {
+		:root {
+			--gutter: 24px;
+		}
+	}
+
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+		margin: 0;
+	}
+
+	html,
+	body {
+		min-height: 100%;
+	}
+
+	body {
+		background-color: var(--color-bg);
+		color: var(--color-text);
+		line-height: 1.5;
+		-webkit-font-smoothing: antialiased;
+		-webkit-tap-highlight-color: transparent;
+	}
+
+	ol,
+	ul {
+		list-style: none;
+		padding: 0;
+	}
+
+	img,
+	picture,
+	video,
+	canvas,
+	svg {
+		display: block;
+		max-width: 100%;
+	}
+
+	a {
+		color: inherit;
+		text-decoration: inherit;
+	}
+
+	button,
+	input,
+	textarea,
+	select {
+		font: inherit;
+	}
+
+	/* Hidden on screen, still read by screen readers. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}

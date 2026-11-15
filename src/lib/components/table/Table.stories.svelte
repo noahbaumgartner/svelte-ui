@@ -4,6 +4,10 @@
 	import Table, { type TableColumn } from './Table.svelte';
 	import Badge from '../badge/Badge.svelte';
 	import Button from '../button/Button.svelte';
+	import Card from '../card/Card.svelte';
+	import CardDescription from '../card/CardDescription.svelte';
+	import CardHeader from '../card/CardHeader.svelte';
+	import CardTitle from '../card/CardTitle.svelte';
 	import { Ellipsis } from '@lucide/svelte';
 
 	type Invoice = {
@@ -122,6 +126,50 @@
 				<Table {rowId} {selection} data={invoices} {columns} aria-label="{selection} selection" />
 			{/each}
 		</div>
+	{/snippet}
+</Story>
+
+<Story name="In a card" parameters={{ controls: { exclude: ['selection'] } }}>
+	{#snippet template()}
+		{@const columns: TableColumn<Invoice>[] = [
+			{ header: 'Invoice', key: 'id', sortable: true },
+			{ header: 'Customer', key: 'customer', sortable: true },
+			{ header: 'Amount', cell: amount, align: 'right', sortable: (invoice) => invoice.amount }
+		]}
+		<Card style="max-width: 560px;">
+			<CardHeader>
+				<CardTitle>Invoices</CardTitle>
+				<CardDescription>The table runs down to the card's edge.</CardDescription>
+			</CardHeader>
+			<Table {rowId} data={invoices} {columns} dividers maxHeight="180px" aria-label="Invoices" />
+		</Card>
+	{/snippet}
+</Story>
+
+<Story name="Filled" parameters={{ controls: { exclude: ['selection'] } }}>
+	{#snippet template()}
+		{@const columns: TableColumn<Invoice>[] = [
+			{ header: 'Invoice', key: 'id' },
+			{ header: 'Customer', key: 'customer' },
+			{ header: 'Amount', cell: amount, align: 'right' }
+		]}
+		<Table {rowId} data={invoices} {columns} variant="filled" dividers />
+	{/snippet}
+</Story>
+
+<Story
+	name="Test: a max height scrolls the rows and keeps the header"
+	tags={['!dev', '!autodocs']}
+	play={async ({ canvas }) => {
+		const header = canvas.getByRole('columnheader', { name: 'Customer' });
+		await expect(getComputedStyle(header).position).toBe('sticky');
+		const container = header.closest('.table-container')!;
+		await expect(container.scrollHeight).toBeGreaterThan(container.clientHeight);
+	}}
+>
+	{#snippet template()}
+		{@const columns: TableColumn<Invoice>[] = [{ header: 'Customer', key: 'customer' }]}
+		<Table {rowId} data={invoices} {columns} maxHeight="80px" />
 	{/snippet}
 </Story>
 
