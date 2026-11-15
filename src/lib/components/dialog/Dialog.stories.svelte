@@ -193,6 +193,51 @@
 </Story>
 
 <Story
+	name="Test: stays centred with a margin reset, also while closing"
+	tags={['!dev', '!autodocs']}
+	play={async ({ canvas, userEvent }) => {
+		// An app reset like base.css's `* { margin: 0 }` must not move the dialog.
+		const reset = document.createElement('style');
+		reset.textContent = '@layer svelte-ui.base { *, *::before, *::after { margin: 0; } }';
+		document.head.append(reset);
+		try {
+			const offCentre = (element: HTMLElement) => {
+				const box = element.getBoundingClientRect();
+				return Math.max(
+					Math.abs(box.left + box.width / 2 - window.innerWidth / 2),
+					Math.abs(box.top + box.height / 2 - window.innerHeight / 2)
+				);
+			};
+			await userEvent.click(canvas.getByRole('button', { name: 'Edit profile' }));
+			const dialog = canvas.getByRole('dialog', { name: 'Edit profile' });
+			await waitFor(() => expect(dialog).toBeVisible());
+			await waitFor(() => expect(offCentre(dialog)).toBeLessThan(2));
+
+			// While it fades out it must stay where it was.
+			await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
+			await expect(offCentre(dialog)).toBeLessThan(2);
+		} finally {
+			reset.remove();
+		}
+	}}
+>
+	{#snippet template(args)}
+		<Dialog {...args}>
+			{#snippet trigger(props)}
+				<Button {...props} variant="secondary">Edit profile</Button>
+			{/snippet}
+			<Field>
+				<Label for="test-centred-name">Name</Label>
+				<Input id="test-centred-name" value="Noah Baumgartner" />
+			</Field>
+			{#snippet actions(close)}
+				<Button variant="ghost" onclick={close}>Cancel</Button>
+			{/snippet}
+		</Dialog>
+	{/snippet}
+</Story>
+
+<Story
 	name="Test: opens on click and focuses content"
 	tags={['!dev', '!autodocs']}
 	play={async ({ canvas, userEvent }) => {

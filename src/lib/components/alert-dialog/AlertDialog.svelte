@@ -106,6 +106,12 @@
 		}
 
 		.alert-dialog {
+			/* Centred by position, not by the browser's `dialog:modal` rule: that one stops matching as
+			   soon as the dialog closes while it still fades out, and an app reset such as
+			   `* { margin: 0 }` (base.css) would send it to the top left. */
+			position: fixed;
+			inset: 0;
+			margin: auto;
 			box-sizing: border-box;
 			width: calc(100% - 32px);
 			max-width: 420px;
