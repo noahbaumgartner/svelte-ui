@@ -51,7 +51,7 @@
 			width: 100%;
 			overflow: hidden;
 			background-color: var(--color-surface);
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 		}
 
 		.progress--sm {

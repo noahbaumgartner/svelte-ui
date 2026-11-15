@@ -68,7 +68,7 @@
 			padding: 14px 0;
 			font-weight: 500;
 			list-style: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			outline: none;
 			cursor: pointer;
 			user-select: none;

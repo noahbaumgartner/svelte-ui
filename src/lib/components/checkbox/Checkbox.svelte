@@ -44,7 +44,7 @@
 			margin: 0;
 			background-color: var(--color-surface-hover);
 			border: 1px solid transparent;
-			border-radius: 5px;
+			border-radius: var(--radius-sm);
 			outline: none;
 			cursor: pointer;
 			transition:

@@ -53,7 +53,7 @@
 			align-items: flex-start;
 			gap: 10px;
 			padding: 8px 10px;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			font-size: 13px;
 			line-height: 1.4;
 			color: var(--color-text);

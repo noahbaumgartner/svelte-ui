@@ -29,7 +29,7 @@
 			line-height: 1;
 			background-color: var(--color-surface);
 			color: var(--color-text-muted);
-			border-radius: 4px;
+			border-radius: var(--radius-xs);
 			pointer-events: none;
 			user-select: none;
 		}

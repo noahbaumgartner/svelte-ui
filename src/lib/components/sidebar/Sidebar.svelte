@@ -151,7 +151,7 @@
 			height: calc(100% - 16px);
 			margin: 8px;
 			border: 1px solid var(--color-border);
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 			box-shadow: 0 4px 16px color-mix(in srgb, var(--color-shadow) 6%, transparent);
 		}
 

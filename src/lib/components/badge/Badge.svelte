@@ -37,7 +37,7 @@
 			padding: 2px 8px;
 			font-family: inherit;
 			font-size: 12px;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			user-select: none;
 		}
 

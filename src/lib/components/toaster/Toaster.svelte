@@ -155,7 +155,7 @@
 			background-color: var(--color-bg);
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
-			border-radius: 16px;
+			border-radius: var(--radius-3xl);
 			box-shadow: 0 4px 16px color-mix(in srgb, var(--color-shadow) 6%, transparent);
 			pointer-events: auto;
 			cursor: pointer;

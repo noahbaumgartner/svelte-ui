@@ -147,7 +147,7 @@
 			overflow: hidden;
 			background-color: transparent;
 			border: none;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			font: inherit;
 			font-size: 13px;
 			color: var(--color-text-secondary);

@@ -90,7 +90,7 @@
 		aspect-ratio: var(--media-preview-aspect-ratio);
 		overflow: hidden;
 		border: 1px solid var(--color-border);
-		border-radius: 10px;
+		border-radius: var(--radius-lg);
 		background-color: var(--color-surface);
 		box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--color-shadow) 25%, transparent);
 	}

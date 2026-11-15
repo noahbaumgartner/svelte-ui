@@ -14,7 +14,7 @@
 	@layer svelte-ui {
 		.skeleton {
 			flex-shrink: 0;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			background-color: var(--color-surface);
 			animation: skeleton-pulse 2s ease-in-out infinite;
 		}

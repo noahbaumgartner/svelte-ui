@@ -219,7 +219,7 @@
 			color: var(--color-text);
 			background-color: transparent;
 			border: none;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			outline: none;
 			cursor: pointer;
 			scroll-snap-align: center;

@@ -115,7 +115,7 @@
 			min-width: 0;
 			box-sizing: border-box;
 			border: none;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			font-family: inherit;
 			font-size: 13px;
 			text-decoration: none;
@@ -181,7 +181,7 @@
 			height: 28px;
 			padding: 0 12px 0 9px;
 			gap: 5px;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			font-size: 12px;
 		}
 
@@ -249,7 +249,7 @@
 
 		/* Pill with a label, circle when icon-only */
 		.button--overlay {
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
 			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);

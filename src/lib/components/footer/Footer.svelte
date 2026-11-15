@@ -56,7 +56,7 @@
 			padding: 40px;
 			color: var(--color-base);
 			background-color: var(--color-ink);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 
 		.footer-title {

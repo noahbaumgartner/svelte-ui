@@ -45,6 +45,11 @@
 		-webkit-tap-highlight-color: transparent;
 	}
 
+	/* Page titles use the display font; it falls back to the body font. */
+	h1 {
+		font-family: var(--font-display);
+	}
+
 	ol,
 	ul {
 		list-style: none;

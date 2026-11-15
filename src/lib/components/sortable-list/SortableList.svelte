@@ -274,7 +274,7 @@
 
 		.sortable-list-item--dragging {
 			z-index: 1;
-			border-radius: var(--sortable-list-dragging-radius, 10px);
+			border-radius: var(--sortable-list-dragging-radius, var(--radius-lg));
 			background: var(--sortable-list-dragging-background, transparent);
 			box-shadow: var(
 				--sortable-list-dragging-shadow,
@@ -294,7 +294,7 @@
 			color: var(--color-text-faint);
 			background: transparent;
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			cursor: grab;
 			touch-action: none;
 			transition:

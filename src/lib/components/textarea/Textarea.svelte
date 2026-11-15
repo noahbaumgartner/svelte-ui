@@ -26,7 +26,7 @@
 			color: var(--color-text);
 			background-color: var(--color-surface);
 			border: 1px solid transparent;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			outline: none;
 			resize: vertical;
 			field-sizing: content;

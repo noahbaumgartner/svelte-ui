@@ -164,7 +164,7 @@
 			padding: 4px;
 			background-color: var(--color-bg);
 			border: 1px solid var(--color-border);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 			user-select: none;

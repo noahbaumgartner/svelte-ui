@@ -105,7 +105,7 @@
 		button.steps-trigger:focus-visible {
 			outline: 2px solid var(--color-accent);
 			outline-offset: 2px;
-			border-radius: 2px;
+			border-radius: var(--radius-2xs);
 		}
 
 		.steps-item--done .steps-trigger,
@@ -125,7 +125,7 @@
 			justify-content: center;
 			width: 22px;
 			height: 22px;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background-color: var(--color-surface);
 			color: var(--color-text-muted);
 			font-size: 12px;

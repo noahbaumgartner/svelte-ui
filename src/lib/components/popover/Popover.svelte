@@ -254,7 +254,7 @@
 			background-color: var(--color-bg);
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 		}

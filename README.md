@@ -57,38 +57,44 @@ An icon component receives `class` and `aria-hidden` and is sized with CSS, so i
 
 ### Theming
 
-All colours are derived from two variables, `--ui-base` and `--ui-ink`, mixed into a grey scale. Light and dark mode follow `prefers-color-scheme` by default; force one with a `data-theme` attribute on `<html>`:
+Set the variables below on `:root` in your app; every one is optional. All colours are derived from two of them, `--ui-base` (page) and `--ui-ink` (text), mixed into a grey scale.
 
-```html
-<html data-theme="dark"></html>
-```
+| Variable                                    | Default              | Used for                                             |
+| ------------------------------------------- | -------------------- | ---------------------------------------------------- |
+| `--ui-base`, `--ui-base-dark`               | `#fff`, `#0a0a0a`    | Page colour in light and dark mode                   |
+| `--ui-ink`, `--ui-ink-dark`                 | `#000`, `#fff`       | Text colour in light and dark mode                   |
+| `--ui-accent`, `--ui-accent-dark`           | `--ui-ink`           | Checked controls, primary buttons and focus rings    |
+| `--ui-fill`, `--ui-fill-dark`               | 3% ink on base       | Cards and empty states (e.g. white on a tinted page) |
+| `--ui-destructive`, `--ui-destructive-dark` | `#dc2626`, `#f87171` | Errors and destructive actions                       |
+| `--ui-font-sans`                            | the system font      | All text (`--font-sans`, set on `:root`)             |
+| `--ui-font-display`                         | `--ui-font-sans`     | Page titles, the `Navbar` logo (`--font-display`)    |
 
-Set `--ui-accent` to colour checked controls, primary buttons and focus rings. It defaults to `--ui-ink`, and the foreground colour on top of it is picked automatically for contrast:
+The `-dark` variants are only used in dark mode and fall back to the defaults above (the accent falls back to `--ui-accent`). So a custom palette keeps working in dark mode, and you only set the dark values you want to change:
 
 ```css
 :root {
+	--ui-base: #f6f3ee;
+	--ui-ink: #1c1d26;
+	--ui-base-dark: #14120f;
 	--ui-accent: #2563eb;
-}
-```
-
-A few more variables are optional and fall back to the derived values:
-
-| Variable                | Default          | Used for                                             |
-| ----------------------- | ---------------- | ---------------------------------------------------- |
-| `--ui-fill`             | 3% ink on base   | Cards and empty states (e.g. white on a tinted page) |
-| `--ui-destructive`      | `#dc2626`        | Errors and destructive actions in light mode         |
-| `--ui-destructive-dark` | `#f87171`        | The same in dark mode                                |
-| `--ui-font-sans`        | the system font  | All text (`--font-sans`, set on `:root`)             |
-| `--ui-font-display`     | `--ui-font-sans` | Big titles, opt-in via `--font-display`              |
-
-```css
-:root {
+	--ui-accent-dark: #60a5fa;
 	--ui-font-sans: 'Space Grotesk Variable', system-ui, sans-serif;
 	--ui-font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
 }
 ```
 
-See [`src/lib/styles/tokens.css`](src/lib/styles/tokens.css) for every token.
+Light and dark mode follow `prefers-color-scheme` by default; force one with a `data-theme` attribute on `<html>`:
+
+```html
+<html data-theme="dark"></html>
+```
+
+In your own CSS, read the resolved tokens (`--color-base`, `--color-ink`, `--color-text`, `--color-surface`, `--color-accent`, `--font-display`, ...) rather than the `--ui-*` inputs: they switch with the theme. The foreground colour on top of the accent is picked automatically for contrast.
+
+Two limits to know about:
+
+- Set the variables on `:root`. The derived colours are computed there, so setting `--ui-accent` on a single element does not recolour what is inside it.
+- Corner radii are internal for now: the components use the `--radius-*` scale from `tokens.css`, which is not meant to be configured yet.
 
 ### Page defaults
 

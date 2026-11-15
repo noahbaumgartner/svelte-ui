@@ -149,7 +149,7 @@
 			background-color: var(--color-bg);
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
-			border-radius: 14px;
+			border-radius: var(--radius-2xl);
 			box-shadow: 0 16px 48px color-mix(in srgb, var(--color-shadow) 16%, transparent);
 			outline: none;
 			opacity: 0;

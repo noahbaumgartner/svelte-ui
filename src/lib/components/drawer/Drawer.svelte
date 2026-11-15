@@ -196,7 +196,7 @@
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
 			border-bottom: 0;
-			border-radius: 16px 16px 0 0;
+			border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
 			box-shadow: 0 -8px 32px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 			translate: 0 100%;
@@ -316,7 +316,7 @@
 			padding: 10px 24px;
 			background: none;
 			border: 0;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			cursor: grab;
 			translate: -50% 0;
 			touch-action: none;
@@ -333,7 +333,7 @@
 			width: 36px;
 			height: 4px;
 			background-color: var(--color-border-strong);
-			border-radius: 2px;
+			border-radius: var(--radius-2xs);
 			transition: background-color 120ms ease;
 		}
 
@@ -359,7 +359,7 @@
 				margin: var(--drawer-inset) var(--drawer-inset) var(--drawer-inset) auto;
 				padding: 0;
 				border: 1px solid var(--color-border);
-				border-radius: 20px;
+				border-radius: var(--radius-4xl);
 				box-shadow: 0 16px 48px color-mix(in srgb, var(--color-shadow) 16%, transparent);
 				translate: calc(100% + var(--drawer-inset)) 0;
 			}

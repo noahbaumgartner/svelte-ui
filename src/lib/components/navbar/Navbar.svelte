@@ -124,7 +124,7 @@
 >
 	<div class="navbar-bar">
 		<div class="navbar-start">
-			{#if logo}{@render logo()}{/if}
+			{#if logo}<div class="navbar-logo">{@render logo()}</div>{/if}
 			<div class="navbar-desktop">
 				<NavigationMenu {label}>{@render children()}</NavigationMenu>
 			</div>
@@ -193,6 +193,12 @@
 			justify-content: space-between;
 			gap: 16px;
 			padding: 14px var(--navbar-gutter, 16px);
+		}
+
+		/* The logo is set in the display font; the wrapper adds no box of its own. */
+		.navbar-logo {
+			display: contents;
+			font-family: var(--font-display);
 		}
 
 		.navbar-start {

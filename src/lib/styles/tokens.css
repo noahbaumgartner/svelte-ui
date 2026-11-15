@@ -1,58 +1,87 @@
+/*
+ * Theming inputs, all optional and set by the app on :root (see the README):
+ *
+ *   --ui-base, --ui-ink          page colour and text colour in light mode
+ *   --ui-base-dark, --ui-ink-dark   the same in dark mode
+ *   --ui-accent, --ui-accent-dark   colour of checked controls, primary buttons, focus rings
+ *   --ui-fill, --ui-fill-dark       resting fill of cards and empty states
+ *   --ui-destructive, --ui-destructive-dark   errors and destructive actions
+ *   --ui-font-sans, --ui-font-display
+ *
+ * The components only read the resolved --color-*, --font-* and --radius-* tokens below, so the
+ * values flip with the colour scheme whatever the app sets. Read --color-base and --color-ink
+ * (not --ui-base and --ui-ink) in app CSS that has to follow the theme.
+ */
 @layer svelte-ui {
 	:root {
 		color-scheme: light;
-		--ui-base: #fff;
-		--ui-ink: #000;
 
-		--color-bg: var(--ui-base);
-		--color-surface: color-mix(in srgb, var(--ui-base), var(--ui-ink) 6%);
+		--color-base: var(--ui-base, #fff);
+		--color-ink: var(--ui-ink, #000);
+
+		--color-bg: var(--color-base);
+		--color-surface: color-mix(in srgb, var(--color-base), var(--color-ink) 6%);
 		/* Resting fill shared by cards and empty states */
-		--color-fill: var(--ui-fill, color-mix(in srgb, var(--ui-base), var(--ui-ink) 3%));
-		--color-border: color-mix(in srgb, var(--ui-base), var(--ui-ink) 10%);
-		--color-border-strong: color-mix(in srgb, var(--ui-base), var(--ui-ink) 17%);
-		--color-text-faint: color-mix(in srgb, var(--ui-base), var(--ui-ink) 36%);
-		--color-text-muted: color-mix(in srgb, var(--ui-base), var(--ui-ink) 55%);
-		--color-text-secondary: color-mix(in srgb, var(--ui-base), var(--ui-ink) 75%);
-		--color-emphasis: color-mix(in srgb, var(--ui-base), var(--ui-ink) 85%);
-		--color-text: var(--ui-ink);
-		--color-ink: var(--ui-ink);
-		--color-base: var(--ui-base);
+		--color-fill: var(--ui-fill, color-mix(in srgb, var(--color-base), var(--color-ink) 3%));
+		--color-border: color-mix(in srgb, var(--color-base), var(--color-ink) 10%);
+		--color-border-strong: color-mix(in srgb, var(--color-base), var(--color-ink) 17%);
+		--color-text-faint: color-mix(in srgb, var(--color-base), var(--color-ink) 36%);
+		--color-text-muted: color-mix(in srgb, var(--color-base), var(--color-ink) 55%);
+		--color-text-secondary: color-mix(in srgb, var(--color-base), var(--color-ink) 75%);
+		--color-emphasis: color-mix(in srgb, var(--color-base), var(--color-ink) 85%);
+		--color-text: var(--color-ink);
 
 		/* Hover states */
-		--color-surface-hover: color-mix(in srgb, var(--ui-base), var(--ui-ink) 12%);
-		--color-surface-active: color-mix(in srgb, var(--ui-base), var(--ui-ink) 17%);
-		--color-ink-hover: color-mix(in srgb, var(--ui-base), var(--ui-ink) 80%);
+		--color-surface-hover: color-mix(in srgb, var(--color-base), var(--color-ink) 12%);
+		--color-surface-active: color-mix(in srgb, var(--color-base), var(--color-ink) 17%);
+		--color-ink-hover: color-mix(in srgb, var(--color-base), var(--color-ink) 80%);
 
 		/* Accent */
-		--color-accent: var(--ui-accent, var(--ui-ink));
-		--color-accent-hover: color-mix(in srgb, var(--ui-base), var(--color-accent) 80%);
+		--color-accent: var(--ui-accent, var(--color-ink));
+		--color-accent-hover: color-mix(in srgb, var(--color-base), var(--color-accent) 80%);
 		--color-accent-foreground: oklch(from var(--color-accent) clamp(0, (0.65 - l) * 1000, 1) 0 0);
 
 		/* Shadows follow the ink, so they turn light in dark mode */
-		--color-shadow: var(--ui-ink);
+		--color-shadow: var(--color-ink);
 
 		/* Validation errors; the only non-gray color */
 		--color-destructive: var(--ui-destructive, #dc2626);
 
-		/* Body text, and a display face for big titles that falls back to it */
+		/* Body text, and a display face for titles that falls back to it */
 		--font-sans: var(--ui-font-sans, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif);
 		--font-display: var(--ui-font-display, var(--font-sans));
 		font-family: var(--font-sans);
+
+		/* Corner radii of the components, from small controls up to dialogs and cards */
+		--radius-2xs: 2px;
+		--radius-xs: 4px;
+		--radius-sm: 6px;
+		--radius-md: 8px;
+		--radius-lg: 10px;
+		--radius-xl: 12px;
+		--radius-2xl: 14px;
+		--radius-3xl: 16px;
+		--radius-4xl: 20px;
+		--radius-full: 9999px;
 	}
 
 	@media (prefers-color-scheme: dark) {
 		:root:not([data-theme='light']) {
-			--ui-base: #0a0a0a;
-			--ui-ink: #fff;
 			color-scheme: dark;
+			--color-base: var(--ui-base-dark, #0a0a0a);
+			--color-ink: var(--ui-ink-dark, #fff);
+			--color-fill: var(--ui-fill-dark, color-mix(in srgb, var(--color-base), var(--color-ink) 3%));
+			--color-accent: var(--ui-accent-dark, var(--ui-accent, var(--color-ink)));
 			--color-destructive: var(--ui-destructive-dark, #f87171);
 		}
 	}
 
 	:root[data-theme='dark'] {
-		--ui-base: #0a0a0a;
-		--ui-ink: #fff;
 		color-scheme: dark;
+		--color-base: var(--ui-base-dark, #0a0a0a);
+		--color-ink: var(--ui-ink-dark, #fff);
+		--color-fill: var(--ui-fill-dark, color-mix(in srgb, var(--color-base), var(--color-ink) 3%));
+		--color-accent: var(--ui-accent-dark, var(--ui-accent, var(--color-ink)));
 		--color-destructive: var(--ui-destructive-dark, #f87171);
 	}
 
@@ -60,6 +89,6 @@
 	   rounded overlay scrollbar, which only shows while scrolling. */
 	:root {
 		scrollbar-width: auto;
-		scrollbar-color: color-mix(in srgb, var(--ui-base), var(--ui-ink) 40%) var(--color-bg);
+		scrollbar-color: color-mix(in srgb, var(--color-base), var(--color-ink) 40%) var(--color-bg);
 	}
 }

@@ -46,7 +46,7 @@
 	@layer svelte-ui {
 		.stat {
 			padding: 16px;
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 		}
 
 		.stat--outline {

@@ -53,7 +53,7 @@
 			line-height: 1.5;
 			color: var(--color-text);
 			text-align: center;
-			border-radius: 14px;
+			border-radius: var(--radius-2xl);
 		}
 
 		.empty-state--secondary {

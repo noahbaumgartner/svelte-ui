@@ -283,7 +283,7 @@
 			color: var(--color-text);
 			background-color: var(--color-surface);
 			border: 1px solid transparent;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			outline: none;
 			transition: border-color 200ms ease;
 		}
@@ -309,7 +309,7 @@
 			color: var(--color-text);
 			background-color: var(--color-surface);
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			cursor: pointer;
 		}
 
@@ -323,7 +323,7 @@
 			width: 24px;
 			height: 24px;
 			margin: 0;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			background:
 				linear-gradient(45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
 				linear-gradient(-45deg, transparent 46%, var(--color-text) 46% 54%, transparent 54%),
@@ -353,12 +353,12 @@
 
 		.input::-webkit-color-swatch {
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 		}
 
 		.input::-moz-color-swatch {
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 		}
 
 		/* Number and date/time types: custom buttons replace the native spinners and picker icon */
@@ -382,7 +382,7 @@
 			padding: 12px;
 			background-color: var(--color-bg);
 			border: 1px solid var(--color-border);
-			border-radius: 14px;
+			border-radius: var(--radius-2xl);
 			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 		}
 
@@ -439,7 +439,7 @@
 			color: var(--color-text-muted);
 			background-color: transparent;
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			cursor: pointer;
 			transition:
 				background-color 200ms ease,
@@ -463,7 +463,7 @@
 
 		/* Two stacked stepper buttons are half height */
 		.input-controls button:not(:only-child) {
-			border-radius: 4px;
+			border-radius: var(--radius-xs);
 		}
 
 		.input-controls button:not(:only-child) :global(svg) {

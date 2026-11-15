@@ -196,7 +196,7 @@
 			padding: 0;
 			background: none;
 			border: none;
-			border-radius: 4px;
+			border-radius: var(--radius-xs);
 			font: inherit;
 			font-size: 14px;
 			line-height: 28px;
@@ -242,7 +242,7 @@
 			background-color: var(--color-bg);
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			transform-origin: top left;
 			user-select: none;

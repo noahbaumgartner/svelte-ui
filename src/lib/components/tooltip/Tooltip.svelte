@@ -195,7 +195,7 @@
 			background-color: var(--color-ink);
 			color: var(--color-base);
 			border: none;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			pointer-events: none;
 		}
 
@@ -208,7 +208,7 @@
 			width: 8px;
 			height: 8px;
 			background-color: inherit;
-			border-radius: 2px;
+			border-radius: var(--radius-2xs);
 			transform: rotate(45deg);
 		}
 

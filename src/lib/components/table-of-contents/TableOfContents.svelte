@@ -181,7 +181,7 @@
 		color: var(--color-text-muted);
 		text-decoration: none;
 		line-height: 1.4;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		outline: none;
 		transition: color 150ms ease;
 	}
@@ -205,7 +205,8 @@
 	}
 
 	.toc-mobile {
-		background-color: var(--color-surface);
+		background-color: var(--color-bg);
+		border-bottom: 1px solid var(--color-border);
 		user-select: none;
 	}
 
@@ -258,7 +259,7 @@
 		padding: 0;
 		background-color: transparent;
 		border: none;
-		border-radius: 4px;
+		border-radius: var(--radius-xs);
 		color: var(--color-text);
 		outline: none;
 		cursor: pointer;

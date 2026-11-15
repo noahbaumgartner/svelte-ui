@@ -243,7 +243,7 @@
 		}
 
 		.table-container--filled {
-			border-radius: 14px;
+			border-radius: var(--radius-2xl);
 			background-color: var(--table-bg);
 		}
 
@@ -334,7 +334,7 @@
 			color: inherit;
 			background: none;
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			outline: none;
 			cursor: pointer;
 			transition: color 200ms ease;

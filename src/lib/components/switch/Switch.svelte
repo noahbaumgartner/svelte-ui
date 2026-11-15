@@ -36,7 +36,7 @@
 			margin: 0;
 			background-color: var(--color-surface-active);
 			border: 1px solid transparent;
-			border-radius: 9px;
+			border-radius: var(--radius-lg);
 			outline: none;
 			cursor: pointer;
 			transition:
@@ -71,7 +71,7 @@
 			width: 14px;
 			height: 14px;
 			background-color: var(--color-base);
-			border-radius: 5px;
+			border-radius: var(--radius-sm);
 			pointer-events: none;
 			transition:
 				transform 200ms ease,

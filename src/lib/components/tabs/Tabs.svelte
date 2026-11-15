@@ -216,7 +216,7 @@
 			gap: 2px;
 			padding: 3px;
 			background-color: var(--color-surface);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 
 		.tabs-tab {
@@ -236,7 +236,7 @@
 			white-space: nowrap;
 			background-color: transparent;
 			border: none;
-			border-radius: 7px;
+			border-radius: var(--radius-md);
 			outline: none;
 			cursor: pointer;
 			user-select: none;
@@ -273,25 +273,25 @@
 		}
 
 		.tabs--sm .tabs-list {
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 		}
 
 		.tabs--sm .tabs-tab {
 			height: 22px;
 			padding: 0 10px;
 			font-size: 12px;
-			border-radius: 5px;
+			border-radius: var(--radius-sm);
 		}
 
 		.tabs--lg .tabs-list {
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 		}
 
 		.tabs--lg .tabs-tab {
 			height: 32px;
 			padding: 0 14px;
 			font-size: 14px;
-			border-radius: 9px;
+			border-radius: var(--radius-lg);
 		}
 
 		/* Text: no track and no pill, the selected tab is only darker. Padding stays vertical so the first label lines up with the content below. */
@@ -343,7 +343,7 @@
 		.tabs-panel {
 			font-size: 13px;
 			color: var(--color-text);
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			outline: none;
 		}
 

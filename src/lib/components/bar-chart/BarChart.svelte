@@ -113,7 +113,7 @@
 
 		.bar-chart-track {
 			height: 20px;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			background-color: var(--color-surface);
 			overflow: hidden;
 		}
@@ -121,7 +121,7 @@
 		.bar-chart-bar {
 			display: block;
 			height: 100%;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			background-color: var(--color-accent);
 			transition: width 300ms ease;
 		}
@@ -195,7 +195,7 @@
 			justify-content: center;
 			min-height: 120px;
 			border: 1px dashed var(--color-border);
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 			color: var(--color-text-muted);
 			font-size: 14px;
 		}

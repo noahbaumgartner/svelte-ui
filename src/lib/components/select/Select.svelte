@@ -290,7 +290,7 @@
 			text-align: left;
 			background-color: var(--color-surface);
 			border: 1px solid transparent;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			outline: none;
 			cursor: pointer;
 			transition: border-color 200ms ease;
@@ -346,7 +346,7 @@
 			background-color: var(--color-bg);
 			color: var(--color-text);
 			border: 1px solid var(--color-border);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			box-shadow: 0 8px 24px color-mix(in srgb, var(--color-shadow) 12%, transparent);
 			outline: none;
 			user-select: none;
@@ -377,7 +377,7 @@
 			text-align: left;
 			background-color: transparent;
 			border: none;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 			outline: none;
 			cursor: pointer;
 			transition: background-color 150ms ease;

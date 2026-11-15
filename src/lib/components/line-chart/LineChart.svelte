@@ -208,7 +208,7 @@
 		.line-chart svg:focus-visible {
 			outline: 2px solid var(--color-accent);
 			outline-offset: 4px;
-			border-radius: 4px;
+			border-radius: var(--radius-xs);
 		}
 
 		.line-chart-grid {
@@ -257,7 +257,7 @@
 			gap: 2px;
 			padding: 6px 10px;
 			border: 1px solid var(--color-border);
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			background-color: var(--color-bg);
 			box-shadow: 0 4px 16px color-mix(in srgb, var(--color-shadow) 10%, transparent);
 			color: var(--color-text);
@@ -276,7 +276,7 @@
 			align-items: center;
 			justify-content: center;
 			border: 1px dashed var(--color-border);
-			border-radius: 12px;
+			border-radius: var(--radius-xl);
 			color: var(--color-text-muted);
 			font-size: 14px;
 		}

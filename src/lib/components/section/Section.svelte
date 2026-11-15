@@ -85,7 +85,7 @@
 		.section--contained {
 			width: min(100% - 2 * var(--section-gutter), var(--section-max-width, 1280px));
 			margin-inline: auto;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 
 		.section--contained.section--padded {

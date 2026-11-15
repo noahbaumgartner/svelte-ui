@@ -49,7 +49,7 @@
 		/* Buttons shrink to fit inside the 32px group */
 		.input-group-addon > :global(.button) {
 			height: 24px;
-			border-radius: 6px;
+			border-radius: var(--radius-sm);
 		}
 
 		.input-group-addon > :global(.button--icon-only) {

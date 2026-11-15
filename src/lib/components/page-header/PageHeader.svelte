@@ -55,6 +55,7 @@
 	}
 
 	.page-header-title {
+		font-family: var(--font-display);
 		/* Tighter lines for multi-line titles; the margin gives back the half-leading
 		   of the default 1.5, so the gaps above and below stay the same. */
 		line-height: 1.15;

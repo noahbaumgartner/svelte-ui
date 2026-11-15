@@ -57,7 +57,7 @@
 			color: inherit;
 			text-decoration: none;
 			outline: none;
-			border-radius: 4px;
+			border-radius: var(--radius-xs);
 			transition: color 200ms ease;
 		}
 

@@ -35,7 +35,7 @@
 			overflow: hidden;
 			font-size: 13px;
 			color: var(--color-text);
-			border-radius: 14px;
+			border-radius: var(--radius-2xl);
 		}
 
 		.card--outline {

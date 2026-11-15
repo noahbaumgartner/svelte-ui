@@ -29,7 +29,7 @@
 			color: var(--color-text);
 			background-color: var(--color-surface);
 			border: 1px solid transparent;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			transition: border-color 200ms ease;
 		}
 

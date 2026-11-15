@@ -67,7 +67,7 @@
 			gap: 20px;
 			color: var(--color-text);
 			text-decoration: none;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 			outline: none;
 		}
 
@@ -90,7 +90,7 @@
 			flex-shrink: 0;
 			aspect-ratio: 1;
 			overflow: hidden;
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 
 		.preview-card--horizontal .preview-card-media {
@@ -123,7 +123,7 @@
 			height: 40px;
 			color: var(--color-base);
 			background-color: var(--color-ink);
-			border-radius: 10px 0 0 0;
+			border-radius: var(--radius-lg) 0 0 0;
 		}
 
 		.preview-card-icon :global(svg) {

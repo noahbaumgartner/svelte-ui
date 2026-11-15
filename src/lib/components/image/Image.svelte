@@ -47,7 +47,7 @@
 			max-width: 100%;
 			height: auto;
 			background-color: var(--color-surface);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 
 		.image--cover {

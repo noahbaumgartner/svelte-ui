@@ -184,7 +184,7 @@
 		.color-picker-area {
 			position: relative;
 			height: 150px;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			background:
 				linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent),
 				hsl(var(--hue) 100% 50%);
@@ -197,7 +197,7 @@
 			position: relative;
 			height: 12px;
 			margin: 0 6px;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			background: linear-gradient(
 				to right,
 				#f00 0%,
@@ -227,7 +227,7 @@
 			height: 14px;
 			box-sizing: border-box;
 			border: 2px solid #fff;
-			border-radius: 999px;
+			border-radius: var(--radius-full);
 			box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
 			transform: translate(-50%, -50%);
 			pointer-events: none;
@@ -274,7 +274,7 @@
 			height: 32px;
 			box-sizing: border-box;
 			border: 1px solid var(--color-border);
-			border-radius: 10px;
+			border-radius: var(--radius-lg);
 		}
 	}
 </style>

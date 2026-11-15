@@ -356,7 +356,7 @@
 			color: var(--color-text);
 			background-color: transparent;
 			border: none;
-			border-radius: 8px;
+			border-radius: var(--radius-md);
 			outline: none;
 			cursor: pointer;
 			transition:
@@ -422,8 +422,8 @@
 		}
 
 		.calendar--week td:nth-child(2) .calendar-cell {
-			border-start-start-radius: 8px;
-			border-end-start-radius: 8px;
+			border-start-start-radius: var(--radius-md);
+			border-end-start-radius: var(--radius-md);
 		}
 
 		@media (forced-colors: active) {
@@ -459,8 +459,8 @@
 		}
 
 		.calendar--week td:last-child .calendar-cell {
-			border-start-end-radius: 8px;
-			border-end-end-radius: 8px;
+			border-start-end-radius: var(--radius-md);
+			border-end-end-radius: var(--radius-md);
 		}
 	}
 </style>
