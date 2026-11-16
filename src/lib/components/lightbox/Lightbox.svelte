@@ -77,6 +77,9 @@
 		-webkit-backdrop-filter: blur(32px);
 		border: none;
 		cursor: zoom-out;
+		/* lets the image size itself against the overlay (cqw) instead of 100vw, which
+		   includes a classic scrollbar (Windows) and would push the image past the frame */
+		container-type: inline-size;
 	}
 
 	@media (min-width: 640px) {
@@ -110,10 +113,7 @@
 		height: auto;
 		aspect-ratio: var(--aspect, auto);
 		/* images without intrinsic size (SVG with only a viewBox) need an explicit width */
-		min-width: min(
-			calc(100vw - 2 * var(--lightbox-pad-inline)),
-			calc((100dvh - 2 * var(--lightbox-pad-block)) * var(--aspect, 0))
-		);
+		min-width: min(100cqw, calc((100dvh - 2 * var(--lightbox-pad-block)) * var(--aspect, 0)));
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-3xl);
 		box-shadow: 0 12px 32px -12px color-mix(in srgb, var(--color-shadow) 25%, transparent);
