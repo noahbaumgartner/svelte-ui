@@ -251,8 +251,8 @@
 		.button--overlay {
 			border-radius: var(--radius-full);
 			background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
-			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);
+			backdrop-filter: blur(8px);
 			color: var(--color-text);
 		}
 

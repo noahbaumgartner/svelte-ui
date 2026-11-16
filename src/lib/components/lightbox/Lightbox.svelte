@@ -73,8 +73,8 @@
 		padding-block: var(--lightbox-pad-block);
 		padding-inline: var(--lightbox-pad-inline);
 		background-color: color-mix(in srgb, var(--color-bg) 30%, transparent);
-		backdrop-filter: blur(32px);
 		-webkit-backdrop-filter: blur(32px);
+		backdrop-filter: blur(32px);
 		border: none;
 		cursor: zoom-out;
 		/* lets the image size itself against the overlay (cqw) instead of 100vw, which
