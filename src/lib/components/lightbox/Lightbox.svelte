@@ -72,9 +72,9 @@
 		justify-content: center;
 		padding-block: var(--lightbox-pad-block);
 		padding-inline: var(--lightbox-pad-inline);
-		background-color: color-mix(in srgb, var(--color-bg) 60%, transparent);
-		backdrop-filter: blur(16px);
-		-webkit-backdrop-filter: blur(16px);
+		background-color: color-mix(in srgb, var(--color-bg) 30%, transparent);
+		backdrop-filter: blur(32px);
+		-webkit-backdrop-filter: blur(32px);
 		border: none;
 		cursor: zoom-out;
 	}
